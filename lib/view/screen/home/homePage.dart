@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
@@ -12,6 +13,7 @@ class HomePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge, overlays: []);
     Get.put(HomeControllerImp());
     return Scaffold(
       body: Center(
@@ -23,25 +25,52 @@ class HomePageView extends StatelessWidget {
               decoration: BoxDecoration(),
               child: Stack(
                 children: [
-                  ListWheelScrollView(
-                    scrollBehavior: ScrollBehavior(
-                        androidOverscrollIndicator:
-                            AndroidOverscrollIndicator.stretch),
-                    itemExtent: Get.height,
-                    physics: FixedExtentScrollPhysics(),
-                    perspective: RenderListWheelViewport.defaultPerspective,
-                    diameterRatio: RenderListWheelViewport.defaultDiameterRatio,
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    children: [
-                      ...List.generate(
-                        controller.images.length,
-                        (index) => PhotoProdects(
-                          photo_prodect:
-                              '${AppLink.imageHome}/${controller.images[index]['image']}',
-                        ),
-                      ),
-                    ],
+                  CarouselSlider.builder(
+                    itemBuilder: (context, index, realIndex) {
+                      final image = controller.images[index]['image'];
+                      return PhotoProdects(
+                        photo_prodect: '${AppLink.imageHome}/$image',
+                      );
+                    },
+                    options: CarouselOptions(
+                      pageViewKey: PageStorageKey<String>(
+                          'carousel_slider'),
+                      scrollPhysics: FixedExtentScrollPhysics(),
+                      reverse: false,
+                      height: Get.height,
+                      viewportFraction: 1,
+                      enlargeCenterPage: true,
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      autoPlayInterval: const Duration(seconds: 4),
+                      autoPlayAnimationDuration:
+                      const Duration(milliseconds: 800),
+                      autoPlayCurve: Curves.linear,
+                      onPageChanged: (index, _) {
+                        controller.currentIndex = index;
+                        controller.update();
+                      },
+                      scrollDirection: Axis.vertical,
+                    ),
+                    itemCount: controller.images.length,
                   ),
+                  // ListWheelScrollView.useDelegate(
+                  //   scrollBehavior: ScrollBehavior(
+                  //       androidOverscrollIndicator:
+                  //           AndroidOverscrollIndicator.stretch),
+                  //   itemExtent: Get.height*0.9,
+                  //   clipBehavior: Clip.none,
+                  //   physics: FixedExtentScrollPhysics(),
+                  //   perspective: RenderListWheelViewport.defaultPerspective,
+                  //   diameterRatio: RenderListWheelViewport.defaultDiameterRatio,
+                  //   childDelegate: ListWheelChildBuilderDelegate(
+                  //     childCount: controller.images.length,
+                  //     builder: (context, index) => PhotoProdects(
+                  //       photo_prodect:
+                  //           '${AppLink.imageHome}/${controller.images[index]['image']}',
+                  //     ),
+                  //   ),
+                  // ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [

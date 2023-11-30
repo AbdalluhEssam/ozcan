@@ -16,14 +16,18 @@ class PhotoProdects extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(0),
-          image: DecorationImage(image: CachedNetworkImageProvider(photo_prodect), fit: BoxFit.fill)),
+          image: DecorationImage(
+              image: CachedNetworkImageProvider(photo_prodect),
+              fit: BoxFit.fill)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          SizedBox(
+            height: 20,
+          ),
           Image.asset(
             "assets/images/1.png",
             fit: BoxFit.contain,
-            height: Get.width * 0.6,
             width: Get.width * 0.7,
           )
         ],

@@ -18,94 +18,17 @@ class _Chat_homeState extends State<Chat_home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.to(BottomNav_home());
-            print("success");
-          },
-          icon: Icon(Icons.arrow_back),
-        ),
-        title: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          height: MediaQuery.of(context).size.height * 0.2,
-          //color: Colors.pink,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              Container(
-                //width: MediaQuery.of(context).size.width * 0.115,
-                //height: MediaQuery.of(context).size.height * 0.1,
-                //color: Colors.green,
-                child: IconButton(
-                    onPressed: () {
-                      print("success");
-                    },
-                    icon: Icon(Icons.emoji_flags_outlined)),
-              ),
-              Container(
-                //width: MediaQuery.of(context).size.width * 0.115,
-                //height: MediaQuery.of(context).size.height * 0.1,
-                //color: Colors.green,
-                child: IconButton(
-                    onPressed: () {
-                      print("success");
-                    },
-                    icon: Icon(Icons.videocam_outlined)),
-              ),
-              Container(
-                //width: MediaQuery.of(context).size.width * 0.115,
-                //height: MediaQuery.of(context).size.height * 0.1,
-                //color: Colors.green,
-                child: IconButton(
-                  onPressed: () {
-                    print("success");
-                  },
-                  icon: Icon(Icons.phone_outlined),
-                ),
-              ),
-              Spacer(),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      // Container(
-                      //   width: MediaQuery.of(context).size.width * 0.09,
-                      //   height: MediaQuery.of(context).size.height * 0.05,
-                      //   //color: Colors.green,
-                      //   child: IconButton(
-                      //     onPressed: () {
-                      //       print("success");
-                      //     },
-                      //     icon: Image(
-                      //       image: AssetImage("images/6.png"),
-                      //       fit: BoxFit.contain,
-                      //     ),
-                      //   ),
-                      // ),
-                      Baio_user_home(
-                        name_user: 'مرام احمد',
-                        Biao_user: 'صباح الخير',
-                      ),
-                      // Text(
-                      //   "صباح الخير",
-                      //   style: Second_font,
-                      // ),
-                    ],
-                  ),
-                  // Text(
-                  //   "مرام محمود",
-                  //   style: Third_font,
-                  // ),
-                ],
-              ),
-              Spacer(),
-              Image_user_chat(
-                photo: "images/8.png",
-              ),
-            ],
-          ),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Baio_user_home(
+              name_user: 'مرام احمد',
+              Biao_user: 'صباح الخير',
+            ),
+            Image_user_chat(
+              photo: "assets/images/8.png",
+            ),
+          ],
         ),
       ),
       body: ListView(
@@ -297,28 +220,28 @@ class _Chat_homeState extends State<Chat_home> {
                               ),
                               Message_container_for_Russell_home(
                                 text: "صباح الخير اريد ان اطلب اوردر",
-                                photo: 'images/8.png',
+                                photo: 'assets/images/8.png',
                               ),
                               Message_container_for_Receive_home(
                                 text: "نعم بكل سرور",
-                                photo: 'images/30.png',
+                                photo: 'assets/images/46.png',
                               ),
                               Message_container_for_Russell_home(
                                 text:
                                     "كنت اريد حذاء نايك الازرق هل متوفر لديكم",
-                                photo: 'images/8.png',
+                                photo: 'assets/images/8.png',
                               ),
                               Message_container_for_Receive_home(
                                 text: "نعم متوفر",
-                                photo: 'images/30.png',
+                                photo: 'assets/images/46.png',
                               ),
                               Message_container_for_Russell_home(
                                 text: "حسننا اريد منه قطعتين",
-                                photo: 'images/8.png',
+                                photo: 'assets/images/8.png',
                               ),
                               Message_container_for_Receive_home(
                                 text: "حسننا نحن سعداء بخدمة حضرتكم",
-                                photo: 'images/30.png',
+                                photo: 'assets/images/46.png',
                               ),
                             ],
                           ),

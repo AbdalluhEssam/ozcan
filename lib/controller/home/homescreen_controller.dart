@@ -24,8 +24,8 @@ class HomeScreenControllerImp extends HomeScreenController {
   List bottomAppBar = [
     {"title": translateDataBase("الصفحة الرئسية", "Home"), "icon": Icons.home},
     {
-      "title": translateDataBase("الاقسام", "Notifications"),
-      "icon": Icons.category
+      "title": translateDataBase("القائمة", "Notifications"),
+      "icon": Icons.menu
     },
     {
       "title": translateDataBase("الاعدادات", "Settings"),

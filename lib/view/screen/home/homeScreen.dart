@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/core/constant/color.dart';
-import 'package:ozcan/core/constant/routes.dart';
 import 'package:ozcan/core/functions/alertextiapp.dart';
 import '../../../controller/home/homescreen_controller.dart';
 import '../../widget/home/customButtonAppBar.dart';

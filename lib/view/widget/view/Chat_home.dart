@@ -92,18 +92,11 @@ class Message_container_for_Receive_home extends StatelessWidget {
                   )),
                 ),
               ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.015,
-                height: MediaQuery.of(context).size.height * 0.02,
-                //color: Colors.black,
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.12,
-                height: MediaQuery.of(context).size.height * 0.055,
-                child: Image(
-                  image: AssetImage(photo),
-                  fit: BoxFit.contain,
-                ),
+
+              Image(
+                image: AssetImage(photo),
+                fit: BoxFit.fill,
+                height: 80,
               ),
             ],
           ),

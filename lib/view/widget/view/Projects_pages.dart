@@ -216,7 +216,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                 child: MaterialButton(
                   onPressed: ontap_to_make_order,
                   child: Text(
-                    "مواصلة الطلب",
+                    "تواصل معانا",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

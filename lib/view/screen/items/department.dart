@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/View/Chat_home.dart';
 import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
@@ -60,7 +61,14 @@ class DepartmentView extends StatelessWidget {
           ),
           elevation: 1,
           actions: [
-            IconButton(onPressed: () {}, icon: Icon(Icons.phone)),
+            IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.notifications_active_outlined)),
+            IconButton(
+                onPressed: () {
+                  Get.to(Chat_home());
+                },
+                icon: Icon(FontAwesome5.facebook_messenger)),
           ],
         ),
         body: GetBuilder<DepartmentControllerImp>(
@@ -243,14 +251,16 @@ class DepartmentView extends StatelessWidget {
                                         onTap: () {
                                           Get.toNamed(AppRoute.itemsView,
                                               arguments: {
-                                                "itemsModel": controller.items[index]
+                                                "itemsModel":
+                                                    controller.items[index]
                                               });
                                         },
                                         child: Container(
                                           width: 150,
                                           height: 150,
                                           alignment: Alignment.center,
-                                          clipBehavior: Clip.antiAliasWithSaveLayer,
+                                          clipBehavior:
+                                              Clip.antiAliasWithSaveLayer,
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(15),
