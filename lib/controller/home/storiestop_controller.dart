@@ -1,15 +1,13 @@
 import 'dart:developer';
-
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/department_data.dart';
-import 'package:ozcan/data/model/itemsmodel.dart';
+import 'package:story_view/controller/story_controller.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import 'home_controller.dart';
 
-abstract class DepartmentController extends SearchMaxController {
+abstract class StoriesTopController extends SearchMaxController {
   initialData();
 
   getData();
@@ -17,15 +15,11 @@ abstract class DepartmentController extends SearchMaxController {
   goToItems(List categories, int selectedCat, String catId);
 }
 
-class DepartmentControllerImp extends DepartmentController {
+class StoriesTopControllerImp extends StoriesTopController {
   MyServices myServices = Get.find();
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
-
-  List banner = [];
-  List departmentStory = [];
+  StoryController storyController = StoryController();
   List story = [];
-  List storyTop = [];
-  List<ItemsModel> items = [];
 
   int? currentIndex = 0;
 
@@ -35,7 +29,7 @@ class DepartmentControllerImp extends DepartmentController {
   String? email;
   String? id;
   String? categoriesId;
-  String? categoriesName;
+  String? departmentId;
   String? categoriesColor;
 
   @override
@@ -48,34 +42,23 @@ class DepartmentControllerImp extends DepartmentController {
   @override
   void onInit() {
     categoriesId = Get.arguments['categoriesId'];
-    categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['categoriesColor'];
-    initialData();
+    departmentId = Get.arguments['departmentId'];
     getData();
-    getStory();
+    statusRequest = StatusRequest.success;
     super.onInit();
   }
 
   @override
   getData() async {
-    banner.clear();
+    story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.getData(categoriesId!);
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
+    var response = await departmentViewData.storyTop(departmentId!);
+    log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        banner.addAll(response['banner']);
-        if (response['department_story'] != "{\"status\":\"failure\"}") {
-          departmentStory.addAll(response['department_story']);
-        } else {
-          departmentStory = [];
-        }
-        List item = response['items'];
-        items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+        story.addAll(response['story']);
       } else {
         statusRequest = StatusRequest.failure;
       }
@@ -83,23 +66,15 @@ class DepartmentControllerImp extends DepartmentController {
     update();
   }
 
-  getStory() async {
+  addLikes() async {
     story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.storyView(categoriesId!);
+    var response = await departmentViewData.addLikes(currentIndex.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        if (response['story'] != "{\"status\":\"failure\"}") {
-          story.addAll(response['story']);
-        } else {
-          story = [];
-          statusRequest = StatusRequest.success;
-        }
-      } else {
-        story = [];
-        statusRequest = StatusRequest.success;
+        update();
       }
     }
     update();

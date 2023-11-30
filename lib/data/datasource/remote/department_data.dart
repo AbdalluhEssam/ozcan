@@ -18,6 +18,12 @@ class DepartmentViewData {
     });
     return response.fold((l) => l, (r) => r);
   }
+  storyTop(String departmentId) async {
+    var response = await crud.postData(AppLink.storyTop, {
+      "department_id": departmentId,
+    });
+    return response.fold((l) => l, (r) => r);
+  }
   addLikes(String categoriesId) async {
     var response = await crud.postData(AppLink.updateLike, {
       "story_id": categoriesId,

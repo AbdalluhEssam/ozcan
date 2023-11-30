@@ -8,15 +8,16 @@ import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:ozcan/likeapi.dart';
 import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
+import '../../../controller/home/storiestop_controller.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/constant/imageassets.dart';
 
-class StoriesDepartment extends StatelessWidget {
-  const StoriesDepartment({super.key});
+class StoriesTopDepartment extends StatelessWidget {
+  const StoriesTopDepartment({super.key});
 
   @override
   Widget build(BuildContext context) {
-    StoriesDepartmentControllerImp controller = Get.put(StoriesDepartmentControllerImp());
+    StoriesTopControllerImp controller = Get.put(StoriesTopControllerImp());
     Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
 
     return Scaffold(
@@ -59,7 +60,7 @@ class StoriesDepartment extends StatelessWidget {
         ),
         elevation: 1,
       ),
-      body: GetBuilder<StoriesDepartmentControllerImp>(
+      body: GetBuilder<StoriesTopControllerImp>(
         builder: (controller) => HandlingDataView(
           statusRequest: controller.statusRequest,
           widget: Column(

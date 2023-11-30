@@ -11,6 +11,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
   final String number_of_star;
   final String containt_of_descripation;
   final String price_of_project;
+  final Color primaryColor;
 
   const Descripation_and_containt_of_prodect(
       {super.key,
@@ -20,6 +21,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
       required this.containt_of_descripation,
       required this.price_of_project,
       this.ontap_prodect_details,
+      required this.primaryColor,
       this.ontap_to_make_order});
 
   @override
@@ -38,63 +40,36 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                   "$name_of_prodect",
                   style: Main_font,
                 ),
-                Row(
-                  children: [
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: MediaQuery.of(context).size.height * 0.05,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xffF7F7F7),
-                      ),
-                      child: Center(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                "$value_of_buy",
-                                style: Third_font,
-                              ),
-                              Text(
-                                "  شراء",
-                                style: Third_font,
-                              ),
-                            ],
-                          )),
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.01,
-                      height: MediaQuery.of(context).size.height * 0.02,
-                      //color: Colors.grey,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.005,
-                      height: MediaQuery.of(context).size.height * 0.02,
-                      color: Colors.grey,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.01,
-                      height: MediaQuery.of(context).size.height * 0.02,
-                      //color: Colors.grey,
-                    ),
-                    Text(
-                      "$number_of_star",
-                      style: TextStyle(
-                          color: Colors.grey,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 14),
-                    ),
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.star_border_purple500_outlined))
-                  ],
+                Container(
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  height: MediaQuery.of(context).size.height * 0.05,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffF7F7F7),
+                  ),
+                  child: Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            "$value_of_buy",
+                            style:  TextStyle(
+                                color: primaryColor, fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                          Text(
+                            "  شراء",
+                            style:  TextStyle(
+                                color: primaryColor, fontWeight: FontWeight.bold, fontSize: 14),
+                          ),
+                        ],
+                      )),
                 )
               ],
             ),
               LikeButton(
                 size: 50,
                 circleColor: CircleColor(
-                    start: Color(0xffA659A9), end: Color(0xffA659A9)),
+                    start: Color(0xffA659A9), end: primaryColor),
                 bubblesColor: BubblesColor(
                   dotPrimaryColor: Color(0xffA659A9),
                   dotSecondaryColor: Colors.black,
@@ -102,7 +77,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                 likeBuilder: (bool isLiked) {
                   return Icon(
                     Icons.favorite_outline,
-                    color: isLiked ? Color(0xffA659A9) : Colors.black,
+                    color: isLiked ? primaryColor : Colors.black,
                     size: 30,
                   );
                 },
@@ -117,7 +92,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Divider(
-            color: Colors.grey,
+            color:primaryColor,
             thickness: 1.5,
           ),
         ),
@@ -172,7 +147,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Divider(
-            color: Colors.grey,
+            color:primaryColor,
             thickness: 1.5,
           ),
         ),
@@ -212,11 +187,11 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                 height: MediaQuery.of(context).size.height * 0.06,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: Color(0xffA659A9)),
+                    color: primaryColor),
                 child: MaterialButton(
                   onPressed: ontap_to_make_order,
                   child: Text(
-                    "تواصل معانا",
+                    "تواصل معنا",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

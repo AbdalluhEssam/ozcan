@@ -4,7 +4,6 @@ import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
-import 'package:ozcan/core/constant/color.dart';
 import '../../../core/constant/routes.dart';
 import '../../../likeapi.dart';
 
@@ -13,10 +12,13 @@ class ItemsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(DepartmentControllerImp());
+    DepartmentControllerImp controller= Get.put(DepartmentControllerImp());
+    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+
     return Scaffold(
       appBar: AppBar(
-        title: Text("تصفح المنتجات"),
+        title: Text("تصفح المنتجات",style: TextStyle(color: primaryColor),),
+        foregroundColor: primaryColor,
       ),
       body: GetBuilder<DepartmentControllerImp>(
         builder: (controller) => HandlingDataViewNot(
@@ -28,7 +30,10 @@ class ItemsView extends StatelessWidget {
             itemBuilder: (context, index) => InkWell(
               onTap: () {
                 Get.toNamed(AppRoute.productDetails,
-                    arguments: {"itemsModel": controller.items[index]});
+                    arguments: {
+                  "itemsModel": controller.items[index],
+                   "color" : controller.categoriesColor,
+                });
               },
               child: Card(
                 child: Container(
@@ -57,14 +62,14 @@ class ItemsView extends StatelessWidget {
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
-                                  .copyWith(fontWeight: FontWeight.bold),
+                                  .copyWith(fontWeight: FontWeight.bold,color: primaryColor),
                             ),
                             const SizedBox(
                               width: 10,
                             ),
                             CircleAvatar(
                               radius: 28,
-                              backgroundColor: AppColor.primaryColor,
+                              backgroundColor: primaryColor,
                               child: Container(
                                 alignment: Alignment.center,
                                 margin: EdgeInsets.all(3),
@@ -110,7 +115,7 @@ class ItemsView extends StatelessWidget {
                             bottomRight: Radius.circular(0),
                             bottomLeft: Radius.circular(0),
                           ),
-                          color: AppColor.primaryColor,
+                          color: primaryColor,
                         ),
                         child: Padding(
                           padding: const EdgeInsets.only(left: 15, right: 15),

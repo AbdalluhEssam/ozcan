@@ -26,6 +26,7 @@ class AppRoute {
   static const String addressAdd = "/AddressAdd";
   static const String productDetails = "/productdetalis";
   static const String storiesDepartment = "/StoriesDepartment";
+  static const String storiesTopDepartment = "/StoriesTopDepartment";
   static const String aboutUs = "/aboutus";
   static const String helpPage = "/helppage";
   static const String listItem = "/listitem";

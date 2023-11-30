@@ -8,8 +8,6 @@ import 'package:ozcan/View/Chat_home.dart';
 import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
-import 'package:ozcan/data/model/itemsmodel.dart';
-import '../../../controller/home/home_controller.dart';
 import '../../../core/class/handlingdataview.dart';
 import '../../../likeapi.dart';
 import '../../widget/home/department_widget.dart';
@@ -20,15 +18,18 @@ class DepartmentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(DepartmentControllerImp());
+    DepartmentControllerImp controller = Get.put(DepartmentControllerImp());
+    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
     return Scaffold(
         appBar: AppBar(
           toolbarHeight: 70,
           titleSpacing: 0,
+          foregroundColor: primaryColor,
           systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: AppColor.backgroundColor,
           ),
           title: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
                 radius: 25,
@@ -37,38 +38,68 @@ class DepartmentView extends StatelessWidget {
               const SizedBox(
                 width: 15,
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "اهلا تفضل بسؤالك",
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    "خدمة العملاء",
-                    style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        height: 1,
-                        color: AppColor.primaryColor,
-                        fontWeight: FontWeight.bold),
-                    textAlign: TextAlign.end,
-                  )
-                ],
-              )
+              GetBuilder<DepartmentControllerImp>(
+                builder: (controller) => controller.myServices.sharedPreferences
+                            .getString("username") !=
+                        null
+                    ? Text(
+                        "${controller.myServices.sharedPreferences.getString("username")}",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: primaryColor),
+                      )
+                    : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                            Text(
+                              "OZCAN ${controller.categoriesName}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      height: 1,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18,
+                                      color: primaryColor),
+                            ),
+                            Text(
+                              "مرحبا بك",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    height: 1,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                            )
+                          ]),
+              ),
             ],
           ),
           elevation: 1,
           actions: [
             IconButton(
                 onPressed: () {},
-                icon: Icon(Icons.notifications_active_outlined)),
-            IconButton(
-                onPressed: () {
-                  Get.to(Chat_home());
-                },
-                icon: Icon(FontAwesome5.facebook_messenger)),
+                icon: Icon(
+                  Icons.notifications_active_outlined,
+                  color: primaryColor,
+                )),
+            GetBuilder<DepartmentControllerImp>(
+                builder: (controller) => IconButton(
+                    onPressed: () {
+                      if (controller.myServices.sharedPreferences
+                              .getString("username") ==
+                          null) {
+                        Get.toNamed(AppRoute.login);
+                      } else {
+                        Get.to(Chat_home());
+                      }
+                    },
+                    icon: Icon(
+                      FontAwesome5.facebook_messenger,
+                      color: primaryColor,
+                    ))),
           ],
         ),
         body: GetBuilder<DepartmentControllerImp>(
@@ -92,13 +123,16 @@ class DepartmentView extends StatelessWidget {
                                     children: [
                                       StoresWidgetAfter(
                                         photo: "assets/images/call.png",
+                                        primaryColor: primaryColor,
                                         onTap: () {
                                           if (controller.story.isNotEmpty)
                                             Get.toNamed(
                                                 AppRoute.storiesDepartment,
                                                 arguments: {
                                                   "categoriesId":
-                                                      controller.categoriesId
+                                                      controller.categoriesId,
+                                                  "categoriesColor": controller
+                                                      .categoriesColor,
                                                 });
                                         },
                                         show: controller.story.isNotEmpty,
@@ -110,6 +144,17 @@ class DepartmentView extends StatelessWidget {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8),
                                             child: StoresWidget(
+                                                onTap: () {
+
+                                                    Get.toNamed(
+                                                        AppRoute.storiesTopDepartment,
+                                                        arguments: {
+                                                          "categoriesId": controller.categoriesId,
+                                                          "categoriesColor":controller.categoriesColor,
+                                                          "departmentId":controller.departmentStory[index]['department_id'],
+                                                        });
+                                                },
+                                                primaryColor: primaryColor,
                                                 title:
                                                     "${controller.departmentStory[index]['title']}",
                                                 photo:
@@ -122,7 +167,7 @@ class DepartmentView extends StatelessWidget {
                                               right: 8, bottom: 20),
                                           child: CircleAvatar(
                                             radius: 32,
-                                            backgroundColor: Colors.grey,
+                                            backgroundColor: primaryColor,
                                             child: Container(
                                               alignment: Alignment.center,
                                               margin: EdgeInsets.all(3),
@@ -143,34 +188,47 @@ class DepartmentView extends StatelessWidget {
                                 const SizedBox(
                                   height: 20,
                                 ),
-                                SizedBox(
-                                  height: 50,
-                                  child: TextFormField(
-                                    textAlignVertical: TextAlignVertical.center,
-                                    onTap: () {
-                                      showSearch(
-                                          context: context,
-                                          delegate: SearchScreen());
-                                    },
-                                    // keyboardType: TextInputType.none,
-                                    readOnly: true,
-                                    decoration: InputDecoration(
-                                        isDense: true,
-                                        prefixIcon:
-                                            const Icon(Icons.search, size: 25),
-                                        hintText: "findproduct".tr,
-                                        border: OutlineInputBorder(
-                                          borderSide: BorderSide.none,
-                                          borderRadius:
-                                              BorderRadius.circular(20),
-                                        ),
-                                        filled: true,
-                                        fillColor: AppColor.primaryColor
-                                            .withOpacity(0.5)),
+                                GetBuilder<DepartmentControllerImp>(
+                                  builder: (controller) => SizedBox(
+                                    height: 50,
+                                    child: TextFormField(
+                                      textAlignVertical:
+                                          TextAlignVertical.center,
+                                      onTap: () {
+                                        showSearch(
+                                            context: context,
+                                            delegate: SearchScreen());
+                                      },
+                                      // keyboardType: TextInputType.none,
+                                      readOnly: true,
+                                      decoration: InputDecoration(
+                                          isDense: true,
+                                          prefixIcon: const Icon(Icons.search,
+                                              size: 25),
+                                          hintText: "findproduct".tr,
+                                          border: OutlineInputBorder(
+                                            borderSide: BorderSide.none,
+                                            borderRadius:
+                                                BorderRadius.circular(20),
+                                          ),
+                                          filled: true,
+                                          fillColor: Color(int.parse("0xff" +
+                                                  controller.categoriesColor!))
+                                              .withOpacity(0.5)),
+                                    ),
                                   ),
                                 ),
                                 const SizedBox(
-                                  height: 20,
+                                  height: 10,
+                                ),
+                                if (controller.banner.isNotEmpty)
+                                  Text("العروض الخاصة",
+                                      style: TextStyle(
+                                          color: primaryColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 18)),
+                                const SizedBox(
+                                  height: 10,
                                 ),
                                 if (controller.banner.isNotEmpty)
                                   CarouselSlider(
@@ -189,8 +247,8 @@ class DepartmentView extends StatelessWidget {
                                       }).toList(),
                                       options: CarouselOptions(
                                         viewportFraction: 1,
-                                        aspectRatio: 2.0,
-                                        initialPage: 2,
+                                        // aspectRatio: 2.0,
+                                        // initialPage: 1,
                                         height: Get.height * 0.24,
                                         enableInfiniteScroll: true,
                                         reverse: false,
@@ -234,7 +292,7 @@ class DepartmentView extends StatelessWidget {
                                               BorderRadius.circular(5),
                                           color:
                                               controller.currentIndex == index
-                                                  ? AppColor.primaryColor
+                                                  ? primaryColor
                                                   : AppColor.gray,
                                         ),
                                       );
@@ -252,7 +310,9 @@ class DepartmentView extends StatelessWidget {
                                           Get.toNamed(AppRoute.itemsView,
                                               arguments: {
                                                 "itemsModel":
-                                                    controller.items[index]
+                                                    controller.items[index],
+                                                "categoriesColor":
+                                                    controller.categoriesColor,
                                               });
                                         },
                                         child: Container(
@@ -264,7 +324,7 @@ class DepartmentView extends StatelessWidget {
                                           decoration: BoxDecoration(
                                             borderRadius:
                                                 BorderRadius.circular(15),
-                                            color: Color(0xffECECEC),
+                                            color: primaryColor,
                                           ),
                                           child: Hero(
                                             tag:
@@ -342,7 +402,7 @@ class DepartmentView extends StatelessWidget {
                                 //                     CircleAvatar(
                                 //                       radius: 28,
                                 //                       backgroundColor:
-                                //                           AppColor.primaryColor,
+                                //                           primaryColor,
                                 //                       child: Container(
                                 //                         alignment:
                                 //                             Alignment.center,
@@ -391,7 +451,7 @@ class DepartmentView extends StatelessWidget {
                                 //                     bottomLeft:
                                 //                         Radius.circular(0),
                                 //                   ),
-                                //                   color: AppColor.primaryColor,
+                                //                   color: primaryColor,
                                 //                 ),
                                 //                 child: Padding(
                                 //                   padding:
@@ -501,60 +561,5 @@ class DepartmentView extends StatelessWidget {
                             )),
                       )
                     ]))));
-  }
-}
-
-class ListItemsSearch extends GetView<HomeControllerImp> {
-  final List<ItemsModel> listData;
-
-  const ListItemsSearch({Key? key, required this.listData}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: listData.length,
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () {},
-          child: Container(
-            decoration: BoxDecoration(
-                color: AppColor.primaryColor.withOpacity(0.2),
-                boxShadow: [BoxShadow(offset: Offset.fromDirection(10, 10))]),
-            margin: const EdgeInsets.symmetric(vertical: 2),
-            child: Card(
-              color: AppColor.black.withOpacity(0.5),
-              child: Container(
-                padding: const EdgeInsets.all(10),
-                child: Row(
-                  children: [
-                    Expanded(
-                        child: Hero(
-                      tag: "${listData[index].itemsId}",
-                      child: CachedNetworkImage(
-                          imageUrl:
-                              "${AppLink.imageItems}/${listData[index].itemsImage}"),
-                    )),
-                    Expanded(
-                        flex: 2,
-                        child: ListTile(
-                          title: Text(
-                            listData[index].itemsName.toString(),
-                            style: const TextStyle(
-                                color: AppColor.backgroundColor),
-                          ),
-                          subtitle: Text("${listData[index].itemsPrice}",
-                              style: const TextStyle(
-                                  color: AppColor.backgroundColor)),
-                        )),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
   }
 }

@@ -35,6 +35,7 @@ class CategoriesPage extends GetView<HomeControllerImp> {
                             Get.toNamed(AppRoute.departmentView, arguments: {
                               "categoriesId": controller.categories[index]['categories_id'],
                               "categoriesName": controller.categories[index]['categories_name'],
+                              "categoriesColor": controller.categories[index]['color'],
                             });
                           }),
                       itemCount: controller.categories.length,

@@ -99,6 +99,7 @@ class _Projects_pagesState extends State<Projects_pages> {
               ),
               Small_space(),
               Descripation_and_containt_of_prodect(
+                primaryColor: Colors.cyan,
                   ontap_prodect_details: () {},
                   ontap_to_make_order: () {},
                   name_of_prodect: "حذاء نايك زووم",

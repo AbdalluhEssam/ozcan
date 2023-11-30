@@ -14,14 +14,17 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     ProductDetailsControllerImp controller =
         Get.put(ProductDetailsControllerImp());
+    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColor.primaryColor,
+        backgroundColor: primaryColor,
         foregroundColor: Colors.white,
         systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarColor: AppColor.primaryColor,
+            statusBarColor: primaryColor,
             statusBarIconBrightness: Brightness.light),
         title: Text("${controller.itemsModel.itemsName}",
             style: TextStyle(
@@ -38,7 +41,7 @@ class ProductDetails extends StatelessWidget {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height * 0.25,
                 alignment: Alignment.center,
-                color: AppColor.primaryColor,
+                color: primaryColor,
                 child: Hero(
                     tag: "${controller.itemsModel.itemsId}",
                     child: CachedNetworkImage(
@@ -52,6 +55,7 @@ class ProductDetails extends StatelessWidget {
                 height: 20,
               ),
               Descripation_and_containt_of_prodect(
+                primaryColor: primaryColor,
                   ontap_prodect_details: () {},
                   ontap_to_make_order: () {},
                   name_of_prodect: "${controller.itemsModel.itemsName}",

@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,11 +8,14 @@ class StoresWidget extends StatelessWidget {
   final void Function()? onTap;
   final String photo;
   final String title;
+  final Color primaryColor;
+
 
   const StoresWidget({
     super.key,
     this.onTap,
     required this.photo,
+    required this.primaryColor,
     required this.title,
   });
 
@@ -24,7 +28,7 @@ class StoresWidget extends StatelessWidget {
           onTap: onTap,
           child: CircleAvatar(
             radius: 32,
-            backgroundColor: Colors.grey,
+            backgroundColor: primaryColor,
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.all(3),
@@ -32,8 +36,8 @@ class StoresWidget extends StatelessWidget {
               decoration: BoxDecoration(shape: BoxShape.circle),
               child: CircleAvatar(
                 radius: 30,
-                child: Image.asset(
-                  photo,
+                child: CachedNetworkImage(
+                  imageUrl: photo,
                   width: Get.width,
                   fit: BoxFit.fill,
                 ),
@@ -54,11 +58,13 @@ class StoresWidgetAfter extends StatelessWidget {
   final void Function()? onTap;
   final String photo;
   final bool show;
+  final Color primaryColor;
 
   const StoresWidgetAfter({
     super.key,
     this.onTap,
     required this.photo,
+    required this.primaryColor,
     required this.show,
   });
 
@@ -71,7 +77,7 @@ class StoresWidgetAfter extends StatelessWidget {
           onTap: onTap,
           child: CircleAvatar(
             radius: 32,
-            backgroundColor: show == false ? Colors.transparent : Colors.grey,
+            backgroundColor: show == false ? Colors.transparent : primaryColor,
             child: Container(
               alignment: Alignment.center,
               margin: EdgeInsets.all(3),

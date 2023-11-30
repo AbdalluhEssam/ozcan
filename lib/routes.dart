@@ -15,6 +15,7 @@ import 'package:ozcan/view/screen/home/items.dart';
 import 'package:ozcan/view/screen/home/notification_screen.dart';
 import 'package:ozcan/view/screen/home/splash_screen.dart';
 import 'package:ozcan/view/screen/home/stories.dart';
+import 'package:ozcan/view/screen/home/storiesTop.dart';
 import 'package:ozcan/view/screen/items/department.dart';
 import 'package:ozcan/view/screen/items/productdetails.dart';
 import 'package:ozcan/view/screen/language.dart';
@@ -58,6 +59,7 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.departmentView, page: () => const DepartmentView()),
   GetPage(name: AppRoute.productDetails, page: () => const ProductDetails()),
   GetPage(name: AppRoute.storiesDepartment, page: () => const StoriesDepartment()),
+  GetPage(name: AppRoute.storiesTopDepartment, page: () => const StoriesTopDepartment()),
   GetPage(name: AppRoute.cart, page: () => const CartView()),
   GetPage(name: AppRoute.aboutUs, page: () => const AboutUs()),
   GetPage(name: AppRoute.helpPage, page: () => const HelpPage()),
