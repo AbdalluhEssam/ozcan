@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:lottie/lottie.dart';
@@ -104,49 +105,62 @@ class StoriesDepartment extends StatelessWidget {
                           width: 250, height: 250)),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: [
                     Expanded(
                         child: SizedBox(
-                      height: 50,
-                      child: TextFormField(
-                        textAlign: TextAlign.start,
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                        toolbarOptions: ToolbarOptions(
-                            selectAll: true,
-                            copy: true,
-                            cut: true,
-                            paste: true),
-                        enabled: true,
-                        focusNode: FocusNode(canRequestFocus: true),
-                        cursorColor: primaryColor,
-                        decoration: InputDecoration(
+                          height: 50,
+                          child: TextFormField(
+                            textAlign: TextAlign.start,
+                            controller: controller.textController,
+                            onTap: () {
+                              controller.storyController.pause();
+                            },
+                            onFieldSubmitted: (value) {
+                              controller.storyController.play();
+
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            toolbarOptions: ToolbarOptions(
+                                selectAll: true,
+                                copy: true,
+                                cut: true,
+                                paste: true),
                             enabled: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                strokeAlign: 5,
-                                color: Color(0xffA659A9),
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
+                            focusNode: FocusNode(canRequestFocus: true),
+                            cursorColor: primaryColor,
+                            decoration: InputDecoration(
+                                enabled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
                                     width: 2,
                                     strokeAlign: 5,
-                                    color: Colors.black)),
-                            focusColor: Color(0xfff7901e),
-                            hintText: ("تواصل الان معنا..."),
-                            hintStyle: TextStyle(
-                              color: Colors.black,
-                            )),
-                      ),
-                    )),
+                                    color: Color(0xffA659A9),
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        width: 2,
+                                        strokeAlign: 5,
+                                        color: Colors.black)),
+                                prefixIcon: IconButton(
+                                    onPressed: () {
+                                      controller.textController.clear();
+                                    },
+                                    icon: Icon(FontAwesome5.telegram_plane)),
+                                focusColor: Color(0xfff7901e),
+                                hintText: ("تواصل الان معنا..."),
+                                hintStyle: TextStyle(
+                                  color: Colors.black,
+                                )),
+                          ),
+                        )),
                     SizedBox(
                       width: 15,
                     ),
@@ -169,7 +183,7 @@ class StoriesDepartment extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),

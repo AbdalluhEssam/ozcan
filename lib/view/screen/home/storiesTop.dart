@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:lottie/lottie.dart';
-import 'package:ozcan/controller/home/stories_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:ozcan/likeapi.dart';
-import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import '../../../controller/home/storiestop_controller.dart';
 import '../../../core/constant/color.dart';
@@ -78,13 +77,14 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
+                                  controller.update();
                                   print(controller.currentIndex);
                                   return StoryItem.pageImage(
                                     caption:
                                         "${controller.story[index]['note']}",
                                     url:
                                         "${AppLink.imageStory}/${controller.story[index]['image']}",
-                                    controller: StoryController(),
+                                    controller: controller.storyController,
                                   );
                                 },
                               ),
@@ -113,6 +113,14 @@ class StoriesTopDepartment extends StatelessWidget {
                       height: 50,
                       child: TextFormField(
                         textAlign: TextAlign.start,
+                        controller: controller.textController,
+                        onTap: () {
+                          controller.storyController.pause();
+                        },
+                        onFieldSubmitted: (value) {
+                          controller.storyController.play();
+
+                        },
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(
                             fontSize: 14,
@@ -141,6 +149,11 @@ class StoriesTopDepartment extends StatelessWidget {
                                     width: 2,
                                     strokeAlign: 5,
                                     color: Colors.black)),
+                            prefixIcon: IconButton(
+                                onPressed: () {
+                                  controller.textController.clear();
+                                },
+                                icon: Icon(FontAwesome5.telegram_plane)),
                             focusColor: Color(0xfff7901e),
                             hintText: ("تواصل الان معنا..."),
                             hintStyle: TextStyle(
@@ -170,7 +183,7 @@ class StoriesTopDepartment extends StatelessWidget {
                     ),
                   ],
                 ),
-              ),
+              )
             ],
           ),
         ),

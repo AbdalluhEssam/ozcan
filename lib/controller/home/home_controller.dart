@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -37,7 +39,6 @@ class HomeControllerImp extends HomeController {
 
   @override
   void onInit() {
-
     getData();
     initialData();
     super.onInit();

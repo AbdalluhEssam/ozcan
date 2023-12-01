@@ -26,6 +26,8 @@ class DepartmentView extends StatelessWidget {
           titleSpacing: 0,
           foregroundColor: primaryColor,
           systemOverlayStyle: SystemUiOverlayStyle(
+
+
             statusBarColor: AppColor.backgroundColor,
           ),
           title: Row(

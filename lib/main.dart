@@ -6,6 +6,7 @@ import 'core/localization/changelocal.dart';
 import 'core/localization/translation.dart';
 import 'core/services/services.dart';
 import 'routes.dart';
+// Timer.periodic(Duration(seconds: 5), (timer) => getData());
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

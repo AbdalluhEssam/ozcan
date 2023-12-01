@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/department_data.dart';
 import 'package:story_view/controller/story_controller.dart';
@@ -19,6 +20,7 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   MyServices myServices = Get.find();
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   StoryController storyController = StoryController();
+  TextEditingController textController = TextEditingController();
   List story = [];
 
   int? currentIndex = 0;
