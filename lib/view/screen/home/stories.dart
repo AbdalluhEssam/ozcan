@@ -11,6 +11,7 @@ import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/constant/imageassets.dart';
+import '../../../core/constant/routes.dart';
 
 class StoriesDepartment extends StatelessWidget {
   const StoriesDepartment({super.key});
@@ -78,6 +79,7 @@ class StoriesDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
+                                  controller.itemsName = controller.story[index]['note'];
                                   print(controller.currentIndex);
                                   return StoryItem.pageImage(
                                     caption:
@@ -115,6 +117,12 @@ class StoriesDepartment extends StatelessWidget {
                             textAlign: TextAlign.start,
                             controller: controller.textController,
                             onTap: () {
+                              Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                                "color": primaryColor,
+                                "categoriesId": controller.categoriesId,
+                                "adminId": controller.adminId,
+                                "itemsName": controller.itemsName,
+                              });
                               controller.storyController.pause();
                             },
                             onFieldSubmitted: (value) {

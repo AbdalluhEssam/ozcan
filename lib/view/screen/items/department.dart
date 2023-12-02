@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
-import 'package:ozcan/View/Chat_home.dart';
 import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
@@ -26,8 +25,6 @@ class DepartmentView extends StatelessWidget {
           titleSpacing: 0,
           foregroundColor: primaryColor,
           systemOverlayStyle: SystemUiOverlayStyle(
-
-
             statusBarColor: AppColor.backgroundColor,
           ),
           title: Row(
@@ -95,7 +92,12 @@ class DepartmentView extends StatelessWidget {
                           null) {
                         Get.toNamed(AppRoute.login);
                       } else {
-                        Get.to(Chat_home());
+                        Get.toNamed(AppRoute.chatsDetailsScreen,arguments: {
+                          "adminId" : controller.adminId,
+                          "categoriesName" : controller.categoriesName,
+                          "categoriesId" : controller.categoriesId,
+                          "color" :primaryColor,
+                        });
                       }
                     },
                     icon: Icon(
@@ -131,10 +133,10 @@ class DepartmentView extends StatelessWidget {
                                             Get.toNamed(
                                                 AppRoute.storiesDepartment,
                                                 arguments: {
-                                                  "categoriesId":
-                                                      controller.categoriesId,
-                                                  "categoriesColor": controller
-                                                      .categoriesColor,
+                                                  "categoriesId":controller.categoriesId,
+                                                  "categoriesColor": controller.categoriesColor,
+                                                  "adminId" : controller.adminId,
+                                                  "categoriesName" : controller.categoriesName,
                                                 });
                                         },
                                         show: controller.story.isNotEmpty,
@@ -147,14 +149,16 @@ class DepartmentView extends StatelessWidget {
                                                 horizontal: 8),
                                             child: StoresWidget(
                                                 onTap: () {
-
-                                                    Get.toNamed(
-                                                        AppRoute.storiesTopDepartment,
-                                                        arguments: {
-                                                          "categoriesId": controller.categoriesId,
-                                                          "categoriesColor":controller.categoriesColor,
-                                                          "departmentId":controller.departmentStory[index]['department_id'],
-                                                        });
+                                                  Get.toNamed(
+                                                      AppRoute
+                                                          .storiesTopDepartment,
+                                                      arguments: {
+                                                        "categoriesId":controller.categoriesId,
+                                                        "categoriesColor": controller.categoriesColor,
+                                                        "adminId" : controller.adminId,
+                                                        "categoriesName" : controller.categoriesName,
+                                                        "departmentId": controller.departmentStory[index]['department_id'],
+                                                      });
                                                 },
                                                 primaryColor: primaryColor,
                                                 title:
@@ -311,10 +315,11 @@ class DepartmentView extends StatelessWidget {
                                         onTap: () {
                                           Get.toNamed(AppRoute.itemsView,
                                               arguments: {
-                                                "itemsModel":
-                                                    controller.items[index],
-                                                "categoriesColor":
-                                                    controller.categoriesColor,
+                                                "itemsModel":controller.items[index],
+                                                "categoriesColor":controller.categoriesColor,
+                                                "categoriesId":controller.categoriesId,
+                                                "adminId" : controller.adminId,
+                                                "categoriesName" : controller.categoriesName,
                                               });
                                         },
                                         child: Container(

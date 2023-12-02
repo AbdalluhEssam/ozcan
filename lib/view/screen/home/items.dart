@@ -33,6 +33,9 @@ class ItemsView extends StatelessWidget {
                     arguments: {
                   "itemsModel": controller.items[index],
                    "color" : controller.categoriesColor,
+                   "categoriesId":controller.categoriesId,
+                   "adminId" : controller.adminId,
+                   "categoriesName" : controller.categoriesName,
                 });
               },
               child: Card(
@@ -134,7 +137,16 @@ class ItemsView extends StatelessWidget {
                                 ),
                               ),
                               IconButton(
-                                onPressed: () {},
+                                onPressed: () {
+                                  Get.toNamed(AppRoute.chatsDetailsScreen,arguments: {
+                                  "color": primaryColor,
+                                  "categoriesId": controller.categoriesId,
+                                  "adminId": controller.adminId,
+                                  "categoriesName": controller.categoriesName,
+                                  "itemsName": controller.items[index].itemsName
+
+                                  });
+                                },
                                 icon: Icon(
                                   FontAwesome5.telegram_plane,
                                   color: Colors.blueAccent,

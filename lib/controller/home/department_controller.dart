@@ -37,6 +37,7 @@ class DepartmentControllerImp extends DepartmentController {
   String? categoriesId;
   String? categoriesName;
   String? categoriesColor;
+  String? adminId;
 
   @override
   initialData() {
@@ -50,6 +51,7 @@ class DepartmentControllerImp extends DepartmentController {
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['categoriesColor'];
+    adminId = Get.arguments['adminId'];
     initialData();
     getData();
     getStory();

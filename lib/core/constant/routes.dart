@@ -27,6 +27,7 @@ class AppRoute {
   static const String productDetails = "/productdetalis";
   static const String storiesDepartment = "/StoriesDepartment";
   static const String storiesTopDepartment = "/StoriesTopDepartment";
+  static const String chatsDetailsScreen = "/ChatsDetailsScreen";
   static const String aboutUs = "/aboutus";
   static const String helpPage = "/helppage";
   static const String listItem = "/listitem";

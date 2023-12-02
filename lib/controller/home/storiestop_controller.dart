@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,8 +31,10 @@ class StoriesTopControllerImp extends StoriesTopController {
   String? email;
   String? id;
   String? categoriesId;
+  String? adminId;
   String? departmentId;
   String? categoriesColor;
+  String? itemsName;
 
   @override
   initialData() {
@@ -47,6 +48,7 @@ class StoriesTopControllerImp extends StoriesTopController {
     categoriesId = Get.arguments['categoriesId'];
     categoriesColor = Get.arguments['categoriesColor'];
     departmentId = Get.arguments['departmentId'];
+    adminId = Get.arguments['adminId'];
     getData();
     statusRequest = StatusRequest.success;
     super.onInit();

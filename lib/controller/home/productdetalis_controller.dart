@@ -19,6 +19,9 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late StatusRequest statusRequest;
   late String? username;
   late String? email;
+  late String? categoriesId;
+  late String? adminId;
+  late String? categoriesName;
   String? categoriesColor;
   late ItemsModel itemsModel;
   CartData cartData = CartData(Get.find());
@@ -41,6 +44,9 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   @override
   void onInit() {
     categoriesColor = Get.arguments['color'];
+    categoriesId = Get.arguments['categoriesId'];
+    adminId = Get.arguments['adminId'];
+    categoriesName = Get.arguments['categoriesName'];
     initialData();
     super.onInit();
   }

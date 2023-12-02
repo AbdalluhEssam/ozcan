@@ -2,9 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:ozcan/Constants.dart';
 import 'package:ozcan/controller/home/productdetalis_controller.dart';
-import 'package:ozcan/core/constant/color.dart';
+import 'package:ozcan/core/constant/routes.dart';
 import 'package:ozcan/view/widget/view/Projects_pages.dart';
 
 import '../../../likeapi.dart';
@@ -14,7 +13,6 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     ProductDetailsControllerImp controller =
         Get.put(ProductDetailsControllerImp());
     Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
@@ -55,9 +53,17 @@ class ProductDetails extends StatelessWidget {
                 height: 20,
               ),
               Descripation_and_containt_of_prodect(
-                primaryColor: primaryColor,
+                  primaryColor: primaryColor,
                   ontap_prodect_details: () {},
-                  ontap_to_make_order: () {},
+                  ontap_to_make_order: () {
+                    Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                      "categoriesId": controller.categoriesId,
+                      "adminId": controller.adminId,
+                      "categoriesName": controller.categoriesName,
+                      "color": primaryColor,
+                      "itemsName": controller.itemsModel.itemsName
+                    });
+                  },
                   name_of_prodect: "${controller.itemsModel.itemsName}",
                   value_of_buy: "${controller.itemsModel.itemsCount}",
                   number_of_star: "${controller.itemsModel.itemsCount}",

@@ -31,7 +31,9 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   String? email;
   String? id;
   String? categoriesId;
+  String? adminId;
   String? categoriesColor;
+  String? itemsName;
 
   @override
   initialData() {
@@ -44,7 +46,8 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   void onInit() {
     categoriesId = Get.arguments['categoriesId'];
     categoriesColor = Get.arguments['categoriesColor'];
-    // initialData();
+    adminId = Get.arguments['adminId'];
+    initialData();
     getData();
     statusRequest = StatusRequest.success;
     super.onInit();

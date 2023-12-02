@@ -10,6 +10,7 @@ import 'package:story_view/widgets/story_view.dart';
 import '../../../controller/home/storiestop_controller.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/constant/imageassets.dart';
+import '../../../core/constant/routes.dart';
 
 class StoriesTopDepartment extends StatelessWidget {
   const StoriesTopDepartment({super.key});
@@ -77,6 +78,8 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
+                                  controller.itemsName = controller.story[index]['note'];
+
                                   controller.update();
                                   print(controller.currentIndex);
                                   return StoryItem.pageImage(
@@ -115,11 +118,16 @@ class StoriesTopDepartment extends StatelessWidget {
                         textAlign: TextAlign.start,
                         controller: controller.textController,
                         onTap: () {
+                          Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                            "color": primaryColor,
+                            "categoriesId": controller.categoriesId,
+                            "adminId": controller.adminId,
+                            "itemsName": controller.itemsName,
+                          });
                           controller.storyController.pause();
                         },
                         onFieldSubmitted: (value) {
                           controller.storyController.play();
-
                         },
                         keyboardType: TextInputType.emailAddress,
                         style: TextStyle(

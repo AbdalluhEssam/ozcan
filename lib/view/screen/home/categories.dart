@@ -29,13 +29,13 @@ class CategoriesPage extends GetView<HomeControllerImp> {
                     statusRequest: controller.statusRequest,
                     widget: ListView.separated(
                       itemBuilder: (context, index) => Department(
-                          photo:
-                              '${AppLink.imageCategories}/${controller.categories[index]['categories_image']}',
+                          photo:'${AppLink.imageCategories}/${controller.categories[index]['categories_image']}',
                           onTap: () {
                             Get.toNamed(AppRoute.departmentView, arguments: {
                               "categoriesId": controller.categories[index]['categories_id'],
                               "categoriesName": controller.categories[index]['categories_name'],
                               "categoriesColor": controller.categories[index]['color'],
+                              "adminId": controller.categories[index]['admin_id'],
                             });
                           }),
                       itemCount: controller.categories.length,

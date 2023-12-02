@@ -8,7 +8,6 @@ import '../../core/constant/routes.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/cart/cart_data.dart';
-import '../../data/model/coupon_model.dart';
 
 abstract class CartController extends GetxController {
   initialData();
@@ -20,7 +19,6 @@ class CartControllerImp extends CartController {
   MyServices myServices = Get.find();
   CartData cartData = CartData(Get.find());
 
-  CouponModel? couponModel;
   int? discountCoupon = 0;
   String? couponName;
   String? couponId;
@@ -129,10 +127,7 @@ class CartControllerImp extends CartController {
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
         Map<String, dynamic> dataCoupon = response['data'];
-        couponModel = CouponModel.fromJson(dataCoupon);
-        discountCoupon = int.parse(couponModel!.couponDiscount!);
-        couponName = couponModel!.couponName;
-        couponId = couponModel!.couponId;
+
         Get.rawSnackbar(
             snackPosition: SnackPosition.TOP,
             title: "notice".tr,
