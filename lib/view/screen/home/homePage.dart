@@ -1,6 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/likeapi.dart';
 import 'package:ozcan/view/screen/home/searchscreen.dart';
