@@ -33,8 +33,7 @@ class HomePageView extends StatelessWidget {
                       );
                     },
                     options: CarouselOptions(
-                      pageViewKey: PageStorageKey<String>(
-                          'carousel_slider'),
+                      pageViewKey: PageStorageKey<String>('carousel_slider'),
                       scrollPhysics: FixedExtentScrollPhysics(),
                       reverse: false,
                       height: Get.height,
@@ -44,7 +43,7 @@ class HomePageView extends StatelessWidget {
                       autoPlay: true,
                       autoPlayInterval: const Duration(seconds: 4),
                       autoPlayAnimationDuration:
-                      const Duration(milliseconds: 800),
+                          const Duration(milliseconds: 800),
                       autoPlayCurve: Curves.linear,
                       onPageChanged: (index, _) {
                         controller.currentIndex = index;
@@ -54,23 +53,6 @@ class HomePageView extends StatelessWidget {
                     ),
                     itemCount: controller.images.length,
                   ),
-                  // ListWheelScrollView.useDelegate(
-                  //   scrollBehavior: ScrollBehavior(
-                  //       androidOverscrollIndicator:
-                  //           AndroidOverscrollIndicator.stretch),
-                  //   itemExtent: Get.height*0.9,
-                  //   clipBehavior: Clip.none,
-                  //   physics: FixedExtentScrollPhysics(),
-                  //   perspective: RenderListWheelViewport.defaultPerspective,
-                  //   diameterRatio: RenderListWheelViewport.defaultDiameterRatio,
-                  //   childDelegate: ListWheelChildBuilderDelegate(
-                  //     childCount: controller.images.length,
-                  //     builder: (context, index) => PhotoProdects(
-                  //       photo_prodect:
-                  //           '${AppLink.imageHome}/${controller.images[index]['image']}',
-                  //     ),
-                  //   ),
-                  // ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -93,16 +75,15 @@ class HomePageView extends StatelessWidget {
                                 hintText: "findproduct".tr,
                                 border: OutlineInputBorder(
                                   borderSide: BorderSide.none,
-                                  borderRadius: BorderRadius.circular(20),
+                                  borderRadius: BorderRadius.circular(50),
                                 ),
                                 filled: true,
                                 fillColor: Colors.grey[200]),
                           ),
                         ),
                       ),
-                      Container(
-                        width: MediaQuery.of(context).size.width,
-                        height: MediaQuery.of(context).size.height * 0.07,
+                      SizedBox(
+                        height: Get.height * 0.07,
                         //color: Colors.red,
                       ),
                     ],

@@ -13,8 +13,7 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProductDetailsControllerImp controller =
-        Get.put(ProductDetailsControllerImp());
+    ProductDetailsControllerImp controller = Get.put(ProductDetailsControllerImp());
     Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
 
     return Scaffold(
@@ -56,13 +55,18 @@ class ProductDetails extends StatelessWidget {
                   primaryColor: primaryColor,
                   ontap_prodect_details: () {},
                   ontap_to_make_order: () {
-                    Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
-                      "categoriesId": controller.categoriesId,
-                      "adminId": controller.adminId,
-                      "categoriesName": controller.categoriesName,
-                      "color": primaryColor,
-                      "itemsName": controller.itemsModel.itemsName
-                    });
+                    if (controller.myServices.sharedPreferences.getString("username") != null){
+                      Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                        "categoriesId": controller.categoriesId,
+                        "adminId": controller.adminId,
+                        "categoriesName": controller.categoriesName,
+                        "color": primaryColor,
+                        "itemsName": controller.itemsModel.itemsName
+                      });
+                    }else{
+                      Get.toNamed(AppRoute.login);
+                    }
+
                   },
                   name_of_prodect: "${controller.itemsModel.itemsName}",
                   value_of_buy: "${controller.itemsModel.itemsCount}",
