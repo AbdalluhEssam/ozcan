@@ -118,12 +118,17 @@ class StoriesTopDepartment extends StatelessWidget {
                         textAlign: TextAlign.start,
                         controller: controller.textController,
                         onTap: () {
-                          Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
-                            "color": primaryColor,
-                            "categoriesId": controller.categoriesId,
-                            "adminId": controller.adminId,
-                            "itemsName": controller.itemsName,
-                          });
+                          if(controller.myServices.sharedPreferences.getString("username") != null){
+                            Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                              "color": primaryColor,
+                              "categoriesId": controller.categoriesId,
+                              "adminId": controller.adminId,
+                              "itemsName": controller.itemsName,
+                            });
+                          }else{
+                            Get.toNamed(AppRoute.login);
+                          }
+
                           controller.storyController.pause();
                         },
                         onFieldSubmitted: (value) {

@@ -138,14 +138,21 @@ class ItemsView extends StatelessWidget {
                               ),
                               IconButton(
                                 onPressed: () {
-                                  Get.toNamed(AppRoute.chatsDetailsScreen,arguments: {
-                                  "color": primaryColor,
-                                  "categoriesId": controller.categoriesId,
-                                  "adminId": controller.adminId,
-                                  "categoriesName": controller.categoriesName,
-                                  "itemsName": controller.items[index].itemsName
+                                  if(controller.myServices.sharedPreferences.getString("username") != null){
 
-                                  });
+                                    Get.toNamed(AppRoute.chatsDetailsScreen,arguments: {
+                                      "color": primaryColor,
+                                      "categoriesId": controller.categoriesId,
+                                      "adminId": controller.adminId,
+                                      "categoriesName": controller.categoriesName,
+                                      "itemsName": controller.items[index].itemsName
+
+                                    });
+                                  }else{
+                                    Get.toNamed(AppRoute.login
+                                       );
+                                  }
+
                                 },
                                 icon: Icon(
                                   FontAwesome5.telegram_plane,

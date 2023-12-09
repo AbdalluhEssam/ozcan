@@ -18,7 +18,8 @@ class StoriesDepartment extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    StoriesDepartmentControllerImp controller = Get.put(StoriesDepartmentControllerImp());
+    StoriesDepartmentControllerImp controller =
+        Get.put(StoriesDepartmentControllerImp());
     Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
 
     return Scaffold(
@@ -79,7 +80,8 @@ class StoriesDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
-                                  controller.itemsName = controller.story[index]['note'];
+                                  controller.itemsName =
+                                      controller.story[index]['note'];
                                   print(controller.currentIndex);
                                   return StoryItem.pageImage(
                                     caption:
@@ -107,68 +109,73 @@ class StoriesDepartment extends StatelessWidget {
                           width: 250, height: 250)),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: [
                     Expanded(
                         child: SizedBox(
-                          height: 50,
-                          child: TextFormField(
-                            textAlign: TextAlign.start,
-                            controller: controller.textController,
-                            onTap: () {
-                              Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
-                                "color": primaryColor,
-                                "categoriesId": controller.categoriesId,
-                                "adminId": controller.adminId,
-                                "itemsName": controller.itemsName,
-                              });
-                              controller.storyController.pause();
-                            },
-                            onFieldSubmitted: (value) {
-                              controller.storyController.play();
+                      height: 50,
+                      child: TextFormField(
+                        textAlign: TextAlign.start,
+                        controller: controller.textController,
+                        onTap: () {
+                          if (controller.myServices.sharedPreferences.getString("username") != null) {
+                            Get.toNamed(AppRoute.chatsDetailsScreen,
+                                arguments: {
+                                  "color": primaryColor,
+                                  "categoriesId": controller.categoriesId,
+                                  "adminId": controller.adminId,
+                                  "itemsName": controller.itemsName,
+                                });
+                          } else {
+                            Get.toNamed(AppRoute.login);
+                          }
 
-                            },
-                            keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                            toolbarOptions: ToolbarOptions(
-                                selectAll: true,
-                                copy: true,
-                                cut: true,
-                                paste: true),
+                          controller.storyController.pause();
+                        },
+                        onFieldSubmitted: (value) {
+                          controller.storyController.play();
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        toolbarOptions: ToolbarOptions(
+                            selectAll: true,
+                            copy: true,
+                            cut: true,
+                            paste: true),
+                        enabled: true,
+                        focusNode: FocusNode(canRequestFocus: true),
+                        cursorColor: primaryColor,
+                        decoration: InputDecoration(
                             enabled: true,
-                            focusNode: FocusNode(canRequestFocus: true),
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                                enabled: true,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                strokeAlign: 5,
+                                color: Color(0xffA659A9),
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
                                     width: 2,
                                     strokeAlign: 5,
-                                    color: Color(0xffA659A9),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                        width: 2,
-                                        strokeAlign: 5,
-                                        color: Colors.black)),
-                                prefixIcon: IconButton(
-                                    onPressed: () {
-                                      controller.textController.clear();
-                                    },
-                                    icon: Icon(FontAwesome5.telegram_plane)),
-                                focusColor: Color(0xfff7901e),
-                                hintText: ("تواصل الان معنا..."),
-                                hintStyle: TextStyle(
-                                  color: Colors.black,
-                                )),
-                          ),
-                        )),
+                                    color: Colors.black)),
+                            prefixIcon: IconButton(
+                                onPressed: () {
+                                  controller.textController.clear();
+                                },
+                                icon: Icon(FontAwesome5.telegram_plane)),
+                            focusColor: Color(0xfff7901e),
+                            hintText: ("تواصل الان معنا..."),
+                            hintStyle: TextStyle(
+                              color: Colors.black,
+                            )),
+                      ),
+                    )),
                     SizedBox(
                       width: 15,
                     ),
