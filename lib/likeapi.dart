@@ -1,6 +1,6 @@
 class AppLink {
 //================================== Hosting ===============================//
-  static const String serverLink = "https://abdalluh-essam.com/ozcan";
+  static const String serverLink = "https://ozcan.almirsystem.com/ozcan";
 //================================== Image ===============================//
   static const String imageStatic = "$serverLink/upload";
   static const String imageServices = "$imageStatic/services";

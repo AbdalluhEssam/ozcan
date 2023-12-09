@@ -45,10 +45,10 @@ class StoriesTopControllerImp extends StoriesTopController {
 
   @override
   void onInit() {
-    categoriesId = Get.arguments['categoriesId'];
-    categoriesColor = Get.arguments['categoriesColor'];
-    departmentId = Get.arguments['departmentId'];
-    adminId = Get.arguments['adminId'];
+    categoriesId = Get.arguments['categoriesId'].toString();
+    categoriesColor = Get.arguments['categoriesColor'].toString();
+    departmentId = Get.arguments['departmentId'].toString();
+    adminId = Get.arguments['adminId'].toString();
     getData();
     statusRequest = StatusRequest.success;
     super.onInit();

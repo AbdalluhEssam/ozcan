@@ -15,10 +15,10 @@ class MassageModel {
         this.createAt});
 
   MassageModel.fromJson(Map<String, dynamic> json) {
-    conversationId = json['conversation_id'];
-    adminId  = json['admin_id'];
-    adminId  = json['users_id'];
-    usersId = json['senderId'];
+    conversationId = json['conversation_id'].toString();
+    adminId  = json['admin_id'].toString();
+    adminId  = json['users_id'].toString();
+    usersId = json['senderId'].toString();
     text = json['text'];
     createAt = json['createAt'];
   }

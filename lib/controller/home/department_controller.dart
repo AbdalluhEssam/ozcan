@@ -48,10 +48,10 @@ class DepartmentControllerImp extends DepartmentController {
 
   @override
   void onInit() {
-    categoriesId = Get.arguments['categoriesId'];
-    categoriesName = Get.arguments['categoriesName'];
-    categoriesColor = Get.arguments['categoriesColor'];
-    adminId = Get.arguments['adminId'];
+    categoriesId = Get.arguments['categoriesId'].toString();
+    categoriesName = Get.arguments['categoriesName'].toString();
+    categoriesColor = Get.arguments['categoriesColor'].toString();
+    adminId = Get.arguments['adminId'].toString();
     initialData();
     getData();
     getStory();
