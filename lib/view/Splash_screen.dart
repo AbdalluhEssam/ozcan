@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
-import 'package:ozcan/View/Welcome_1.dart';
 
 class Splash_screen extends StatefulWidget {
   const Splash_screen({super.key});
@@ -24,7 +23,7 @@ class _Splash_screenState extends State<Splash_screen>
   @override
   void initState() {
     Future.delayed(Duration(seconds: 8)).then((value) {
-      Get.to((BottomNav()));
+      Get;
       print("sucess");
     });
     super.initState();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/controller/home/productdetalis_controller.dart';
+import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
 import 'package:ozcan/view/widget/view/Projects_pages.dart';
 
@@ -14,7 +15,7 @@ class ProductDetails extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ProductDetailsControllerImp controller = Get.put(ProductDetailsControllerImp());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = controller.categoriesColor  == null ? AppColor.primaryColor:  Color(int.parse("0xff" + controller.categoriesColor!));
 
     return Scaffold(
       appBar: AppBar(

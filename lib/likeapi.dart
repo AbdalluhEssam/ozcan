@@ -1,15 +1,16 @@
 class AppLink {
 //================================== Hosting ===============================//
   static const String serverLink = "https://ozcan.almirsystem.com/ozcan";
+  static const String serverImage = "https://ozcan.almirsystem.com/uploads";
 //================================== Image ===============================//
-  static const String imageStatic = "$serverLink/upload";
-  static const String imageServices = "$imageStatic/services";
-  static const String imageCategories = "$imageStatic/categories";
-  static const String imageItems = "$imageStatic/items";
-  static const String imageBanner = "$imageStatic/banner";
-  static const String imageHome = "$imageStatic/home";
-  static const String imageInfo = "$imageStatic/info";
-  static const String imageStory = "$imageStatic/story";
+  static const String imageStatic = "$serverImage";
+  static const String imageServices = "$serverImage";
+  static const String imageCategories = "$serverImage";
+  static const String imageItems = "$serverImage";
+  static const String imageBanner = "$serverImage";
+  static const String imageHome = "$serverImage";
+  static const String imageInfo = "$serverImage";
+  static const String imageStory = "$serverImage";
 //================================== Auth ===============================//
   static const String signUp = "$serverLink/auth/signup.php";
   static const String verfiyCodeSignUp = "$serverLink/auth/verfiycode.php";

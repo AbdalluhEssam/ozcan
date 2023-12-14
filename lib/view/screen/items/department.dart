@@ -38,17 +38,7 @@ class DepartmentView extends StatelessWidget {
                 width: 15,
               ),
               GetBuilder<DepartmentControllerImp>(
-                builder: (controller) => controller.myServices.sharedPreferences
-                            .getString("username") !=
-                        null
-                    ? Text(
-                        "${controller.myServices.sharedPreferences.getString("username")}",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: primaryColor),
-                      )
-                    : Column(
+                builder: (controller) =>  Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                             Text(

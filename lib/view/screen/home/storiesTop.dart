@@ -74,6 +74,7 @@ class StoriesTopDepartment extends StatelessWidget {
                           textDirection: TextDirection.ltr,
                           child: StoryView(
                             storyItems: [
+
                               ...List.generate(
                                 controller.story.length,
                                 (index) {
@@ -104,7 +105,7 @@ class StoriesTopDepartment extends StatelessWidget {
                       ),
                     )
                   : Expanded(
-                      child: Lottie.asset(AppImageAssets.loading,
+                      child: Lottie.asset(AppImageAssets.offline,
                           width: 250, height: 250)),
               Padding(
                 padding:

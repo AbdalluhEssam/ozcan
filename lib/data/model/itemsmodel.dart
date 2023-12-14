@@ -43,7 +43,7 @@ class ItemsModel {
     itemsName = json['items_name'].toString();
     itemsDesc = json['items_desc'].toString();
     itemsImage = json['items_image'].toString();
-    itemsCount = json['items_count'].toString();
+    itemsCount = json['qty'].toString();
     size = json['size'].toString();
     itemsActive = json['items_active'].toString();
     itemsPrice = json['items_price'].toString();
@@ -65,7 +65,7 @@ class ItemsModel {
     data['size'] = this.size;
     data['items_desc'] = this.itemsDesc;
     data['items_image'] = this.itemsImage;
-    data['items_count'] = this.itemsCount;
+    data['qty'] = this.itemsCount;
     data['items_active'] = this.itemsActive;
     data['items_price'] = this.itemsPrice;
     data['items_descount'] = this.itemsDescount;
