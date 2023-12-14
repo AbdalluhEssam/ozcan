@@ -1,63 +1,109 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/data/datasource/remote/department_data.dart';
 import 'package:ozcan/data/model/itemsmodel.dart';
-import '../../core/constant/routes.dart';
+import '../../core/services/services.dart';
+import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
-import '../../core/services/services.dart';import '../../../core/class/statusrequest.dart';
-import '../../data/datasource/remote/items_data.dart';
 import '../home/home_controller.dart';
 
 abstract class ItemsController extends SearchMaxController {
   initialData();
-  getData(String cateId);
-  changeCat(int val,String catVal);
-  goToProductDetails(ItemsModel itemsModel);
+
+  getData();
+
+  goToItems(List categories, int selectedCat, String catId);
 }
 
 class ItemsControllerImp extends ItemsController {
   MyServices myServices = Get.find();
-  ItemsData itemsData = ItemsData(Get.find());
+  DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
+
+  List<ItemsModel> items = [];
+
+  int? currentIndex = 0;
+  ScrollController scrollController = ScrollController();
+  RxInt selectedIndex = 0.obs;
 
   late StatusRequest statusRequest;
 
-  List categories = [];
-  List items = [];
-
-  int? selectedCat;
-  String? catId;
-  String? idUser;
   String? username;
+  String? email;
+  String? id;
+  String? categoriesId;
+  String? categoriesName;
+  String? categoriesColor;
+  String? adminId;
+  int? itemId;
 
   @override
   initialData() {
-    categories = Get.arguments['categories'];
-    selectedCat = Get.arguments['selectedCat'];
-    catId = Get.arguments['catId'];
-    getData(catId!);
+    username = myServices.sharedPreferences.getString("username");
+    email = myServices.sharedPreferences.getString("email");
+    id = myServices.sharedPreferences.getString("id");
+  }
+
+  // ScrollPosition currentScrollPosition = scrollController.position;
+  // double currentOffset = scrollController.offset;
+
+  scrollToIndex() {
+    if (itemId != null) {
+      // Your logic to determine the index based on itemId
+      int index = itemId ?? 0;
+
+      // Scroll to the calculated offset
+      double offset =
+          index * Get.height * 0.65; // Replace 100.0 with your item height
+      scrollController.jumpTo(offset);
+      scrollController.animateTo(
+        offset,
+        duration: Duration(milliseconds: 400),
+        curve: Curves.linear,
+      );
+    }
+    // double offset = index * Get.height * 0.45; // Replace 100.0 with your item height
+    // scrollController.jumpTo(offset);
   }
 
   @override
   void onInit() {
-    search = TextEditingController();
-
+    categoriesId = Get.arguments['categoriesId'].toString();
+    categoriesName = Get.arguments['categoriesName'].toString();
+    categoriesColor = Get.arguments['categoriesColor'].toString();
+    adminId = Get.arguments['adminId'].toString();
+    itemId = Get.arguments['itemId'];
+    log(itemId.toString());
     initialData();
+    getData();
+    Timer(Duration(milliseconds: 500), () {
+      scrollController.addListener(() {
+        scrollToIndex();
+        print(["log", scrollController.offset]);
+      });
+      scrollController.notifyListeners();
+      scrollController.keepScrollOffset;
+      scrollController.dispose();
+    });
     super.onInit();
   }
 
   @override
-  getData(cateId) async {
-    items.clear();
+  getData() async {
     statusRequest = StatusRequest.loading;
-    var response = await itemsData.postData(cateId.toString());
+    var response = await departmentViewData.getData(categoriesId!);
     if (kDebugMode) {
       print(
-        "========================================================================$response");
+          "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        items.addAll(response['data']);
+        List item = response['items'];
+        items.addAll(item.map((e) => ItemsModel.fromJson(e)));
       } else {
         statusRequest = StatusRequest.failure;
       }
@@ -65,18 +111,14 @@ class ItemsControllerImp extends ItemsController {
     update();
   }
 
-  @override
-  changeCat( val,catVal) {
-    selectedCat =val;
-    catId =catVal;
-    getData(catId!);
-    update();
-  }
 
   @override
-  goToProductDetails(itemsModel) {
-    Get.toNamed(AppRoute.productDetails,arguments: {
-      "itemsModel":itemsModel
-    });
+  goToItems(categories, selectedCat, catId) {
+    // Get.toNamed(AppRoute.itemsView,arguments: {
+    //   "categories" :  categories ,
+    //   "selectedCat" :  selectedCat ,
+    //   "catId" :  catId ,
+    //
+    // });
   }
 }

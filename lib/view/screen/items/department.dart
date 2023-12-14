@@ -310,6 +310,7 @@ class DepartmentView extends StatelessWidget {
                                                 "categoriesId":controller.categoriesId,
                                                 "adminId" : controller.adminId,
                                                 "categoriesName" : controller.categoriesName,
+                                                "itemId" : index,
                                               });
                                         },
                                         child: Container(

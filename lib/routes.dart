@@ -9,6 +9,7 @@ import 'package:ozcan/view/screen/auth/success_signup.dart';
 import 'package:ozcan/view/screen/auth/verfiycodesignup.dart';
 import 'package:ozcan/view/screen/cart/cartview.dart';
 import 'package:ozcan/view/screen/cart/checkout.dart';
+import 'package:ozcan/view/screen/chat.dart';
 import 'package:ozcan/view/screen/chat/chats_details.dart';
 import 'package:ozcan/view/screen/home/home.dart';
 import 'package:ozcan/view/screen/home/homeScreen.dart';
@@ -61,7 +62,8 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.productDetails, page: () => const ProductDetails()),
   GetPage(name: AppRoute.storiesDepartment, page: () => const StoriesDepartment()),
   GetPage(name: AppRoute.storiesTopDepartment, page: () => const StoriesTopDepartment()),
-  GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatsDetailsScreen()),
+  // GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatsDetailsScreen()),
+  GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatScreenWeb()),
   GetPage(name: AppRoute.cart, page: () => const CartView()),
   GetPage(name: AppRoute.aboutUs, page: () => const AboutUs()),
   GetPage(name: AppRoute.helpPage, page: () => const HelpPage()),

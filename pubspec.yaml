@@ -96,6 +96,7 @@ dependencies:
   rating_dialog: ^2.0.4
   flutter_launcher_icons: ^0.13.1
   lottie: ^2.7.0
+  webview_flutter: ^4.4.2
 
 dev_dependencies:
   flutter_test:
