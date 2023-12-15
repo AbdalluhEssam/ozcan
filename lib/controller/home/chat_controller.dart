@@ -21,7 +21,7 @@ class ChatControllerImp extends ChatController {
   MyServices myServices = Get.find();
   ChatData chatData = ChatData(Get.find());
 
-  List<MassageModel> chat = [];
+  List<MassageBotModel> chat = [];
   late TextEditingController myControllerMassage;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Timer _timer;
@@ -45,12 +45,16 @@ class ChatControllerImp extends ChatController {
 
   @override
   void onInit() {
+    if (myServices.sharedPreferences.getString("done") == null) {
+      myServices.sharedPreferences.setString("done", "ok");
+      addFirst();
+    }
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
     adminId = Get.arguments['adminId'];
     itemsName = Get.arguments['itemsName'];
-    itemsName = itemsName  != null ? "${"اريد الاستفسار عن " + itemsName!}" : "";
+    itemsName = itemsName != null ? "${"اريد الاستفسار عن " + itemsName!}" : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     initialData();
     log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
@@ -61,20 +65,29 @@ class ChatControllerImp extends ChatController {
 
   @override
   addMassage() async {
-    var response = await chatData.addMassage(adminId.toString(),
-        idUser.toString(), idUser.toString(), myControllerMassage.text);
+    var response = await chatData.addMassage(
+        0.toString(), idUser.toString(), myControllerMassage.text);
+    if (kDebugMode) {
+      print("========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      myControllerMassage.clear();
+      viewChat();
+    }
+    update();
+  }
+
+  addFirst() async {
+    var response = await chatData.addFirstAcc(idUser.toString(), username.toString());
     if (kDebugMode) {
       print(
           "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        myControllerMassage.clear();
-        viewChat();
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      myControllerMassage.clear();
+      viewChat();
     }
     update();
   }
@@ -95,17 +108,12 @@ class ChatControllerImp extends ChatController {
   @override
   viewChat() async {
     chat.clear();
-    var response =
-        await chatData.getData(adminId.toString(), idUser.toString());
+    var response = await chatData.getData(adminId.toString(), idUser.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        List massage = response['data'];
-        chat.addAll(massage.map((e) => MassageModel.fromJson(e)));
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      List massage = response['messages'];
+      chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
     }
     update();
   }

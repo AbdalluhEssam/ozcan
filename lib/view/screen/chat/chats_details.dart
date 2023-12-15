@@ -67,8 +67,10 @@ class ChatsDetailsScreen extends StatelessWidget {
                       padding: const EdgeInsets.all(10),
                       child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+
                           itemBuilder: (context, index) {
-                            if (controller.chat[index].usersId ==
+                            if (controller.chat[index].from ==
                                 controller.idUser) {
                               return buildMyMessage(controller.chat[index],
                                   controller.categoriesColor!);
@@ -143,43 +145,12 @@ class ChatsDetailsScreen extends StatelessWidget {
     await launchUrlString("whatsapp://send?phone=+9647746423382");
   }
 
-  Widget buildMessage(MassageModel model) => Align(
+  Widget buildMessage(MassageBotModel model) => Align(
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
               color: Colors.grey[300],
-              borderRadius: const BorderRadiusDirectional.only(
-                bottomEnd: Radius.circular(10),
-                bottomStart: Radius.circular(10),
-                topEnd: Radius.circular(10),
-              )),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(model.text!),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                DateFormat('jm', 'en_US')
-                    .format(DateTime.parse(model.createAt!))
-                    .toString(),
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 10),
-              ),
-            ],
-          ),
-        ),
-      );
-
-  Widget buildMyMessage(MassageModel model, Color color) => Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          decoration: BoxDecoration(
-              color: color.withOpacity(0.4),
               borderRadius: const BorderRadiusDirectional.only(
                 bottomEnd: Radius.circular(10),
                 bottomStart: Radius.circular(10),
@@ -189,9 +160,40 @@ class ChatsDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
+              Text(model.message!),
+              const SizedBox(
+                width: 5,
+              ),
               Text(
                 DateFormat('jm', 'en_US')
-                    .format(DateTime.parse(model.createAt!))
+                    .format(DateTime.parse(model.createdAt!))
+                    .toString(),
+                textAlign: TextAlign.right,
+                style: const TextStyle(fontSize: 10),
+              ),
+            ],
+          ),
+        ),
+      );
+
+  Widget buildMyMessage(MassageBotModel model, Color color) => Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          decoration: BoxDecoration(
+              color: color.withOpacity(0.4),
+              borderRadius: const BorderRadiusDirectional.only(
+                bottomEnd: Radius.circular(10),
+                bottomStart: Radius.circular(10),
+                topEnd: Radius.circular(10),
+              )),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                DateFormat('jm', 'en_US')
+                    .format(DateTime.parse(model.createdAt!))
                     .toString(),
                 textAlign: TextAlign.right,
                 style: const TextStyle(fontSize: 10),
@@ -199,7 +201,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               const SizedBox(
                 width: 5,
               ),
-              Text(model.text!),
+              Text(model.message!),
             ],
           ),
         ),
