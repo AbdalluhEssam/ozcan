@@ -73,7 +73,7 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
-      viewChat();
+      // viewChat();
     }
     update();
   }
