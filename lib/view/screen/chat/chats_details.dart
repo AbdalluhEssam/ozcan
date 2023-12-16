@@ -14,6 +14,7 @@ class ChatsDetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.put(ChatControllerImp());
     return GetBuilder<ChatControllerImp>(
+      init: Get.put(ChatControllerImp()),
       builder: (controller) => Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.white,
@@ -48,6 +49,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               )
             ],
           ),
+          foregroundColor: controller.categoriesColor,
           elevation: 5,
           actions: [
             IconButton(
@@ -70,8 +72,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                           shrinkWrap: true,
 
                           itemBuilder: (context, index) {
-                            if (controller.chat[index].from ==
-                                controller.idUser) {
+                            if (controller.chat[index].sender ==
+                                "user") {
                               return buildMyMessage(controller.chat[index],
                                   controller.categoriesColor!);
                             }
@@ -148,6 +150,7 @@ class ChatsDetailsScreen extends StatelessWidget {
   Widget buildMessage(MassageBotModel model) => Align(
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
+          constraints: BoxConstraints(maxWidth: 300),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
               color: Colors.grey[300],
@@ -160,7 +163,7 @@ class ChatsDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(model.message!),
+              Flexible(child: Text(model.description!)),
               const SizedBox(
                 width: 5,
               ),
@@ -179,6 +182,7 @@ class ChatsDetailsScreen extends StatelessWidget {
   Widget buildMyMessage(MassageBotModel model, Color color) => Align(
         alignment: AlignmentDirectional.centerStart,
         child: Container(
+          constraints: BoxConstraints(maxWidth: 300),
           padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           decoration: BoxDecoration(
               color: color.withOpacity(0.4),
@@ -201,7 +205,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               const SizedBox(
                 width: 5,
               ),
-              Text(model.message!),
+              Text(model.description!),
             ],
           ),
         ),

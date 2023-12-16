@@ -60,7 +60,9 @@ class AppLink {
   static const String addChat = "$serverLink/chat/chat.php";
 //================================== ChatBot ===============================//
   static const String viewChatBot = "https://ozcan.almirsystem.com/chatapi/api/chat/chat.php";
-  static const String addChatBot = "https://ozcan.almirsystem.com/chatapi/api/user/insert.php";
-  static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/chat/insert.php";
+  // static const String addChatBot = "https://ozcan.almirsystem.com/chatapi/api/user/insert.php";
+  static const String addChatBot = "https://ozcan.almirsystem.com/chatapi/api/tikc/insert.php";
+  static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/msg/insert.php";
+  // static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/tikc/insert.php";
 //================================== END ===============================//
 }

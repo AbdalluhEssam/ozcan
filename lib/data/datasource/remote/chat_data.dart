@@ -23,24 +23,34 @@ class ChatData {
   //   });
   //   return response.fold((l) => l, (r) => r);
   // }
-  getData(String adminId, String usersId) async {
-    var response = await crud.getData("https://ozcan.almirsystem.com/chatapi/api/chat/single.php?from=$usersId&to=0", {});
+  getData(String usersId) async {
+    var response = await crud.getData("https://ozcan.almirsystem.com/chatapi/api/msg/single.php?tickid=$usersId", {});
+    return response.fold((l) => l, (r) => r);
+  }
+  getTicketData(String usersId,String category) async {
+    var response = await crud.getData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$usersId&category=$category", {});
     return response.fold((l) => l, (r) => r);
   }
 
-  addFirstAcc(String usersId, String userName) async {
+  addFirstAcc(String name, String email, String category, String priority, String subject, String status, String description, String createdBy) async {
     var response = await crud.postData(AppLink.addChatBot, {
-      "id ": usersId,
-      "email ": userName,
+      "name": name,
+      "email": email,
+      "category": category,
+      "priority": priority,
+      "subject": subject,
+      "status": status,
+      "description": description,
+      "created_by": createdBy,
     });
     return response.fold((l) => l, (r) => r);
   }
   addMassage(
-      String adminId, String usersId, String text) async {
+      String ticketId, String text) async {
     var response = await crud.postData(AppLink.addMassageBot, {
-      "from": usersId,
-      "to": adminId,
-      "message": text,
+      "ticket_id": ticketId,
+      "description": text,
+      "attachments": "",
     });
     return response.fold((l) => l, (r) => r);
   }

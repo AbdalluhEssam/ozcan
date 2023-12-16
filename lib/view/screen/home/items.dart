@@ -29,9 +29,8 @@ class ItemsView extends StatelessWidget {
           statusRequest: controller.statusRequest,
           widget: ListView.separated(
             padding: EdgeInsets.all(15),
-            // physics: BouncingScrollPhysics(),
+            physics: BouncingScrollPhysics(),
             controller: controller.scrollController,
-            addSemanticIndexes: true,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return InkWell(

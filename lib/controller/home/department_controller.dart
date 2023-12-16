@@ -109,6 +109,14 @@ class DepartmentControllerImp extends DepartmentController {
   }
 
   @override
+  void dispose() {
+    items.clear();
+    story.clear();
+    storyTop.clear();
+    super.dispose();
+  }
+
+  @override
   goToItems(categories, selectedCat, catId) {
     // Get.toNamed(AppRoute.itemsView,arguments: {
     //   "categories" :  categories ,

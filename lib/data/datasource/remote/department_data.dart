@@ -12,6 +12,12 @@ class DepartmentViewData {
     });
     return response.fold((l) => l, (r) => r);
   }
+
+  getTicketData(String userId) async {
+    var response = await crud.postData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$userId", {
+    });
+    return response.fold((l) => l, (r) => r);
+  }
   storyView(String categoriesId) async {
     var response = await crud.postData(AppLink.story, {
       "categories_id": categoriesId,

@@ -22,6 +22,7 @@ class ChatControllerImp extends ChatController {
   ChatData chatData = ChatData(Get.find());
 
   List<MassageBotModel> chat = [];
+  List<UserTicketsModel> ticket = [];
   late TextEditingController myControllerMassage;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Timer _timer;
@@ -33,6 +34,7 @@ class ChatControllerImp extends ChatController {
   String? categoriesId;
   String? categoriesName;
   String? adminId;
+  String ticketId = "0";
   String? itemsName;
   Color? categoriesColor;
 
@@ -45,10 +47,6 @@ class ChatControllerImp extends ChatController {
 
   @override
   void onInit() {
-    if (myServices.sharedPreferences.getString("done") == null) {
-      myServices.sharedPreferences.setString("done", "ok");
-      addFirst();
-    }
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
@@ -57,8 +55,15 @@ class ChatControllerImp extends ChatController {
     itemsName = itemsName != null ? "${"اريد الاستفسار عن " + itemsName!}" : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     initialData();
-    log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
+
+    getTicket();
+
+    if (ticket.any((element) => element.category.toString() != adminId)) {
+      addFirst();
+    }
     viewChat();
+    log("***********************************  $ticketId");
+    log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
     _timer = Timer.periodic(Duration(seconds: 5), (timer) => viewChat());
     super.onInit();
   }
@@ -66,9 +71,10 @@ class ChatControllerImp extends ChatController {
   @override
   addMassage() async {
     var response = await chatData.addMassage(
-        0.toString(), idUser.toString(), myControllerMassage.text);
+        ticketId.toString(), myControllerMassage.text);
     if (kDebugMode) {
-      print("========================================================================$response");
+      print(
+          "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
@@ -79,7 +85,16 @@ class ChatControllerImp extends ChatController {
   }
 
   addFirst() async {
-    var response = await chatData.addFirstAcc(idUser.toString(), username.toString());
+    var response = await chatData.addFirstAcc(
+      username.toString(),
+      email.toString(),
+      adminId.toString(),
+      1.toString(),
+      2.toString(),
+      "New Ticket".toString(),
+      "هل يمكننى التواصل مع احد ممثلى الخدمة".toString(),
+      idUser.toString(),
+    );
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -87,6 +102,7 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
+      getTicket();
       viewChat();
     }
     update();
@@ -108,12 +124,28 @@ class ChatControllerImp extends ChatController {
   @override
   viewChat() async {
     chat.clear();
-    var response = await chatData.getData(adminId.toString(), idUser.toString());
+    var response = await chatData.getData(ticketId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       List massage = response['messages'];
       chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+    }
+    update();
+  }
+
+  getTicket() async {
+    var response =
+        await chatData.getTicketData(idUser.toString(), adminId.toString());
+    log("========================================================================$response");
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      List massage = response['User_Tickets'];
+      ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+    }
+    log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
+    if (ticket.isNotEmpty) {
+      ticketId = ticket.last.id.toString();
     }
     update();
   }

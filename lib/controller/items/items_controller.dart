@@ -57,7 +57,7 @@ class ItemsControllerImp extends ItemsController {
 
       // Scroll to the calculated offset
       double offset =
-          index * Get.height * 0.65; // Replace 100.0 with your item height
+          index * Get.height * 0.68; // Replace 100.0 with your item height
       scrollController.jumpTo(offset);
       scrollController.animateTo(
         offset,
