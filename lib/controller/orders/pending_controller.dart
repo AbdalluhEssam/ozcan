@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:get/get.dart';
 import 'package:ozcan/core/class/statusrequest.dart';
 import 'package:ozcan/core/functions/handlingdatacontroller.dart';
@@ -13,22 +12,26 @@ class OrdersPendingController extends GetxController {
 
   List<OrdersModel> pendingOrders = [];
   OrdersData pendingData = OrdersData(Get.find());
+  String? categoriesId;
+  String? categoriesColor;
 
   @override
   void onInit() {
+    categoriesId = Get.arguments['categoriesId'].toString();
+    categoriesColor = Get.arguments['categoriesColor'];
     getData();
     super.onInit();
   }
 
   String printOrderStatus(String val) {
     if (val == "0") {
-      return "Await Approval";
+      return "فى الانتظار";
     } else if (val == "1") {
-      return "The Order is Beaning Prepared";
+      return "تم الموافقة على طلبك";
     } else if (val == "2") {
-      return "On The Way";
+      return "فى الطريق";
     } else {
-      return "Archive";
+      return "تم الانتهاء";
     }
   }
 
@@ -36,14 +39,13 @@ class OrdersPendingController extends GetxController {
     pendingOrders.clear();
     statusRequest = StatusRequest.loading;
     update();
-    pendingData
-        .getPendingDate(myServices.sharedPreferences.getString("id").toString())
+    pendingData.getOrderDate(myServices.sharedPreferences.getString("id").toString(),categoriesId.toString())
         .then((value) {
       log("$value");
       statusRequest = handlingData(value);
       if (StatusRequest.success == statusRequest) {
         if (value['status'] == "success") {
-          List pending = value['data'];
+          List pending = value['orders'];
           pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
         } else {
           statusRequest = StatusRequest.failure;

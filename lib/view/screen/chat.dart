@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 final navigatorKey = GlobalKey<NavigatorState>();
@@ -9,7 +10,7 @@ class ChatScreenWeb extends StatefulWidget {
   @override
   State<ChatScreenWeb> createState() => _ExampleBrowser();
 }
-
+  String? link;
 class _ExampleBrowser extends State<ChatScreenWeb> {
   final controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -30,10 +31,11 @@ class _ExampleBrowser extends State<ChatScreenWeb> {
         },
       ),
     )
-    ..loadRequest(Uri.parse('https://ozcan.almirsystem.com/chat/'));
+    ..loadRequest(Uri.parse('$link'));
 
   @override
   void initState() {
+    link  = Get.arguments['link'];
     super.initState();
   }
 
@@ -41,7 +43,7 @@ class _ExampleBrowser extends State<ChatScreenWeb> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text("Chat Ozcan")
+          title: const Text("Order Ozcan")
 
       ),
       body: WebViewWidget(controller: controller),

@@ -30,21 +30,12 @@ class OrderDetailsViewControllerImp extends OrderDetailsViewController {
 
   initData() {
     completerController = Completer<GoogleMapController>();
-    cameraPosition = CameraPosition(
-        target: LatLng(double.parse(ordersModel.addressLat ?? "0"),
-            double.parse(ordersModel.addressLong ?? "0")),
-        zoom: 12.4746);
-    markers.add(Marker(
-        markerId: const MarkerId("1"),
-        position: LatLng(double.parse(ordersModel.addressLat ?? "0"),
-            double.parse(ordersModel.addressLong ?? "0"))));
     update();
   }
 
   @override
   void onInit() {
     ordersModel = Get.arguments['ordersModel'];
-    orderId = ordersModel.ordersId!;
     initData();
     getDataCart();
     super.onInit();

@@ -111,6 +111,27 @@ class Settings extends StatelessWidget {
                       height: 1,
                       color: AppColor.black,
                     ),
+                    if (controller.myServices.sharedPreferences
+                            .getString("username") !=
+                        null)
+                      ListTile(
+                        title: Text(
+                          "طلباتك".tr,
+                          style:
+                              const TextStyle(color: AppColor.backgroundColor),
+                        ),
+                        onTap: () {
+                          Get.toNamed(AppRoute.departmentOrderView);
+                        },
+                        trailing: const Icon(
+                          Icons.shopping_cart_outlined,
+                          color: AppColor.backgroundColor,
+                        ),
+                      ),
+                    const Divider(
+                      height: 1,
+                      color: AppColor.black,
+                    ),
                     controller.myServices.sharedPreferences
                                 .getString("username") !=
                             null

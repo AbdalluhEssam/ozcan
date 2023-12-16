@@ -163,7 +163,7 @@ class ChatsDetailsScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.end,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Flexible(child: Text(model.description!)),
+              Flexible(child: Text(model.description!.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<pre>', '').replaceAll('</pre>', ''))),
               const SizedBox(
                 width: 5,
               ),
@@ -205,7 +205,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               const SizedBox(
                 width: 5,
               ),
-              Flexible(child: Text(model.description!)),
+              Flexible(child: Text(model.description!.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<pre>', '').replaceAll('</pre>', ''))),
             ],
           ),
         ),

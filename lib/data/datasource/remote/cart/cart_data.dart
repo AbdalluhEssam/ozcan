@@ -30,7 +30,7 @@ class CartData {
     return response.fold((l) => l, (r) => r);
   }
   viewCart() async {
-    var response = await crud.postData(AppLink.cardView, {
+    var response = await crud.postData(AppLink.couponView, {
       "user_id": myServices.sharedPreferences.getString("id"),
     });
     return response.fold((l) => l, (r) => r);

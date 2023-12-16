@@ -15,6 +15,7 @@ class AppRoute {
   static const String myHomePage = "/myhomepage";
   static const String homeScreen = "/HomeScreen";
   static const String departmentView = "/DepartmentView";
+  static const String departmentOrderView = "/DepartmentOrderView";
   static const String myHomePageCart = "/myhomepagecart";
   static const String cart = "/cart";
   static const String personInformation = "/myhomepage";
@@ -28,6 +29,7 @@ class AppRoute {
   static const String storiesDepartment = "/StoriesDepartment";
   static const String storiesTopDepartment = "/StoriesTopDepartment";
   static const String chatsDetailsScreen = "/ChatsDetailsScreen";
+  static const String chatScreenWeb = "/ChatScreenWeb";
   static const String aboutUs = "/aboutus";
   static const String helpPage = "/helppage";
   static const String listItem = "/listitem";
@@ -41,7 +43,5 @@ class AppRoute {
   static const String orderDet = "/orderdet";
   static const String policyReturn = "/policyreturn";
   static const String ordersPending = "/OrdersPending";
-  static const String ordersArchive = "/OrdersArchive";
-  static const String ordersDetails = "/OrdersDetails";
   static const String notificationScreen = "/NotificationScreen";
 }

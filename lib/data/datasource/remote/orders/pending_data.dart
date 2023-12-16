@@ -6,8 +6,11 @@ class OrdersData {
 
   OrdersData(this.crud);
 
-  Future getPendingDate(String userId) async {
-    var response = await crud.postData(AppLink.pendingOrders, {"id": userId});
+  Future getOrderDate(String userId, String categoriesId) async {
+    var response = await crud.postData(AppLink.orderView, {
+      "user_id": userId,
+      "categories_id": categoriesId,
+    });
     return response.fold((l) => l, (r) => r);
   }
 
@@ -16,7 +19,7 @@ class OrdersData {
     return response.fold((l) => l, (r) => r);
   }
 
-  Future addRaring(String id,String rating, String note) async {
+  Future addRaring(String id, String rating, String note) async {
     var response = await crud.postData(AppLink.addRatingOrders, {
       "id": id,
       "rating": rating,

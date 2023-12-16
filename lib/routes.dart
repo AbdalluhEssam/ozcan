@@ -19,14 +19,13 @@ import 'package:ozcan/view/screen/home/splash_screen.dart';
 import 'package:ozcan/view/screen/home/stories.dart';
 import 'package:ozcan/view/screen/home/storiesTop.dart';
 import 'package:ozcan/view/screen/items/department.dart';
+import 'package:ozcan/view/screen/items/department_ordeer.dart';
 import 'package:ozcan/view/screen/items/productdetails.dart';
 import 'package:ozcan/view/screen/language.dart';
 import 'package:ozcan/view/screen/munesetting/aboutus.dart';
 import 'package:ozcan/view/screen/munesetting/helppage.dart';
 import 'package:ozcan/view/screen/munesetting/policy.dart';
 import 'package:ozcan/view/screen/onboarding.dart';
-import 'package:ozcan/view/screen/orders/archive.dart';
-import 'package:ozcan/view/screen/orders/details.dart';
 import 'package:ozcan/view/screen/orders/pending.dart';
 import 'core/constant/routes.dart';
 import 'core/middleware/mymiddleware.dart';
@@ -59,11 +58,12 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.home, page: () => const HomePage()),
   GetPage(name: AppRoute.homeScreen, page: () => const HomeScreen()),
   GetPage(name: AppRoute.departmentView, page: () => const DepartmentView()),
+  GetPage(name: AppRoute.departmentOrderView, page: () => const DepartmentOrderView()),
   GetPage(name: AppRoute.productDetails, page: () => const ProductDetails()),
   GetPage(name: AppRoute.storiesDepartment, page: () => const StoriesDepartment()),
   GetPage(name: AppRoute.storiesTopDepartment, page: () => const StoriesTopDepartment()),
   GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatsDetailsScreen()),
-  // GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatScreenWeb()),
+  GetPage(name: AppRoute.chatScreenWeb, page: () => const ChatScreenWeb()),
   GetPage(name: AppRoute.cart, page: () => const CartView()),
   GetPage(name: AppRoute.aboutUs, page: () => const AboutUs()),
   GetPage(name: AppRoute.helpPage, page: () => const HelpPage()),
@@ -74,8 +74,6 @@ List<GetPage<dynamic>>? routes = [
   // GetPage(name: AppRoute.search, page: () =>  SearchScreen()),
   // ORDERS
   GetPage(name: AppRoute.ordersPending, page: () => const OrdersPending()),
-  GetPage(name: AppRoute.ordersArchive, page: () => const OrdersArchive()),
-  GetPage(name: AppRoute.ordersDetails, page: () => const OrdersDetails()),
   GetPage(name: AppRoute.notificationScreen, page: () => const NotificationScreen()),
 
 ];

@@ -38,31 +38,25 @@ class DepartmentView extends StatelessWidget {
                 width: 15,
               ),
               GetBuilder<DepartmentControllerImp>(
-                builder: (controller) =>  Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                            Text(
-                              "OZCAN ${controller.categoriesName}",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      height: 1,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 18,
-                                      color: primaryColor),
+                builder: (controller) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "OZCAN ${controller.categoriesName}",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                            height: 1,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            color: primaryColor),
+                      ),
+                      Text(
+                        "مرحبا بك",
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              height: 1,
+                              fontWeight: FontWeight.bold,
                             ),
-                            Text(
-                              "مرحبا بك",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    height: 1,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                            )
-                          ]),
+                      )
+                    ]),
               ),
             ],
           ),
@@ -82,11 +76,11 @@ class DepartmentView extends StatelessWidget {
                           null) {
                         Get.toNamed(AppRoute.login);
                       } else {
-                        Get.toNamed(AppRoute.chatsDetailsScreen,arguments: {
-                          "adminId" : controller.adminId,
-                          "categoriesName" : controller.categoriesName,
-                          "categoriesId" : controller.categoriesId,
-                          "color" :primaryColor,
+                        Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
+                          "adminId": controller.adminId,
+                          "categoriesName": controller.categoriesName,
+                          "categoriesId": controller.categoriesId,
+                          "color": primaryColor,
                         });
                       }
                     },
@@ -123,10 +117,13 @@ class DepartmentView extends StatelessWidget {
                                             Get.toNamed(
                                                 AppRoute.storiesDepartment,
                                                 arguments: {
-                                                  "categoriesId":controller.categoriesId,
-                                                  "categoriesColor": controller.categoriesColor,
-                                                  "adminId" : controller.adminId,
-                                                  "categoriesName" : controller.categoriesName,
+                                                  "categoriesId":
+                                                      controller.categoriesId,
+                                                  "categoriesColor": controller
+                                                      .categoriesColor,
+                                                  "adminId": controller.adminId,
+                                                  "categoriesName":
+                                                      controller.categoriesName,
                                                 });
                                         },
                                         show: controller.story.isNotEmpty,
@@ -143,11 +140,20 @@ class DepartmentView extends StatelessWidget {
                                                       AppRoute
                                                           .storiesTopDepartment,
                                                       arguments: {
-                                                        "categoriesId":controller.categoriesId,
-                                                        "categoriesColor": controller.categoriesColor,
-                                                        "adminId" : controller.adminId,
-                                                        "categoriesName" : controller.categoriesName,
-                                                        "departmentId": controller.departmentStory[index]['department_id'],
+                                                        "categoriesId":
+                                                            controller
+                                                                .categoriesId,
+                                                        "categoriesColor":
+                                                            controller
+                                                                .categoriesColor,
+                                                        "adminId":
+                                                            controller.adminId,
+                                                        "categoriesName":
+                                                            controller
+                                                                .categoriesName,
+                                                        "departmentId": controller
+                                                                .departmentStory[
+                                                            index]['department_id'],
                                                       });
                                                 },
                                                 primaryColor: primaryColor,
@@ -181,8 +187,9 @@ class DepartmentView extends StatelessWidget {
                                     ],
                                   ),
                                 ),
+
                                 const SizedBox(
-                                  height: 20,
+                                  height: 12,
                                 ),
                                 GetBuilder<DepartmentControllerImp>(
                                   builder: (controller) => SizedBox(
@@ -305,12 +312,16 @@ class DepartmentView extends StatelessWidget {
                                         onTap: () {
                                           Get.toNamed(AppRoute.itemsView,
                                               arguments: {
-                                                "itemsModel":controller.items[index],
-                                                "categoriesColor":controller.categoriesColor,
-                                                "categoriesId":controller.categoriesId,
-                                                "adminId" : controller.adminId,
-                                                "categoriesName" : controller.categoriesName,
-                                                "itemId" : index,
+                                                "itemsModel":
+                                                    controller.items[index],
+                                                "categoriesColor":
+                                                    controller.categoriesColor,
+                                                "categoriesId":
+                                                    controller.categoriesId,
+                                                "adminId": controller.adminId,
+                                                "categoriesName":
+                                                    controller.categoriesName,
+                                                "itemId": index,
                                               });
                                         },
                                         child: Container(

@@ -35,7 +35,7 @@ class AppLink {
   static const String deleteEndFavorite = "$serverLink/favorite/deleteend.php";
   static const String viewFavorite      = "$serverLink/favorite/view.php";
 //================================== CART ===============================//
-  static const String cardView      = "$serverLink/cart/viewcard.php";
+  static const String orderView      = "$serverLink/cart/view.php";
   static const String cardAdd       = "$serverLink/cart/insertcart.php";
   static const String cardCount     = "$serverLink/cart/count.php";
   static const String cardDelete    = "$serverLink/cart/deletecart.php";
