@@ -58,9 +58,6 @@ class ChatControllerImp extends ChatController {
 
     getTicket();
 
-    if (ticket.any((element) => element.category.toString() != adminId)) {
-      addFirst();
-    }
     viewChat();
     log("***********************************  $ticketId");
     log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
@@ -103,6 +100,8 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
       getTicket();
+      log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////  Message Sent ");
+
       viewChat();
     }
     update();
@@ -146,6 +145,12 @@ class ChatControllerImp extends ChatController {
     log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
     if (ticket.isNotEmpty) {
       ticketId = ticket.last.id.toString();
+      if (ticket.any((element) => element.category.toString() != adminId)) {
+        addFirst();
+      }
+    }
+    if (ticket.isEmpty) {
+      addFirst();
     }
     update();
   }
