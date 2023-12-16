@@ -118,29 +118,38 @@ class ChatControllerImp extends ChatController {
   @override
   viewChat() async {
     chat.clear();
-    var response = await chatData.getData(ticketId.toString());
-    log("========================================================================$response");
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['message'] != "No Messages Found") {
-        List massage = response['messages'];
-        chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
-      } else {
-        chat.clear();
+    if (ticketId != "null") {
+      var response = await chatData.getData(ticketId.toString());
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['message'] != "No Messages Found") {
+          List massage = response['messages'];
+          chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+        } else {
+          chat.clear();
+        }
       }
+      update();
     }
+
     update();
   }
 
   getTicket() async {
     ticket.clear();
     chat.clear();
-    var response = await chatData.getTicketData(idUser.toString(), adminId.toString());
+    var response =
+        await chatData.getTicketData(idUser.toString(), adminId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      List massage = response['User_Tickets'];
-      ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+      if (response['message'] != "No Ticket Yet") {
+        List massage = response['User_Tickets'];
+        ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+      } else {
+        ticket = [];
+      }
     }
     log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
 
