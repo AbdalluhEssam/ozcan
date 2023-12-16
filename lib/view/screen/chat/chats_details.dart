@@ -205,7 +205,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               const SizedBox(
                 width: 5,
               ),
-              Text(model.description!),
+              Flexible(child: Text(model.description!)),
             ],
           ),
         ),

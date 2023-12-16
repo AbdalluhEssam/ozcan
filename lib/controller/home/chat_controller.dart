@@ -34,7 +34,7 @@ class ChatControllerImp extends ChatController {
   String? categoriesId;
   String? categoriesName;
   String? adminId;
-  String ticketId = "0";
+  String ticketId = "null";
   String? itemsName;
   Color? categoriesColor;
 
@@ -47,6 +47,7 @@ class ChatControllerImp extends ChatController {
 
   @override
   void onInit() {
+    initialData();
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
@@ -54,14 +55,10 @@ class ChatControllerImp extends ChatController {
     itemsName = Get.arguments['itemsName'];
     itemsName = itemsName != null ? "${"اريد الاستفسار عن " + itemsName!}" : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
-    initialData();
-
     getTicket();
-
-    viewChat();
     log("***********************************  $ticketId");
     log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) => viewChat());
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
     super.onInit();
   }
 
@@ -101,8 +98,6 @@ class ChatControllerImp extends ChatController {
       myControllerMassage.clear();
       getTicket();
       log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////  Message Sent ");
-
-      viewChat();
     }
     update();
   }
@@ -127,15 +122,20 @@ class ChatControllerImp extends ChatController {
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      List massage = response['messages'];
-      chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+      if (response['message'] != "No Messages Found") {
+        List massage = response['messages'];
+        chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+      } else {
+        chat.clear();
+      }
     }
     update();
   }
 
   getTicket() async {
-    var response =
-        await chatData.getTicketData(idUser.toString(), adminId.toString());
+    ticket.clear();
+    chat.clear();
+    var response = await chatData.getTicketData(idUser.toString(), adminId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
@@ -143,15 +143,15 @@ class ChatControllerImp extends ChatController {
       ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
     }
     log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
-    if (ticket.isNotEmpty) {
-      ticketId = ticket.last.id.toString();
-      if (ticket.any((element) => element.category.toString() != adminId)) {
-        addFirst();
-      }
-    }
+
     if (ticket.isEmpty) {
       addFirst();
     }
+    if (ticket.isNotEmpty) {
+      ticketId = ticket.last.id.toString();
+      viewChat();
+    }
+
     update();
   }
 }

@@ -159,19 +159,19 @@ class Messages {
 
 
 class UserTicketsModel {
-  int? id;
+  String? id;
   String? ticketId;
   String? name;
   String? email;
-  int? category;
-  int? priority;
+  String? category;
+  String? priority;
   String? subject;
   String? status;
   String? description;
   String? createdBy;
   String? attachments;
-  Null? resloveAt;
-  Null? note;
+  String? resloveAt;
+  String? note;
   String? createdAt;
   String? updatedAt;
 
@@ -193,16 +193,16 @@ class UserTicketsModel {
         this.updatedAt});
 
   UserTicketsModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'];
-    ticketId = json['ticket_id'];
+    id = json['id'].toString();
+    ticketId = json['ticket_id'].toString();
     name = json['name'];
     email = json['email'];
-    category = json['category'];
-    priority = json['priority'];
-    subject = json['subject'];
-    status = json['status'];
+    category = json['category'].toString();
+    priority = json['priority'].toString();
+    subject = json['subject'].toString();
+    status = json['status'].toString();
     description = json['description'];
-    createdBy = json['created_by'];
+    createdBy = json['created_by'].toString();
     attachments = json['attachments'];
     resloveAt = json['reslove_at'];
     note = json['note'];
