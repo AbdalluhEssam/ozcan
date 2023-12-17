@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
-import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
 import '../../../controller/items/items_controller.dart';
 import '../../../core/constant/routes.dart';
@@ -159,7 +158,9 @@ class ItemsView extends StatelessWidget {
                                             "categoriesName":
                                                 controller.categoriesName,
                                             "itemsName": controller
-                                                .items[index].itemsName
+                                                .items[index].itemsName,
+                                            "itemsImage":
+                                                "${AppLink.imageItems}/${controller.items[index].itemsImage}"
                                           });
                                     } else {
                                       Get.toNamed(AppRoute.login);

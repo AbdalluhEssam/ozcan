@@ -19,7 +19,7 @@ class OrdersPending extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text("Orders",style: TextStyle(color: primaryColor),),
+        title:  Text("الطلبات",style: TextStyle(color: primaryColor),),
         foregroundColor: primaryColor,
       ),
       body: Container(

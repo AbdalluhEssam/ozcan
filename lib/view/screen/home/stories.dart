@@ -83,13 +83,22 @@ class StoriesDepartment extends StatelessWidget {
                                   controller.itemsName =
                                       controller.story[index]['note'];
                                   print(controller.currentIndex);
-                                  return StoryItem.pageImage(
-                                    caption:
-                                        "${controller.story[index]['note']}",
-                                    url:
-                                        "${AppLink.imageStory}/${controller.story[index]['image']}",
-                                    controller: StoryController(),
-                                  );
+                                  if (controller.story[index]['video'] == "0") {
+                                    return StoryItem.pageImage(
+                                      caption:
+                                          "${controller.story[index]['note']}",
+                                      url:
+                                          "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                      controller: StoryController(),
+                                    );
+                                  } else {
+                                    return StoryItem.pageVideo(
+                                      "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                      caption:
+                                          "${controller.story[index]['note']}",
+                                      controller: StoryController(),
+                                    );
+                                  }
                                 },
                               ),
                             ],
@@ -119,7 +128,9 @@ class StoriesDepartment extends StatelessWidget {
                         textAlign: TextAlign.start,
                         controller: controller.textController,
                         onTap: () {
-                          if (controller.myServices.sharedPreferences.getString("username") != null) {
+                          if (controller.myServices.sharedPreferences
+                                  .getString("username") !=
+                              null) {
                             Get.toNamed(AppRoute.chatsDetailsScreen,
                                 arguments: {
                                   "color": primaryColor,

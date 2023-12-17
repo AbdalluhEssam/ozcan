@@ -62,7 +62,8 @@ class ProductDetails extends StatelessWidget {
                         "adminId": controller.adminId,
                         "categoriesName": controller.categoriesName,
                         "color": primaryColor,
-                        "itemsName": controller.itemsModel.itemsName
+                        "itemsName": controller.itemsModel.itemsName,
+                        "itemsImage": "${AppLink.imageItems}/${controller.itemsModel.itemsImage}"
                       });
                     }else{
                       Get.toNamed(AppRoute.login);

@@ -20,13 +20,29 @@ abstract class ChatController extends GetxController {
 class ChatControllerImp extends ChatController {
   MyServices myServices = Get.find();
   ChatData chatData = ChatData(Get.find());
+  RegExp urlRegExp = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+    caseSensitive: false,
+  );
+  bool hasLink = false;
 
+  bool containsLink(String text) {
+    return urlRegExp.hasMatch(text);
+  }
+
+  String extractLink(String text) {
+    RegExpMatch? match = urlRegExp.firstMatch(text);
+    return match != null ? match.group(0)! : '';
+  }
+  String removeLinks(String text) {
+    return text.replaceAll(urlRegExp, '');
+  }
   List<MassageBotModel> chat = [];
   List<UserTicketsModel> ticket = [];
   late TextEditingController myControllerMassage;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Timer _timer;
-
+  late String enteredText;
   late StatusRequest statusRequest;
   String? idUser;
   String? username;
@@ -36,6 +52,7 @@ class ChatControllerImp extends ChatController {
   String? adminId;
   String ticketId = "null";
   String? itemsName;
+  String? itemsImage;
   Color? categoriesColor;
 
   @override
@@ -52,12 +69,22 @@ class ChatControllerImp extends ChatController {
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
     adminId = Get.arguments['adminId'];
-    itemsName = Get.arguments['itemsName'];
-    itemsName = itemsName != null ? "${"اريد الاستفسار عن " + itemsName!}" : "";
-    myControllerMassage = TextEditingController(text: itemsName ?? "");
     getTicket();
+    itemsName = Get.arguments['itemsName'];
+    itemsImage = Get.arguments['itemsImage'];
+    if (itemsImage != null) {
+      hasLink = true;
+      enteredText = itemsImage!;
+    }
+    itemsName = itemsName != null
+        ? "${"اريد الاستفسار عن " + itemsName!}\n$itemsImage"
+        : "";
+    myControllerMassage = TextEditingController(text: itemsName ?? "");
+    if (itemsImage != null && itemsName != null && ticket.isNotEmpty) {
+      addMassage();
+    }
+
     log("***********************************  $ticketId");
-    log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa///// $idUser");
     _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
     super.onInit();
   }
@@ -73,6 +100,7 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
+      hasLink = false;
       // viewChat();
     }
     update();

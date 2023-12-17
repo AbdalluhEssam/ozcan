@@ -6,6 +6,7 @@ import '../../core/class/statusrequest.dart';
 import '../../core/functions/translatedordatabase.dart';
 import '../../core/services/services.dart';
 import '../../view/screen/home/settings.dart';
+import '../../view/screen/items/department_ordeer.dart';
 
 abstract class HomeScreenController extends GetxController {
   changePage(int currentPage);
@@ -16,9 +17,11 @@ class HomeScreenControllerImp extends HomeScreenController {
   MyServices myServices = Get.find();
   int currentIndex = 0;
   late StatusRequest statusRequest;
+
   List<Widget> listPage = [
     const HomePageView(),
     const CategoriesPage(),
+    const DepartmentOrderView(),
     const Settings(),
   ];
   List bottomAppBar = [
@@ -26,6 +29,10 @@ class HomeScreenControllerImp extends HomeScreenController {
     {
       "title": translateDataBase("القائمة", "Notifications"),
       "icon": Icons.menu
+    },
+    {
+      "title": translateDataBase("تتبع", "Orders"),
+      "icon": Icons.shopping_cart_outlined
     },
     {
       "title": translateDataBase("الاعدادات", "Settings"),

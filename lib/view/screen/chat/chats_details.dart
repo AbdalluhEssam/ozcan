@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
@@ -12,7 +13,7 @@ class ChatsDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ChatControllerImp());
+    ChatControllerImp controller = Get.put(ChatControllerImp());
     return GetBuilder<ChatControllerImp>(
       init: Get.put(ChatControllerImp()),
       builder: (controller) => Scaffold(
@@ -70,10 +71,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                       child: ListView.separated(
                           physics: const BouncingScrollPhysics(),
                           shrinkWrap: true,
-
                           itemBuilder: (context, index) {
-                            if (controller.chat[index].sender ==
-                                "user") {
+                            if (controller.chat[index].sender == "user") {
                               return buildMyMessage(controller.chat[index],
                                   controller.categoriesColor!);
                             }
@@ -91,6 +90,17 @@ class ChatsDetailsScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.bodyLarge,
                       )),
                     ),
+              if (controller.hasLink)
+                Container(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                        color: controller.categoriesColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl: "${controller.enteredText}",
+                      height: Get.width * 0.4,
+                      width: Get.width,
+                    )),
               Container(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   decoration: BoxDecoration(
@@ -147,67 +157,120 @@ class ChatsDetailsScreen extends StatelessWidget {
     await launchUrlString("whatsapp://send?phone=+9647746423382");
   }
 
-  Widget buildMessage(MassageBotModel model) => Align(
-        alignment: AlignmentDirectional.centerEnd,
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 300),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          decoration: BoxDecoration(
-              color: Colors.grey[300],
-              borderRadius: const BorderRadiusDirectional.only(
-                bottomEnd: Radius.circular(10),
-                bottomStart: Radius.circular(10),
-                topStart: Radius.circular(10),
-              )),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(child: Text(model.description!.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<pre>', '').replaceAll('</pre>', ''))),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                DateFormat('jm', 'en_US')
-                    .format(DateTime.parse(model.createdAt!))
-                    .toString(),
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 10),
-              ),
-            ],
-          ),
-        ),
-      );
+  Widget buildMessage(MassageBotModel model) {
+    ChatControllerImp controller = Get.put(ChatControllerImp());
+    return Align(
+      alignment: AlignmentDirectional.centerEnd,
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 300),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        decoration: BoxDecoration(
+            color: Colors.grey[300],
+            borderRadius: const BorderRadiusDirectional.only(
+              bottomEnd: Radius.circular(10),
+              bottomStart: Radius.circular(10),
+              topStart: Radius.circular(10),
+            )),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+                child: controller.containsLink(model.description!)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CachedNetworkImage(
 
-  Widget buildMyMessage(MassageBotModel model, Color color) => Align(
-        alignment: AlignmentDirectional.centerStart,
-        child: Container(
-          constraints: BoxConstraints(maxWidth: 300),
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-          decoration: BoxDecoration(
-              color: color.withOpacity(0.4),
-              borderRadius: const BorderRadiusDirectional.only(
-                bottomEnd: Radius.circular(10),
-                bottomStart: Radius.circular(10),
-                topEnd: Radius.circular(10),
-              )),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                DateFormat('jm', 'en_US')
-                    .format(DateTime.parse(model.createdAt!))
-                    .toString(),
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 10),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Flexible(child: Text(model.description!.replaceAll('<p>', '').replaceAll('</p>', '').replaceAll('<pre>', '').replaceAll('</pre>', ''))),
-            ],
-          ),
+                            imageUrl:
+                                '${controller.extractLink(model.description!)}',
+                            height: 250,
+                          ),
+                          Text(controller
+                              .removeLinks(model.description!)
+                              .replaceAll('<p>', '')
+                              .replaceAll('</p>', '')
+                              .replaceAll('<pre>', '')
+                              .replaceAll('</pre>', ''))
+                        ],
+                      )
+                    : Text(model.description!
+                        .replaceAll('<p>', '')
+                        .replaceAll('</p>', '')
+                        .replaceAll('<pre>', '')
+                        .replaceAll('</pre>', ''))),
+            const SizedBox(
+              width: 5,
+            ),
+            Text(
+              DateFormat('jm', 'en_US')
+                  .format(DateTime.parse(model.createdAt!))
+                  .toString(),
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 10),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
+
+  Widget buildMyMessage(MassageBotModel model, Color color) {
+    ChatControllerImp controller = Get.put(ChatControllerImp());
+
+    return Align(
+      alignment: AlignmentDirectional.centerStart,
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 300),
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        decoration: BoxDecoration(
+            color: color.withOpacity(0.4),
+            borderRadius: const BorderRadiusDirectional.only(
+              bottomEnd: Radius.circular(10),
+              bottomStart: Radius.circular(10),
+              topEnd: Radius.circular(10),
+            )),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              DateFormat('jm', 'en_US')
+                  .format(DateTime.parse(model.createdAt!))
+                  .toString(),
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 10),
+            ),
+            const SizedBox(
+              width: 5,
+            ),
+            Flexible(
+                child: controller.containsLink(model.description!)
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl:
+                                '${controller.extractLink(model.description!)}',
+                            maxHeightDiskCache: 200,
+
+                          ),
+                          Text(controller
+                              .removeLinks(model.description!)
+                              .replaceAll('<p>', '')
+                              .replaceAll('</p>', '')
+                              .replaceAll('<pre>', '')
+                              .replaceAll('</pre>', ''))
+                        ],
+                      )
+                    : Text(model.description!
+                        .replaceAll('<p>', '')
+                        .replaceAll('</p>', '')
+                        .replaceAll('<pre>', '')
+                        .replaceAll('</pre>', ''))),
+          ],
+        ),
+      ),
+    );
+  }
 }
