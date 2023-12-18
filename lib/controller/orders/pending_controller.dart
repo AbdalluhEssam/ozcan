@@ -17,8 +17,8 @@ class OrdersPendingController extends GetxController {
 
   @override
   void onInit() {
-    categoriesId = Get.arguments['categoriesId'].toString();
-    categoriesColor = Get.arguments['categoriesColor'];
+    // categoriesId = Get.arguments['categoriesId'].toString();
+    // categoriesColor = Get.arguments['categoriesColor'];
     getData();
     super.onInit();
   }

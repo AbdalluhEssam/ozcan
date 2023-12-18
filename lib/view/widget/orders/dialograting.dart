@@ -40,9 +40,9 @@ void showDialogRating(BuildContext context, String orderId) {
       commentHint: 'Set your custom comment',
       onCancelled: () => log('cancelled'),
       onSubmitted: (response) {
-        OrdersArchiveController controller = Get.find();
-        controller.submitRating(orderId, response.rating, response.comment);
-        log('rating: ${response.rating}, comment: ${response.comment}');
+        // OrdersArchiveController controller = Get.find();
+        // controller.submitRating(orderId, response.rating, response.comment);
+        // log('rating: ${response.rating}, comment: ${response.comment}');
 
         // TODO: add your own logic
         if (response.rating < 3.0) {

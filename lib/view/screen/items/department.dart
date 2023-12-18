@@ -81,6 +81,7 @@ class DepartmentView extends StatelessWidget {
                           "categoriesName": controller.categoriesName,
                           "categoriesId": controller.categoriesId,
                           "color": primaryColor,
+                          "ticketId": controller.ticketId,
                         });
                       }
                     },
@@ -124,6 +125,7 @@ class DepartmentView extends StatelessWidget {
                                                   "adminId": controller.adminId,
                                                   "categoriesName":
                                                       controller.categoriesName,
+                                                  "ticketId": controller.ticketId,
                                                 });
                                         },
                                         show: controller.story.isNotEmpty,
@@ -148,6 +150,7 @@ class DepartmentView extends StatelessWidget {
                                                                 .categoriesColor,
                                                         "adminId":
                                                             controller.adminId,
+                                                        "ticketId": controller.ticketId,
                                                         "categoriesName":
                                                             controller
                                                                 .categoriesName,
@@ -316,6 +319,7 @@ class DepartmentView extends StatelessWidget {
                                                     controller.items[index],
                                                 "categoriesColor":
                                                     controller.categoriesColor,
+                                                "ticketId": controller.ticketId,
                                                 "categoriesId":
                                                     controller.categoriesId,
                                                 "adminId": controller.adminId,

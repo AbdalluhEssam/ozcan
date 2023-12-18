@@ -44,7 +44,7 @@ class AppLink {
 //================================== ORDERS ===============================//
   static const String checkOutAdd = "$serverLink/orders/checkout.php";
   static const String pendingOrders = "$serverLink/orders/pending.php";
-  static const String archiveOrders = "$serverLink/orders/archive.php";
+  static const String archiveOrders = "$serverLink/cart/viewAll.php";
   static const String addRatingOrders = "$serverLink/orders/rating.php";
   static const String detailsOrders = "$serverLink/orders/details.php";
 //================================== NOTIFICATION ===============================//
@@ -63,6 +63,8 @@ class AppLink {
   // static const String addChatBot = "https://ozcan.almirsystem.com/chatapi/api/user/insert.php";
   static const String addChatBot = "https://ozcan.almirsystem.com/chatapi/api/tikc/insert.php";
   static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/msg/insert.php";
+  static const String editStatus = "$serverLink/cart/updateorder.php";
+  static const String orderId = "$serverLink/cart/orderid.php";
   // static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/tikc/insert.php";
 //================================== END ===============================//
 }

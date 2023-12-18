@@ -63,6 +63,7 @@ class ProductDetails extends StatelessWidget {
                         "categoriesName": controller.categoriesName,
                         "color": primaryColor,
                         "itemsName": controller.itemsModel.itemsName,
+                        "ticketId": controller.ticketId,
                         "itemsImage": "${AppLink.imageItems}/${controller.itemsModel.itemsImage}"
                       });
                     }else{

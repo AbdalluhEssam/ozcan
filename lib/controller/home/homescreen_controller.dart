@@ -7,6 +7,7 @@ import '../../core/functions/translatedordatabase.dart';
 import '../../core/services/services.dart';
 import '../../view/screen/home/settings.dart';
 import '../../view/screen/items/department_ordeer.dart';
+import '../../view/screen/orders/pending.dart';
 
 abstract class HomeScreenController extends GetxController {
   changePage(int currentPage);
@@ -21,7 +22,7 @@ class HomeScreenControllerImp extends HomeScreenController {
   List<Widget> listPage = [
     const HomePageView(),
     const CategoriesPage(),
-    const DepartmentOrderView(),
+    const OrdersPending(),
     const Settings(),
   ];
   List bottomAppBar = [

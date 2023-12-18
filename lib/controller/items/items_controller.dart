@@ -39,6 +39,7 @@ class ItemsControllerImp extends ItemsController {
   String? categoriesColor;
   String? adminId;
   int? itemId;
+  String? ticketId;
 
   @override
   initialData() {
@@ -76,6 +77,7 @@ class ItemsControllerImp extends ItemsController {
     categoriesColor = Get.arguments['categoriesColor'].toString();
     adminId = Get.arguments['adminId'].toString();
     itemId = Get.arguments['itemId'];
+    ticketId = Get.arguments['ticketId'];
     log(itemId.toString());
     initialData();
     getData();

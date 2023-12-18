@@ -66,30 +66,31 @@ class ChatsDetailsScreen extends StatelessWidget {
             children: [
               controller.chat.isNotEmpty
                   ? Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          if (controller.chat[index].sender == "user") {
-                            return buildMyMessage(controller.chat[index],
-                                controller.categoriesColor!);
-                          }
-                          return buildMessage(controller.chat[index]);
-                        },
-                        separatorBuilder: (context, index) => const SizedBox(
-                          height: 8,
-                        ),
-                        itemCount: controller.chat.length),
-                  ))
+                      child: Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: ListView.separated(
+                          controller: controller.scrollController,
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            if (controller.chat[index].sender == "user") {
+                              return buildMyMessage(controller.chat[index],
+                                  controller.categoriesColor!);
+                            }
+                            return buildMessage(controller.chat[index]);
+                          },
+                          separatorBuilder: (context, index) => const SizedBox(
+                                height: 8,
+                              ),
+                          itemCount: controller.chat.length),
+                    ))
                   : Expanded(
-                child: Center(
-                    child: Text(
-                      "أهلاً بك! تحدث الآن مع أحد ممثلي خدمة العملاء.",
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    )),
-              ),
+                      child: Center(
+                          child: Text(
+                        "أهلاً بك! تحدث الآن مع أحد ممثلي خدمة العملاء.",
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      )),
+                    ),
               if (controller.hasLink)
                 Container(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -128,21 +129,21 @@ class ChatsDetailsScreen extends StatelessWidget {
                             )),
                         Expanded(
                             child: TextFormField(
-                              controller: controller.myControllerMassage,
-                              minLines: 1,
-                              maxLines: 2,
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'not message';
-                                }
-                                return null;
-                              },
-                              decoration: const InputDecoration(
-                                  contentPadding:
+                          controller: controller.myControllerMassage,
+                          minLines: 1,
+                          maxLines: 2,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'not message';
+                            }
+                            return null;
+                          },
+                          decoration: const InputDecoration(
+                              contentPadding:
                                   EdgeInsets.symmetric(horizontal: 10),
-                                  hintText: 'تفصل بسؤالك ...',
-                                  border: InputBorder.none),
-                            )),
+                              hintText: 'تفصل بسؤالك ...',
+                              border: InputBorder.none),
+                        )),
                       ],
                     ),
                   ))
@@ -159,6 +160,9 @@ class ChatsDetailsScreen extends StatelessWidget {
 
   Widget buildMessage(MassageBotModel model) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
+    if (model.description!.contains("confirmBtn"))
+      controller
+          .orderId(controller.extractConfirmationCode(model.description!));
     return Align(
       alignment: AlignmentDirectional.centerEnd,
       child: Container(
@@ -178,43 +182,58 @@ class ChatsDetailsScreen extends StatelessWidget {
             Flexible(
                 child: controller.containsLink(model.description!)
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl:
-                      '${controller.extractLink(model.description!)}',
-                      height: 250,
-                    ),
-                    Text(controller
-                        .removeLinks(model.description!)
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl:
+                                '${controller.extractLink(model.description!)}',
+                            maxHeightDiskCache: 200,
+                          ),
+                          Text(controller
+                              .removeLinks(model.description!)
+                              .replaceAll('<p>', '')
+                              .replaceAll('</p>', '')
+                              .replaceAll('<pre>', '')
+                              .replaceAll('</pre>', '')
+                              .replaceAll('<br />', '')
+                              .replaceAll('<br>', '')
+                              .replaceAll('confirmBtn|', '')
+                              .replaceAll(
+                                  '${controller.extractConfirmationCode(model.description!)}',
+                                  '')),
+                          if (!controller.isDateTimeAfter48Hours(DateTime.parse(model.createdAt!).subtract(Duration(hours: 47))))
+                            if (model.description!.contains("confirmBtn"))
+                              OutlinedButton.icon(
+                                  style: ButtonStyle(
+                                      minimumSize: MaterialStatePropertyAll(
+                                          Size(Get.width, 40)),
+                                      alignment: Alignment.center,
+                                      backgroundColor: MaterialStatePropertyAll(
+                                          controller.orderStatus != "1"
+                                              ? Colors.green
+                                              : Colors.greenAccent)),
+                                  onPressed: () {
+                                    if (controller.orderStatus != "1") {
+                                      controller.editStatus(
+                                          controller.extractConfirmationCode(
+                                              model.description!));
+                                    }
+                                  },
+                                  icon: Icon(Icons.add_shopping_cart_outlined,
+                                      color: Colors.white),
+                                  label: Text(
+                                    controller.orderStatus != "1"
+                                        ? "تثبيت"
+                                        : "تم التثبيت",
+                                    style: TextStyle(color: Colors.white),
+                                  ))
+                        ],
+                      )
+                    : Text(model.description!
                         .replaceAll('<p>', '')
                         .replaceAll('</p>', '')
                         .replaceAll('<pre>', '')
-                        .replaceAll('</pre>', '')
-                        .replaceAll('<br />', '')
-                        .replaceAll('<br>', '').replaceAll('confirmBtn|', '')),
-
-                    if (model.description!.contains("confirmBtn"))
-                      OutlinedButton.icon(
-                          style: ButtonStyle(
-                              minimumSize: MaterialStatePropertyAll(Size(Get.width, 40)),
-                              alignment: Alignment.center,
-                              backgroundColor:
-                              MaterialStatePropertyAll(Colors.green)),
-                          onPressed: () {},
-                          icon: Icon(Icons.add_shopping_cart_outlined,
-                              color: Colors.white),
-                          label: Text(
-                            "تثبيت",
-                            style: TextStyle(color: Colors.white),
-                          ))
-                  ],
-                )
-                    : Text(model.description!
-                    .replaceAll('<p>', '')
-                    .replaceAll('</p>', '')
-                    .replaceAll('<pre>', '')
-                    .replaceAll('</pre>', ''))),
+                        .replaceAll('</pre>', ''))),
             const SizedBox(
               width: 5,
             ),
@@ -263,26 +282,26 @@ class ChatsDetailsScreen extends StatelessWidget {
             Flexible(
                 child: controller.containsLink(model.description!)
                     ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    CachedNetworkImage(
-                      imageUrl:
-                      '${controller.extractLink(model.description!)}',
-                      maxHeightDiskCache: 200,
-                    ),
-                    Text(controller
-                        .removeLinks(model.description!)
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CachedNetworkImage(
+                            imageUrl:
+                                '${controller.extractLink(model.description!)}',
+                            maxHeightDiskCache: 200,
+                          ),
+                          Text(controller
+                              .removeLinks(model.description!)
+                              .replaceAll('<p>', '')
+                              .replaceAll('</p>', '')
+                              .replaceAll('<pre>', '')
+                              .replaceAll('</pre>', '')),
+                        ],
+                      )
+                    : Text(model.description!
                         .replaceAll('<p>', '')
                         .replaceAll('</p>', '')
                         .replaceAll('<pre>', '')
-                        .replaceAll('</pre>', '')),
-                  ],
-                )
-                    : Text(model.description!
-                    .replaceAll('<p>', '')
-                    .replaceAll('</p>', '')
-                    .replaceAll('<pre>', '')
-                    .replaceAll('</pre>', ''))),
+                        .replaceAll('</pre>', ''))),
           ],
         ),
       ),

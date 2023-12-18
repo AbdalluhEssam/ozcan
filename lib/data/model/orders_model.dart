@@ -4,19 +4,23 @@ class OrdersModel {
   String? itemsId;
   String? link;
   String? ordersTotalprice;
+  String? color;
+  String? size;
+  String? qty;
+  String? address;
   String? ordersStatus;
   String? categoriesId;
   String? ordersTime;
+  String? helperLink;
   String? itemsName;
   String? itemsDesc;
   String? itemsImage;
-  String? qty;
-  String? size;
   String? itemsActive;
   String? itemsPrice;
   String? itemsDescount;
   String? itemsDate;
   String? itemsCat;
+  String? days;
   String? usersId;
   String? usersName;
   String? usersEmail;
@@ -32,19 +36,23 @@ class OrdersModel {
         this.itemsId,
         this.link,
         this.ordersTotalprice,
+        this.color,
+        this.size,
+        this.qty,
+        this.address,
         this.ordersStatus,
         this.categoriesId,
         this.ordersTime,
+        this.helperLink,
         this.itemsName,
         this.itemsDesc,
         this.itemsImage,
-        this.qty,
-        this.size,
         this.itemsActive,
         this.itemsPrice,
         this.itemsDescount,
         this.itemsDate,
         this.itemsCat,
+        this.days,
         this.usersId,
         this.usersName,
         this.usersEmail,
@@ -58,21 +66,25 @@ class OrdersModel {
     ordersId = json['orders_id'].toString();
     ordersUsersid = json['orders_usersid'].toString();
     itemsId = json['items_id'].toString();
-    link = json['link'];
+    link = json['link'].toString();
     ordersTotalprice = json['orders_totalprice'].toString();
+    color = json['color'].toString();
+    size = json['size'].toString();
+    qty = json['qty'].toString();
+    address = json['Address'].toString();
     ordersStatus = json['orders_status'].toString();
     categoriesId = json['categories_id'].toString();
     ordersTime = json['orders_time'].toString();
+    helperLink = json['helper_link'].toString();
     itemsName = json['items_name'].toString();
     itemsDesc = json['items_desc'].toString();
     itemsImage = json['items_image'].toString();
-    qty = json['qty'].toString();
-    size = json['size'].toString();
     itemsActive = json['items_active'].toString();
     itemsPrice = json['items_price'].toString();
     itemsDescount = json['items_descount'].toString();
     itemsDate = json['items_date'].toString();
     itemsCat = json['items_cat'].toString();
+    days = json['days'].toString();
     usersId = json['users_id'].toString();
     usersName = json['users_name'].toString();
     usersEmail = json['users_email'].toString();
@@ -90,19 +102,23 @@ class OrdersModel {
     data['items_id'] = this.itemsId;
     data['link'] = this.link;
     data['orders_totalprice'] = this.ordersTotalprice;
+    data['color'] = this.color;
+    data['size'] = this.size;
+    data['qty'] = this.qty;
+    data['Address'] = this.address;
     data['orders_status'] = this.ordersStatus;
     data['categories_id'] = this.categoriesId;
     data['orders_time'] = this.ordersTime;
+    data['helper_link'] = this.helperLink;
     data['items_name'] = this.itemsName;
     data['items_desc'] = this.itemsDesc;
     data['items_image'] = this.itemsImage;
-    data['qty'] = this.qty;
-    data['size'] = this.size;
     data['items_active'] = this.itemsActive;
     data['items_price'] = this.itemsPrice;
     data['items_descount'] = this.itemsDescount;
     data['items_date'] = this.itemsDate;
     data['items_cat'] = this.itemsCat;
+    data['days'] = this.days;
     data['users_id'] = this.usersId;
     data['users_name'] = this.usersName;
     data['users_email'] = this.usersEmail;

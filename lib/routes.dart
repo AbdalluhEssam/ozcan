@@ -26,6 +26,7 @@ import 'package:ozcan/view/screen/munesetting/aboutus.dart';
 import 'package:ozcan/view/screen/munesetting/helppage.dart';
 import 'package:ozcan/view/screen/munesetting/policy.dart';
 import 'package:ozcan/view/screen/onboarding.dart';
+import 'package:ozcan/view/screen/orders/orderall.dart';
 import 'package:ozcan/view/screen/orders/pending.dart';
 import 'core/constant/routes.dart';
 import 'core/middleware/mymiddleware.dart';
@@ -59,6 +60,7 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.homeScreen, page: () => const HomeScreen()),
   GetPage(name: AppRoute.departmentView, page: () => const DepartmentView()),
   GetPage(name: AppRoute.departmentOrderView, page: () => const DepartmentOrderView()),
+  GetPage(name: AppRoute.departmentOrderAllView, page: () => const DepartmentOrderAllView()),
   GetPage(name: AppRoute.productDetails, page: () => const ProductDetails()),
   GetPage(name: AppRoute.storiesDepartment, page: () => const StoriesDepartment()),
   GetPage(name: AppRoute.storiesTopDepartment, page: () => const StoriesTopDepartment()),
@@ -74,6 +76,7 @@ List<GetPage<dynamic>>? routes = [
   // GetPage(name: AppRoute.search, page: () =>  SearchScreen()),
   // ORDERS
   GetPage(name: AppRoute.ordersPending, page: () => const OrdersPending()),
+  GetPage(name: AppRoute.ordersAll, page: () => const OrdersAll()),
   GetPage(name: AppRoute.notificationScreen, page: () => const NotificationScreen()),
 
 ];

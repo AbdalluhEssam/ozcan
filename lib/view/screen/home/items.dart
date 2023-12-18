@@ -40,6 +40,7 @@ class ItemsView extends StatelessWidget {
                     "categoriesId": controller.categoriesId,
                     "adminId": controller.adminId,
                     "categoriesName": controller.categoriesName,
+                    "ticketId": controller.ticketId,
                   });
                 },
                 child: Card(
@@ -157,6 +158,8 @@ class ItemsView extends StatelessWidget {
                                             "adminId": controller.adminId,
                                             "categoriesName":
                                                 controller.categoriesName,
+                                            "ticketId":
+                                                controller.ticketId,
                                             "itemsName": controller
                                                 .items[index].itemsName,
                                             "itemsImage":

@@ -16,6 +16,7 @@ class AppRoute {
   static const String homeScreen = "/HomeScreen";
   static const String departmentView = "/DepartmentView";
   static const String departmentOrderView = "/DepartmentOrderView";
+  static const String departmentOrderAllView = "/DepartmentOrderAllView";
   static const String myHomePageCart = "/myhomepagecart";
   static const String cart = "/cart";
   static const String personInformation = "/myhomepage";
@@ -43,5 +44,6 @@ class AppRoute {
   static const String orderDet = "/orderdet";
   static const String policyReturn = "/policyreturn";
   static const String ordersPending = "/OrdersPending";
+  static const String ordersAll = "/OrdersAll";
   static const String notificationScreen = "/NotificationScreen";
 }

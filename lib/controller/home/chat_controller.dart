@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/chat_data.dart';
 import 'package:ozcan/data/model/massage_model.dart';
 import '../../core/class/statusrequest.dart';
+import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 
@@ -34,9 +35,29 @@ class ChatControllerImp extends ChatController {
     RegExpMatch? match = urlRegExp.firstMatch(text);
     return match != null ? match.group(0)! : '';
   }
+
   String removeLinks(String text) {
     return text.replaceAll(urlRegExp, '');
   }
+
+  final ScrollController scrollController = ScrollController();
+  DateTime createdAt = DateTime.now().subtract(Duration(hours: 47)); // Replace this with your model.createdAt
+
+  bool isDateTimeAfter48Hours(DateTime dateTime) {
+    DateTime now = DateTime.now();
+    DateTime after48Hours = now.add(Duration(hours: 48));
+    log(dateTime.isAfter(after48Hours).toString());
+    return dateTime.isAfter(after48Hours);
+  }
+
+
+
+  String extractConfirmationCode(String text) {
+    RegExp regex = RegExp(r'confirmBtn\|(\d+)');
+    Match? match = regex.firstMatch(text);
+    return match != null ? match.group(1)! : '';
+  }
+
   List<MassageBotModel> chat = [];
   List<UserTicketsModel> ticket = [];
   late TextEditingController myControllerMassage;
@@ -50,9 +71,10 @@ class ChatControllerImp extends ChatController {
   String? categoriesId;
   String? categoriesName;
   String? adminId;
-  String ticketId = "null";
+  String? ticketId;
   String? itemsName;
   String? itemsImage;
+  String? orderStatus;
   Color? categoriesColor;
 
   @override
@@ -69,7 +91,7 @@ class ChatControllerImp extends ChatController {
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
     adminId = Get.arguments['adminId'];
-    getTicket();
+    ticketId = Get.arguments['ticketId'];
     itemsName = Get.arguments['itemsName'];
     itemsImage = Get.arguments['itemsImage'];
     if (itemsImage != null) {
@@ -80,12 +102,16 @@ class ChatControllerImp extends ChatController {
         ? "${"اريد الاستفسار عن " + itemsName!}\n$itemsImage"
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
-    if (itemsImage != null && itemsName != null && ticket.isNotEmpty) {
-      addMassage();
+    if (ticketId == null) {
+      addFirst();
+    }
+    if (ticketId != null) {
+      viewChat();
     }
 
     log("***********************************  $ticketId");
     _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
+
     super.onInit();
   }
 
@@ -104,6 +130,45 @@ class ChatControllerImp extends ChatController {
       // viewChat();
     }
     update();
+  }
+
+  editStatus(orderId) async {
+    var response = await chatData.editStatus(orderId.toString());
+    if (kDebugMode) {
+      print(
+          "========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      myControllerMassage.clear();
+      hasLink = false;
+      Get.snackbar("${myServices.sharedPreferences.getString("username")} ",
+          "تم تثبيت طلبك بنجاح".tr,
+          icon: const Icon(Icons.add_shopping_cart),
+          barBlur: 2,
+          margin: const EdgeInsets.symmetric(horizontal: 0),
+          backgroundColor: AppColor.primaryColor.withOpacity(0.4),
+          isDismissible: true,
+          duration: const Duration(seconds: 3),
+          colorText: AppColor.white,
+          borderRadius: 0);
+      // viewChat();
+    }
+    update();
+  }
+
+  orderId(orderId) async {
+    var response = await chatData.orderId(orderId.toString());
+    if (kDebugMode) {
+      print(
+          "========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      if (response['status'] == "success") {
+        orderStatus = response['orders_status'].toString();
+      }
+    }
   }
 
   addFirst() async {
@@ -158,9 +223,7 @@ class ChatControllerImp extends ChatController {
           chat.clear();
         }
       }
-      update();
     }
-
     update();
   }
 
@@ -181,9 +244,6 @@ class ChatControllerImp extends ChatController {
     }
     log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
 
-    if (ticket.isEmpty) {
-      addFirst();
-    }
     if (ticket.isNotEmpty) {
       ticketId = ticket.last.id.toString();
       viewChat();

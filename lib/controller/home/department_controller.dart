@@ -1,27 +1,27 @@
 import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/department_data.dart';
 import 'package:ozcan/data/model/itemsmodel.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
+import '../../data/datasource/remote/chat_data.dart';
+import '../../data/model/massage_model.dart';
 import 'home_controller.dart';
 
 abstract class DepartmentController extends SearchMaxController {
   initialData();
 
   getData();
-
-  goToItems(List categories, int selectedCat, String catId);
 }
 
 class DepartmentControllerImp extends DepartmentController {
   MyServices myServices = Get.find();
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
+  ChatData chatData = ChatData(Get.find());
 
+  List<UserTicketsModel> ticket = [];
   List banner = [];
   List departmentStory = [];
   List story = [];
@@ -39,6 +39,7 @@ class DepartmentControllerImp extends DepartmentController {
   String? categoriesName;
   String? categoriesColor;
   String? adminId;
+  String? ticketId;
 
   @override
   initialData() {
@@ -56,6 +57,7 @@ class DepartmentControllerImp extends DepartmentController {
     initialData();
     getData();
     getStory();
+    getTicket();
     super.onInit();
   }
 
@@ -116,13 +118,23 @@ class DepartmentControllerImp extends DepartmentController {
     super.dispose();
   }
 
-  @override
-  goToItems(categories, selectedCat, catId) {
-    // Get.toNamed(AppRoute.itemsView,arguments: {
-    //   "categories" :  categories ,
-    //   "selectedCat" :  selectedCat ,
-    //   "catId" :  catId ,
-    //
-    // });
+  getTicket() async {
+    ticket.clear();
+    var response =
+        await chatData.getTicketData(id.toString(), categoriesId.toString());
+    log("========================================================================$response");
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      if (response['message'] != "No Ticket Yet") {
+        List massage = response['User_Tickets'];
+        ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+      } else {
+        ticket = [];
+      }
+    }
+    ticketId = ticket.last.id.toString();
+    log("message : ${ticketId}");
+
+    update();
   }
 }

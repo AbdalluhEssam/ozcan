@@ -22,6 +22,7 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late String? categoriesId;
   late String? adminId;
   late String? categoriesName;
+  late String? ticketId;
   String? categoriesColor;
   late ItemsModel itemsModel;
   CartData cartData = CartData(Get.find());
@@ -46,6 +47,8 @@ class ProductDetailsControllerImp extends ProductDetailsController {
     categoriesColor = Get.arguments['color'];
     categoriesId = Get.arguments['categoriesId'];
     adminId = Get.arguments['adminId'];
+    ticketId = Get.arguments['ticketId'];
+
     categoriesName = Get.arguments['categoriesName'];
     initialData();
     super.onInit();

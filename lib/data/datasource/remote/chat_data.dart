@@ -24,15 +24,28 @@ class ChatData {
   //   return response.fold((l) => l, (r) => r);
   // }
   getData(String usersId) async {
-    var response = await crud.getData("https://ozcan.almirsystem.com/chatapi/api/msg/single.php?tickid=$usersId", {});
-    return response.fold((l) => l, (r) => r);
-  }
-  getTicketData(String usersId,String category) async {
-    var response = await crud.getData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$usersId&category=$category", {});
+    var response = await crud.getData(
+        "https://ozcan.almirsystem.com/chatapi/api/msg/single.php?tickid=$usersId",
+        {});
     return response.fold((l) => l, (r) => r);
   }
 
-  addFirstAcc(String name, String email, String category, String priority, String subject, String status, String description, String createdBy) async {
+  getTicketData(String usersId, String category) async {
+    var response = await crud.getData(
+        "https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$usersId&category=$category",
+        {});
+    return response.fold((l) => l, (r) => r);
+  }
+
+  addFirstAcc(
+      String name,
+      String email,
+      String category,
+      String priority,
+      String subject,
+      String status,
+      String description,
+      String createdBy) async {
     var response = await crud.postData(AppLink.addChatBot, {
       "name": name,
       "email": email,
@@ -45,12 +58,26 @@ class ChatData {
     });
     return response.fold((l) => l, (r) => r);
   }
-  addMassage(
-      String ticketId, String text) async {
+
+  addMassage(String ticketId, String text) async {
     var response = await crud.postData(AppLink.addMassageBot, {
       "ticket_id": ticketId,
       "description": text,
       "attachments": "",
+    });
+    return response.fold((l) => l, (r) => r);
+  }
+
+  editStatus(String orderId) async {
+    var response = await crud.postData(AppLink.editStatus, {
+      "order_id": orderId,
+      "orders_status": "1",
+    });
+    return response.fold((l) => l, (r) => r);
+  }
+  orderId(String orderId) async {
+    var response = await crud.postData(AppLink.orderId, {
+      "order_id": orderId,
     });
     return response.fold((l) => l, (r) => r);
   }

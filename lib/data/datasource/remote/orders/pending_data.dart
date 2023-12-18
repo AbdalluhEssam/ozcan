@@ -14,8 +14,11 @@ class OrdersData {
     return response.fold((l) => l, (r) => r);
   }
 
-  Future getArchiveDate(String userId) async {
-    var response = await crud.postData(AppLink.archiveOrders, {"id": userId});
+  Future archiveOrders(String userId, String categoriesId) async {
+    var response = await crud.postData(AppLink.archiveOrders, {
+      "user_id": userId,
+      "categories_id": categoriesId,
+    });
     return response.fold((l) => l, (r) => r);
   }
 
