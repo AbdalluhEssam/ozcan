@@ -13,7 +13,7 @@ class ChatsDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ChatControllerImp controller = Get.put(ChatControllerImp());
+    Get.put(ChatControllerImp());
     return GetBuilder<ChatControllerImp>(
       init: Get.put(ChatControllerImp()),
       builder: (controller) => Scaffold(
@@ -35,14 +35,14 @@ class ChatsDetailsScreen extends StatelessWidget {
                     "خدمة العملاء",
                     style: Theme.of(context)
                         .textTheme
-                        .bodyText2!
+                        .bodyMedium!
                         .copyWith(fontWeight: FontWeight.bold),
                   ),
                   Text(
                     "اهلا بك",
                     style: Theme.of(context)
                         .textTheme
-                        .caption!
+                        .bodySmall!
                         .copyWith(height: 1),
                     textAlign: TextAlign.end,
                   )
@@ -66,30 +66,30 @@ class ChatsDetailsScreen extends StatelessWidget {
             children: [
               controller.chat.isNotEmpty
                   ? Expanded(
-                      child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: ListView.separated(
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            if (controller.chat[index].sender == "user") {
-                              return buildMyMessage(controller.chat[index],
-                                  controller.categoriesColor!);
-                            }
-                            return buildMessage(controller.chat[index]);
-                          },
-                          separatorBuilder: (context, index) => const SizedBox(
-                                height: 8,
-                              ),
-                          itemCount: controller.chat.length),
-                    ))
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: ListView.separated(
+                        physics: const BouncingScrollPhysics(),
+                        shrinkWrap: true,
+                        itemBuilder: (context, index) {
+                          if (controller.chat[index].sender == "user") {
+                            return buildMyMessage(controller.chat[index],
+                                controller.categoriesColor!);
+                          }
+                          return buildMessage(controller.chat[index]);
+                        },
+                        separatorBuilder: (context, index) => const SizedBox(
+                          height: 8,
+                        ),
+                        itemCount: controller.chat.length),
+                  ))
                   : Expanded(
-                      child: Center(
-                          child: Text(
-                        "أهلاً بك! تحدث الآن مع أحد ممثلي خدمة العملاء.",
-                        style: Theme.of(context).textTheme.bodyLarge,
-                      )),
-                    ),
+                child: Center(
+                    child: Text(
+                      "أهلاً بك! تحدث الآن مع أحد ممثلي خدمة العملاء.",
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    )),
+              ),
               if (controller.hasLink)
                 Container(
                     clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -128,21 +128,21 @@ class ChatsDetailsScreen extends StatelessWidget {
                             )),
                         Expanded(
                             child: TextFormField(
-                          controller: controller.myControllerMassage,
-                          minLines: 1,
-                          maxLines: 2,
-                          validator: (value) {
-                            if (value!.isEmpty) {
-                              return 'not message';
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                              contentPadding:
+                              controller: controller.myControllerMassage,
+                              minLines: 1,
+                              maxLines: 2,
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'not message';
+                                }
+                                return null;
+                              },
+                              decoration: const InputDecoration(
+                                  contentPadding:
                                   EdgeInsets.symmetric(horizontal: 10),
-                              hintText: 'تفصل بسؤالك ...',
-                              border: InputBorder.none),
-                        )),
+                                  hintText: 'تفصل بسؤالك ...',
+                                  border: InputBorder.none),
+                            )),
                       ],
                     ),
                   ))
@@ -178,27 +178,43 @@ class ChatsDetailsScreen extends StatelessWidget {
             Flexible(
                 child: controller.containsLink(model.description!)
                     ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CachedNetworkImage(
-
-                            imageUrl:
-                                '${controller.extractLink(model.description!)}',
-                            height: 250,
-                          ),
-                          Text(controller
-                              .removeLinks(model.description!)
-                              .replaceAll('<p>', '')
-                              .replaceAll('</p>', '')
-                              .replaceAll('<pre>', '')
-                              .replaceAll('</pre>', ''))
-                        ],
-                      )
-                    : Text(model.description!
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl:
+                      '${controller.extractLink(model.description!)}',
+                      height: 250,
+                    ),
+                    Text(controller
+                        .removeLinks(model.description!)
                         .replaceAll('<p>', '')
                         .replaceAll('</p>', '')
                         .replaceAll('<pre>', '')
-                        .replaceAll('</pre>', ''))),
+                        .replaceAll('</pre>', '')
+                        .replaceAll('<br />', '')
+                        .replaceAll('<br>', '').replaceAll('confirmBtn|', '')),
+
+                    if (model.description!.contains("confirmBtn"))
+                      OutlinedButton.icon(
+                          style: ButtonStyle(
+                              minimumSize: MaterialStatePropertyAll(Size(Get.width, 40)),
+                              alignment: Alignment.center,
+                              backgroundColor:
+                              MaterialStatePropertyAll(Colors.green)),
+                          onPressed: () {},
+                          icon: Icon(Icons.add_shopping_cart_outlined,
+                              color: Colors.white),
+                          label: Text(
+                            "تثبيت",
+                            style: TextStyle(color: Colors.white),
+                          ))
+                  ],
+                )
+                    : Text(model.description!
+                    .replaceAll('<p>', '')
+                    .replaceAll('</p>', '')
+                    .replaceAll('<pre>', '')
+                    .replaceAll('</pre>', ''))),
             const SizedBox(
               width: 5,
             ),
@@ -247,27 +263,26 @@ class ChatsDetailsScreen extends StatelessWidget {
             Flexible(
                 child: controller.containsLink(model.description!)
                     ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl:
-                                '${controller.extractLink(model.description!)}',
-                            maxHeightDiskCache: 200,
-
-                          ),
-                          Text(controller
-                              .removeLinks(model.description!)
-                              .replaceAll('<p>', '')
-                              .replaceAll('</p>', '')
-                              .replaceAll('<pre>', '')
-                              .replaceAll('</pre>', ''))
-                        ],
-                      )
-                    : Text(model.description!
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CachedNetworkImage(
+                      imageUrl:
+                      '${controller.extractLink(model.description!)}',
+                      maxHeightDiskCache: 200,
+                    ),
+                    Text(controller
+                        .removeLinks(model.description!)
                         .replaceAll('<p>', '')
                         .replaceAll('</p>', '')
                         .replaceAll('<pre>', '')
-                        .replaceAll('</pre>', ''))),
+                        .replaceAll('</pre>', '')),
+                  ],
+                )
+                    : Text(model.description!
+                    .replaceAll('<p>', '')
+                    .replaceAll('</p>', '')
+                    .replaceAll('<pre>', '')
+                    .replaceAll('</pre>', ''))),
           ],
         ),
       ),
