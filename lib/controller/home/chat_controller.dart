@@ -26,6 +26,7 @@ class ChatControllerImp extends ChatController {
     caseSensitive: false,
   );
   bool hasLink = false;
+  bool hasLinkController = false;
 
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
@@ -127,6 +128,7 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
       hasLink = false;
+      hasLinkController = false;
       // viewChat();
     }
     update();

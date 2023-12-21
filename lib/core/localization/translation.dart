@@ -87,7 +87,7 @@ class MyTranslation extends Translations {
           "balconies" :"عددالبلكونات" ,
           "help": "مساعده",
           "welcomeglus": "مرحبا بكم فى Glu's",
-          "signupmass": "شكرًا على انضمامك إلى عائلة Glu's نتمنى لك يومًا سعيدًا",
+          "signupmass": "شكرًا على انضمامك إلى عائلة Ozcan نتمنى لك يومًا سعيدًا",
           "logout": "تسجيل الخروج",
           "abouttextglus":
               """ تأسست مجموعة الخليج السعودية قبل 25 ً عاما في مدينة الرياض بالمملكة العربية السعودية كمجموعةاستثمارية مصرية سعودية تتكون من عدد من الشركات المتخصصة في التصنيع والتجارة و المقاوالت العامة والترميم والتشغيل و الصيانة ، مكونة خبرات كبيرة في السوق المصري واالسواق العربية االخرى.
@@ -251,7 +251,7 @@ class MyTranslation extends Translations {
           "help": "Help",
           "delete": "Success Delete",
           "welcomeglus": "Welcome To Glu's Family",
-          "signupmass": "Thank you for joining Glu's Family Have a nice day",
+          "signupmass": "Thank you for joining Ozcan Family Have a nice day",
           "logout": "Log Out",
           "abouttextglus":
               """The Saudi Gulf Group was established 25 years ago in the city of Riyadh, Saudi Arabia as a group An Egyptian investment company consisting of a number of companies specialized in manufacturing and contracting General, restoration, operation and maintenance, a mixture of great experiences in the Egyptian market like other Arab markets.

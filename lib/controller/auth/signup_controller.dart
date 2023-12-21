@@ -40,7 +40,7 @@ class SignUpControllerImp extends SignUpController {
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
         if (response['status'] == "success") {
-          Get.offNamed(AppRoute.verfiyCodeSignUp, arguments: {
+          Get.offNamed(AppRoute.successSignUp, arguments: {
             "email": email.text.trimLeft().trimRight(),
           });
           Get.snackbar(username.text.toString(),"signupmass".tr,

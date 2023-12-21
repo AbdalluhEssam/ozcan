@@ -102,6 +102,17 @@ class ChatsDetailsScreen extends StatelessWidget {
                       height: Get.width * 0.4,
                       width: Get.width,
                     )),
+              if (controller.hasLinkController)
+                Container(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    decoration: BoxDecoration(
+                        color: controller.categoriesColor,
+                        borderRadius: BorderRadius.circular(20)),
+                    child: CachedNetworkImage(
+                      imageUrl: "${controller.extractLink(controller.myControllerMassage.text)}",
+                      height: Get.width * 0.4,
+                      width: Get.width,
+                    )),
               Container(
                   clipBehavior: Clip.antiAliasWithSaveLayer,
                   decoration: BoxDecoration(
@@ -181,53 +192,63 @@ class ChatsDetailsScreen extends StatelessWidget {
           children: [
             Flexible(
                 child: controller.containsLink(model.description!)
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl:
-                                '${controller.extractLink(model.description!)}',
-                            maxHeightDiskCache: 200,
-                          ),
-                          Text(controller
-                              .removeLinks(model.description!)
-                              .replaceAll('<p>', '')
-                              .replaceAll('</p>', '')
-                              .replaceAll('<pre>', '')
-                              .replaceAll('</pre>', '')
-                              .replaceAll('<br />', '')
-                              .replaceAll('<br>', '')
-                              .replaceAll('confirmBtn|', '')
-                              .replaceAll(
-                                  '${controller.extractConfirmationCode(model.description!)}',
-                                  '')),
-                          if (!controller.isDateTimeAfter48Hours(DateTime.parse(model.createdAt!).subtract(Duration(hours: 47))))
-                            if (model.description!.contains("confirmBtn"))
-                              OutlinedButton.icon(
-                                  style: ButtonStyle(
-                                      minimumSize: MaterialStatePropertyAll(
-                                          Size(Get.width, 40)),
-                                      alignment: Alignment.center,
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          controller.orderStatus != "1"
-                                              ? Colors.green
-                                              : Colors.greenAccent)),
-                                  onPressed: () {
-                                    if (controller.orderStatus != "1") {
-                                      controller.editStatus(
-                                          controller.extractConfirmationCode(
-                                              model.description!));
-                                    }
-                                  },
-                                  icon: Icon(Icons.add_shopping_cart_outlined,
-                                      color: Colors.white),
-                                  label: Text(
-                                    controller.orderStatus != "1"
-                                        ? "تثبيت"
-                                        : "تم التثبيت",
-                                    style: TextStyle(color: Colors.white),
-                                  ))
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.myControllerMassage.text =
+                              controller.extractLink(model.description!);
+                          controller.hasLinkController = true;
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl:
+                                  '${controller.extractLink(model.description!)}',
+                              maxHeightDiskCache: 200,
+                            ),
+                            Text(controller
+                                .removeLinks(model.description!)
+                                .replaceAll('<p>', '')
+                                .replaceAll('</p>', '')
+                                .replaceAll('<pre>', '')
+                                .replaceAll('</pre>', '')
+                                .replaceAll('<br />', '')
+                                .replaceAll('<br>', '')
+                                .replaceAll('confirmBtn|', '')
+                                .replaceAll(
+                                    '${controller.extractConfirmationCode(model.description!)}',
+                                    '')),
+                            if (!controller.isDateTimeAfter48Hours(
+                                DateTime.parse(model.createdAt!)
+                                    .subtract(Duration(hours: 47))))
+                              if (model.description!.contains("confirmBtn"))
+                                OutlinedButton.icon(
+                                    style: ButtonStyle(
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(Get.width, 40)),
+                                        alignment: Alignment.center,
+                                        backgroundColor:
+                                            MaterialStatePropertyAll(
+                                                controller.orderStatus != "1"
+                                                    ? Colors.green
+                                                    : Colors.greenAccent)),
+                                    onPressed: () {
+                                      if (controller.orderStatus != "1") {
+                                        controller.editStatus(
+                                            controller.extractConfirmationCode(
+                                                model.description!));
+                                      }
+                                    },
+                                    icon: Icon(Icons.add_shopping_cart_outlined,
+                                        color: Colors.white),
+                                    label: Text(
+                                      controller.orderStatus != "1"
+                                          ? "تثبيت"
+                                          : "تم التثبيت",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
+                          ],
+                        ),
                       )
                     : Text(model.description!
                         .replaceAll('<p>', '')
@@ -281,21 +302,29 @@ class ChatsDetailsScreen extends StatelessWidget {
             ),
             Flexible(
                 child: controller.containsLink(model.description!)
-                    ? Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          CachedNetworkImage(
-                            imageUrl:
-                                '${controller.extractLink(model.description!)}',
-                            maxHeightDiskCache: 200,
-                          ),
-                          Text(controller
-                              .removeLinks(model.description!)
-                              .replaceAll('<p>', '')
-                              .replaceAll('</p>', '')
-                              .replaceAll('<pre>', '')
-                              .replaceAll('</pre>', '')),
-                        ],
+                    ? GestureDetector(
+                        onTap: () {
+                          controller.myControllerMassage.text =
+                              controller.extractLink(model.description!);
+                          controller.hasLinkController = true;
+
+                        },
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl:
+                                  '${controller.extractLink(model.description!)}',
+                              maxHeightDiskCache: 200,
+                            ),
+                            Text(controller
+                                .removeLinks(model.description!)
+                                .replaceAll('<p>', '')
+                                .replaceAll('</p>', '')
+                                .replaceAll('<pre>', '')
+                                .replaceAll('</pre>', '')),
+                          ],
+                        ),
                       )
                     : Text(model.description!
                         .replaceAll('<p>', '')
