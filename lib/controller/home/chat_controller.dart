@@ -101,7 +101,7 @@ class ChatControllerImp extends ChatController {
       enteredText = itemsImage!;
     }
     itemsName = itemsName != null
-        ? "${"اريد الاستفسار عن " + itemsName!}\n$itemsImage"
+        ? "\n\n $itemsImage\n${"اريد الاستفسار عن " + itemsName!}"
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     if (ticketId == "null") {

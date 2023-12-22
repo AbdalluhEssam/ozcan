@@ -194,8 +194,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                 child: controller.containsLink(model.description!)
                     ? GestureDetector(
                         onTap: () {
-                          controller.myControllerMassage.text =
-                              controller.extractLink(model.description!);
+                          controller.myControllerMassage.text ="\n\n${controller.extractLink(model.description!)}";
                           controller.hasLinkController = true;
                         },
                         child: Column(
@@ -305,8 +304,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                 child: controller.containsLink(model.description!)
                     ? GestureDetector(
                         onTap: () {
-                          controller.myControllerMassage.text =
-                              controller.extractLink(model.description!);
+                          controller.myControllerMassage.text ="\n\n${controller.extractLink(model.description!)}";
+
                           controller.hasLinkController = true;
 
                         },

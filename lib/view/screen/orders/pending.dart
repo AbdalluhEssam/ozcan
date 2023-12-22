@@ -165,7 +165,7 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                   },
                   color: primaryColor,
                   textColor: AppColor.backgroundColor,
-                  child: const Text("تابع طلبك"),
+                  child: const Text("تتبع طلبك"),
                 )
               ],
             )

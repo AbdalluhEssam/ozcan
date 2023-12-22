@@ -170,7 +170,7 @@ class CardListOrders extends GetView<OrdersAllController> {
                   },
                   color: primaryColor,
                   textColor: AppColor.backgroundColor,
-                  child: const Text("تابع طلبك"),
+                  child: const Text("تتبع طلبك"),
                 )
               ],
             )
