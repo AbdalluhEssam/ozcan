@@ -229,7 +229,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                                         alignment: Alignment.center,
                                         backgroundColor:
                                             MaterialStatePropertyAll(
-                                                controller.orderStatus != "1"
+                                                controller.order.any((element) => element['orders_status'] != "1" && element['orders_id']== "${controller.extractConfirmationCode(model.description!)}")
                                                     ? Colors.green
                                                     : Colors.greenAccent)),
                                     onPressed: () {
@@ -242,7 +242,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                                     icon: Icon(Icons.add_shopping_cart_outlined,
                                         color: Colors.white),
                                     label: Text(
-                                      controller.orderStatus != "1"
+
+                                      controller.order.any((element) => element['orders_status'] != "1" && element['orders_id']== "${controller.extractConfirmationCode(model.description!)}")
                                           ? "تثبيت"
                                           : "تم التثبيت",
                                       style: TextStyle(color: Colors.white),

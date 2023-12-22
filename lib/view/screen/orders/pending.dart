@@ -42,6 +42,7 @@ class OrdersPending extends StatelessWidget {
 
 
 
+
 class CardListPOrders extends GetView<OrdersPendingController> {
   final OrdersModel ordersModel;
 
@@ -164,7 +165,7 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                   },
                   color: primaryColor,
                   textColor: AppColor.backgroundColor,
-                  child: const Text("تباع طلبك"),
+                  child: const Text("تابع طلبك"),
                 )
               ],
             )

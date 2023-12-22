@@ -23,13 +23,17 @@ class ChatData {
   //   });
   //   return response.fold((l) => l, (r) => r);
   // }
-  getData(String usersId) async {
+  getData(String tickId) async {
     var response = await crud.getData(
-        "https://ozcan.almirsystem.com/chatapi/api/msg/single.php?tickid=$usersId",
+        "https://ozcan.almirsystem.com/chatapi/api/msg/single.php?tickid=$tickId",
         {});
     return response.fold((l) => l, (r) => r);
   }
-
+  // getTicketData(String userId,String categoriesId) async {
+  //   var response = await crud.postData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$userId&category=$categoriesId", {
+  //   });
+  //   return response.fold((l) => l, (r) => r);
+  // }
   getTicketData(String usersId, String category) async {
     var response = await crud.getData(
         "https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$usersId&category=$category",

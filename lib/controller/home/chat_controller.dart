@@ -42,7 +42,8 @@ class ChatControllerImp extends ChatController {
   }
 
   final ScrollController scrollController = ScrollController();
-  DateTime createdAt = DateTime.now().subtract(Duration(hours: 47)); // Replace this with your model.createdAt
+  DateTime createdAt = DateTime.now()
+      .subtract(Duration(hours: 47)); // Replace this with your model.createdAt
 
   bool isDateTimeAfter48Hours(DateTime dateTime) {
     DateTime now = DateTime.now();
@@ -50,8 +51,6 @@ class ChatControllerImp extends ChatController {
     log(dateTime.isAfter(after48Hours).toString());
     return dateTime.isAfter(after48Hours);
   }
-
-
 
   String extractConfirmationCode(String text) {
     RegExp regex = RegExp(r'confirmBtn\|(\d+)');
@@ -76,7 +75,9 @@ class ChatControllerImp extends ChatController {
   String? itemsName;
   String? itemsImage;
   String? orderStatus;
+  String? ordersId;
   Color? categoriesColor;
+  List order = [];
 
   @override
   initialData() {
@@ -92,7 +93,7 @@ class ChatControllerImp extends ChatController {
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
     adminId = Get.arguments['adminId'];
-    ticketId = Get.arguments['ticketId'];
+    ticketId = Get.arguments['ticketId'].toString();
     itemsName = Get.arguments['itemsName'];
     itemsImage = Get.arguments['itemsImage'];
     if (itemsImage != null) {
@@ -103,15 +104,15 @@ class ChatControllerImp extends ChatController {
         ? "${"اريد الاستفسار عن " + itemsName!}\n$itemsImage"
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
-    if (ticketId == null) {
+    if (ticketId == "null") {
       addFirst();
     }
-    if (ticketId != null) {
+    if (ticketId != "null") {
       viewChat();
     }
 
     log("***********************************  $ticketId");
-    _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
+    _timer = Timer.periodic(Duration(seconds: 5), (timer) => viewChat());
 
     super.onInit();
   }
@@ -168,31 +169,38 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        orderStatus = response['orders_status'].toString();
+        if (!order.any((element) =>element['orders_status'] == response['orders_status'].toString() && element['orders_id'] =="${extractConfirmationCode(response['orders_id'].toString())}")){
+          order.add({
+            "orders_id": response['orders_id'].toString(),
+            "orders_status": response['orders_status'].toString(),
+          });
+        }
+
+        // orderStatus = response['orders_status'].toString();
+        // ordersId = response['orders_id'].toString();
       }
     }
+    log(order.toString());
   }
 
   addFirst() async {
     var response = await chatData.addFirstAcc(
       username.toString(),
       email.toString(),
-      adminId.toString(),
+      categoriesId.toString(),
       1.toString(),
       2.toString(),
       "New Ticket".toString(),
       "هل يمكننى التواصل مع احد ممثلى الخدمة".toString(),
       idUser.toString(),
     );
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
+
+    log("========================================================================$response");
+
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      myControllerMassage.clear();
-      getTicket();
       log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////  Message Sent ");
+      getTicket();
     }
     update();
   }
@@ -232,8 +240,8 @@ class ChatControllerImp extends ChatController {
   getTicket() async {
     ticket.clear();
     chat.clear();
-    var response =
-        await chatData.getTicketData(idUser.toString(), adminId.toString());
+    var response = await chatData.getTicketData(
+        idUser.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
@@ -244,7 +252,7 @@ class ChatControllerImp extends ChatController {
         ticket = [];
       }
     }
-    log("message : ${ticket.any((element) => element.category.toString() == adminId)}");
+    log("message : ${ticket.any((element) => element.category.toString() == categoriesId)}");
 
     if (ticket.isNotEmpty) {
       ticketId = ticket.last.id.toString();

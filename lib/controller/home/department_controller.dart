@@ -115,6 +115,7 @@ class DepartmentControllerImp extends DepartmentController {
     items.clear();
     story.clear();
     storyTop.clear();
+    categoriesId = "null";
     super.dispose();
   }
 
@@ -132,7 +133,12 @@ class DepartmentControllerImp extends DepartmentController {
         ticket = [];
       }
     }
-    ticketId = ticket.last.id.toString();
+    if (ticket.isEmpty) {
+      ticketId = "null";
+    } else {
+      ticketId = ticket.last.id ?? "null";
+    }
+
     log("message : ${ticketId}");
 
     update();

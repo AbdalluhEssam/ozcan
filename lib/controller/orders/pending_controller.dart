@@ -30,6 +30,8 @@ class OrdersPendingController extends GetxController {
       return "تم الموافقة على طلبك";
     } else if (val == "2") {
       return "فى الطريق";
+    } else if (val == "5") {
+      return "تم الغاء الطلب";
     } else {
       return "تم الانتهاء";
     }

@@ -30,6 +30,8 @@ class OrdersAllController extends GetxController {
       return "تم الموافقة على طلبك";
     } else if (val == "2") {
       return "فى الطريق";
+    } else if (val == "5") {
+      return "تم الغاء الطلب";
     } else {
       return "تم الانتهاء";
     }
@@ -39,7 +41,9 @@ class OrdersAllController extends GetxController {
     pendingOrders.clear();
     statusRequest = StatusRequest.loading;
     update();
-    pendingData.archiveOrders(myServices.sharedPreferences.getString("id").toString(),categoriesId.toString())
+    pendingData
+        .archiveOrders(myServices.sharedPreferences.getString("id").toString(),
+            categoriesId.toString())
         .then((value) {
       log("$value");
       statusRequest = handlingData(value);
