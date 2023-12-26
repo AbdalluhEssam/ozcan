@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:ozcan/core/class/statusrequest.dart';
+import 'package:path/path.dart';
 
 import '../functions/checkinterner.dart';
 
@@ -43,5 +45,24 @@ class Crud {
       }catch(_){
         return const Left(StatusRequest.serverFailure);
       }
+  }
+
+  postRequestWithFiles(String url, Map data, File file,String filename) async {
+    var request = http.MultipartRequest("POST", Uri.parse(url));
+    var length = await file.length();
+    var stream = http.ByteStream(file.openRead());
+    var multipartFile = http.MultipartFile(filename, stream, length, filename: basename(file.path));
+    request.files.add(multipartFile);
+    data.forEach((key, value) {
+      request.fields[key] = value;
+    });
+    var myrequest = await request.send();
+
+    var response = await http.Response.fromStream(myrequest);
+    if (myrequest.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+        print("Error${myrequest.statusCode}");
+    }
   }
 }

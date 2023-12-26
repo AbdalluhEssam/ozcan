@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/chat_data.dart';
 import 'package:ozcan/data/model/massage_model.dart';
+import 'package:ozcan/likeapi.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -74,10 +76,10 @@ class ChatControllerImp extends ChatController {
   String? ticketId;
   String? itemsName;
   String? itemsImage;
-  String? orderStatus;
-  String? ordersId;
   Color? categoriesColor;
   List order = [];
+
+  File? myFlie;
 
   @override
   initialData() {
@@ -112,8 +114,16 @@ class ChatControllerImp extends ChatController {
     }
 
     log("***********************************  $ticketId");
+    if (chat.isNotEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        // Scroll to the end of the list
+        if (scrollController != null) {
+          // Scroll to the end of the list
+          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+        }
+      });
+    }
     _timer = Timer.periodic(Duration(seconds: 5), (timer) => viewChat());
-
     super.onInit();
   }
 
@@ -130,6 +140,23 @@ class ChatControllerImp extends ChatController {
       myControllerMassage.clear();
       hasLink = false;
       hasLinkController = false;
+      // viewChat();
+    }
+    update();
+  }
+
+  addImage() async {
+    var response = await chatData.addImage(myFlie!);
+      log("========================================================================$response");
+
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      myControllerMassage.text = "${AppLink.imageItems}/${response['image_name']}";
+      addMassage();
+      myControllerMassage.clear();
+      hasLink = false;
+      hasLinkController = false;
+      myFlie = null;
       // viewChat();
     }
     update();
@@ -160,8 +187,8 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  orderId(orderId) async {
-    var response = await chatData.orderId(orderId.toString());
+  orderId() async {
+    var response = await chatData.orderId();
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -169,15 +196,7 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        if (!order.any((element) =>element['orders_status'] == response['orders_status'].toString() && element['orders_id'] =="${extractConfirmationCode(response['orders_id'].toString())}")){
-          order.add({
-            "orders_id": response['orders_id'].toString(),
-            "orders_status": response['orders_status'].toString(),
-          });
-        }
-
-        // orderStatus = response['orders_status'].toString();
-        // ordersId = response['orders_id'].toString();
+        order.addAll(response["orders"]);
       }
     }
     log(order.toString());
@@ -234,6 +253,13 @@ class ChatControllerImp extends ChatController {
         }
       }
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Scroll to the end of the list
+      if (scrollController != "null") {
+        // Scroll to the end of the list
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      }
+    });
     update();
   }
 

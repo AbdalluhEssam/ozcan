@@ -10,6 +10,10 @@ class HomeData {
     var response = await crud.postData(AppLink.homePage, {});
     return response.fold((l) => l, (r) => r);
   }
+  aboutUs() async {
+    var response = await crud.postData(AppLink.aboutUs, {});
+    return response.fold((l) => l, (r) => r);
+  }
 
   infoData() async {
     var response = await crud.postData(AppLink.infoPage, {});

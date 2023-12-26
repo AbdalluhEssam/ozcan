@@ -22,6 +22,7 @@ class AppLink {
   static const String resetPassword ="$serverLink/forgetpassword/resetpassword.php";
 //================================== Home ===============================//
   static const String homePage = "$serverLink/home.php";
+  static const String aboutUs = "$serverLink/aboutus.php";
   static const String infoPage = "$serverLink/info.php";
   static const String searchPage = "$serverLink/search.php";
   static const String senp = "$serverLink/s.php";
@@ -65,6 +66,7 @@ class AppLink {
   static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/msg/insert.php";
   static const String editStatus = "$serverLink/cart/updateorder.php";
   static const String orderId = "$serverLink/cart/orderid.php";
+  static const String image = "https://ozcan.almirsystem.com/api/upload-image-endpoint";
   // static const String addMassageBot = "https://ozcan.almirsystem.com/chatapi/api/tikc/insert.php";
 //================================== END ===============================//
 }

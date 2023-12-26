@@ -1,11 +1,13 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ozcan/controller/home/chat_controller.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-
 import '../../../data/model/massage_model.dart';
 
 class ChatsDetailsScreen extends StatelessWidget {
@@ -109,7 +111,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                         color: controller.categoriesColor,
                         borderRadius: BorderRadius.circular(20)),
                     child: CachedNetworkImage(
-                      imageUrl: "${controller.extractLink(controller.myControllerMassage.text)}",
+                      imageUrl:
+                          "${controller.extractLink(controller.myControllerMassage.text)}",
                       height: Get.width * 0.4,
                       width: Get.width,
                     )),
@@ -149,9 +152,36 @@ class ChatsDetailsScreen extends StatelessWidget {
                             }
                             return null;
                           },
-                          decoration: const InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 10),
+                          decoration: InputDecoration(
+                              prefixIcon: Container(
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(40),
+                                    color: Colors.white),
+                                child: IconButton(
+                                  onPressed: () async {
+                                    FilePickerResult? result =await FilePicker.platform.pickFiles( dialogTitle:'Select a File For Ozcan');
+                                    if (result != null) {
+                                      PlatformFile file = result.files.single;
+                                      controller.myFlie = File(file.path!);
+                                      controller.addImage();
+                                    } else {
+                                      print("No Image Selected");
+                                    }
+                                  },
+                                  color: controller.myFlie == null
+                                      ? controller.categoriesColor
+                                      : Colors.green,
+                                  icon: controller.myFlie == null
+                                      ? const Icon(
+                                          FontAwesome5.link,
+                                        )
+                                      : const Icon(
+                                          Icons.done,
+                                        ),
+                                ),
+                              ),
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 10),
                               hintText: 'تفصل بسؤالك ...',
                               border: InputBorder.none),
                         )),
@@ -171,9 +201,7 @@ class ChatsDetailsScreen extends StatelessWidget {
 
   Widget buildMessage(MassageBotModel model) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
-    if (model.description!.contains("confirmBtn"))
-      controller
-          .orderId(controller.extractConfirmationCode(model.description!));
+    if (model.description!.contains("confirmBtn")) controller.orderId();
     return Align(
       alignment: AlignmentDirectional.centerEnd,
       child: Container(
@@ -194,7 +222,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                 child: controller.containsLink(model.description!)
                     ? GestureDetector(
                         onTap: () {
-                          controller.myControllerMassage.text ="\n\n${controller.extractLink(model.description!)}";
+                          controller.myControllerMassage.text =
+                              "\n\n${controller.extractLink(model.description!)}";
                           controller.hasLinkController = true;
                         },
                         child: Column(
@@ -226,23 +255,32 @@ class ChatsDetailsScreen extends StatelessWidget {
                                         minimumSize: MaterialStatePropertyAll(
                                             Size(Get.width, 40)),
                                         alignment: Alignment.center,
-                                        backgroundColor:
-                                            MaterialStatePropertyAll(
-                                                controller.order.any((element) => element['orders_status'] != "1" && element['orders_id']== "${controller.extractConfirmationCode(model.description!)}")
-                                                    ? Colors.green
-                                                    : Colors.greenAccent)),
+                                        backgroundColor: MaterialStatePropertyAll(
+                                            controller.order.any((element) =>
+                                                    element['orders_status'] !=
+                                                        "1" &&
+                                                    element['orders_id'] ==
+                                                        "${controller.extractConfirmationCode(model.description!)}")
+                                                ? Colors.green
+                                                : Colors.greenAccent)),
                                     onPressed: () {
-                                      if (controller.orderStatus != "1") {
-                                        controller.editStatus(
-                                            controller.extractConfirmationCode(
-                                                model.description!));
+                                      if (controller.order.any((element) =>
+                                          element['orders_id'] ==
+                                          "${controller.extractConfirmationCode(model.description!)}")) {
+                                        if (controller.order.any((element) =>
+                                            element['orders_status'] != "1")) {
+                                          controller.editStatus(controller
+                                              .extractConfirmationCode(
+                                                  model.description!));
+                                        }
                                       }
                                     },
-                                    icon: Icon(Icons.add_shopping_cart_outlined,
-                                        color: Colors.white),
+                                    icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.white),
                                     label: Text(
-
-                                      controller.order.any((element) => element['orders_status'] != "1" && element['orders_id']== "${controller.extractConfirmationCode(model.description!)}")
+                                      controller.order.any((element) =>
+                                              element['orders_status'] != "1" &&
+                                              element['orders_id'] ==
+                                                  "${controller.extractConfirmationCode(model.description!)}")
                                           ? "تثبيت"
                                           : "تم التثبيت",
                                       style: TextStyle(color: Colors.white),
@@ -304,10 +342,10 @@ class ChatsDetailsScreen extends StatelessWidget {
                 child: controller.containsLink(model.description!)
                     ? GestureDetector(
                         onTap: () {
-                          controller.myControllerMassage.text ="\n\n${controller.extractLink(model.description!)}";
+                          controller.myControllerMassage.text =
+                              "\n\n${controller.extractLink(model.description!)}";
 
                           controller.hasLinkController = true;
-
                         },
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

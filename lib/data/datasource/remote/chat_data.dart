@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import '../../../core/class/crud.dart';
 import '../../../likeapi.dart';
 
@@ -29,6 +31,7 @@ class ChatData {
         {});
     return response.fold((l) => l, (r) => r);
   }
+
   // getTicketData(String userId,String categoriesId) async {
   //   var response = await crud.postData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$userId&category=$categoriesId", {
   //   });
@@ -79,10 +82,9 @@ class ChatData {
     });
     return response.fold((l) => l, (r) => r);
   }
-  orderId(String orderId) async {
-    var response = await crud.postData(AppLink.orderId, {
-      "order_id": orderId,
-    });
+
+  orderId() async {
+    var response = await crud.postData(AppLink.orderId, {});
     return response.fold((l) => l, (r) => r);
   }
 
@@ -90,5 +92,11 @@ class ChatData {
     var response = await crud
         .postData(AppLink.notification, {"user_id": usersId.toString()});
     return response.fold((l) => l, (r) => r);
+  }
+
+  Future addImage(File myFlie) async {
+    var response =
+        await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
+    return response;
   }
 }
