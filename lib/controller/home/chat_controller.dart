@@ -77,6 +77,7 @@ class ChatControllerImp extends ChatController {
   String? itemsName;
   String? itemsImage;
   int? index;
+  int indexOrder = 0;
   Color? categoriesColor;
   List ordersId = [];
 
@@ -166,7 +167,7 @@ class ChatControllerImp extends ChatController {
 
   editStatus(id) async {
     ordersId.clear();
-    var response = await chatData.editStatus(id.toString(),idUser.toString());
+    var response = await chatData.editStatus(id.toString(), idUser.toString());
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -188,7 +189,6 @@ class ChatControllerImp extends ChatController {
           borderRadius: 0);
       // viewChat();
     }
-    update();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       // Scroll to the end of the list
       if (scrollController != "null") {
@@ -199,22 +199,25 @@ class ChatControllerImp extends ChatController {
   }
 
   orderId(orderId) async {
-    var response = await chatData.orderId(orderId);
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0}))) {
-          if(!ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))){
-            ordersId.add({response["orders_id"], response["orders_status"]});
-            update();
+      var response = await chatData.orderId(orderId);
+      if (kDebugMode) {
+        print(
+            "========================================================================$response");
+      }
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          if (!ordersId
+              .any((element) => element.containsAll({int.parse(orderId), 0}))) {
+            if (!ordersId.any(
+                (element) => element.containsAll({int.parse(orderId), 1}))) {
+              ordersId.add({response["orders_id"], response["orders_status"]});
+              update();
+            }
           }
         }
       }
-    }
+
 
     log(ordersId.toString());
   }
@@ -264,7 +267,9 @@ class ChatControllerImp extends ChatController {
       if (StatusRequest.success == statusRequest) {
         if (response['message'] != "No Messages Found") {
           List massage = response['messages'];
-          chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+          if (massage.length != chat.length) {
+            chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+          }
         } else {
           chat.clear();
         }

@@ -83,7 +83,7 @@ class StoriesTopDepartment extends StatelessWidget {
 
                                   controller.update();
                                   print(controller.currentIndex);
-                                  if (controller.story[index]['video'] == "0") {
+                                  if (controller.story[index]['video'].toString() == "0") {
                                     return StoryItem.pageImage(
                                       caption:
                                           "${controller.story[index]['note']}",

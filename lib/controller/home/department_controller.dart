@@ -27,6 +27,14 @@ class DepartmentControllerImp extends DepartmentController {
   List story = [];
   List storyTop = [];
   List<ItemsModel> items = [];
+  RegExp urlRegExp = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+    caseSensitive: false,
+  );
+
+  bool containsLink(String text) {
+    return urlRegExp.hasMatch(text);
+  }
 
   int? currentIndex = 0;
 
@@ -73,14 +81,25 @@ class DepartmentControllerImp extends DepartmentController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        banner.addAll(response['banner']);
-        if (response['department_story'] != "{\"status\":\"failure\"}") {
+        if (response['banner'] != '{"status":"failure"}') {
+          banner.addAll(response['banner']);
+        } else {
+          banner = [];
+        }
+
+        if (response['department_story'] != '{"status":"failure"}') {
           departmentStory.addAll(response['department_story']);
         } else {
           departmentStory = [];
         }
-        List item = response['items'];
-        items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+
+        if (response['items'] != '{"status":"failure"}') {
+          List item = response['items'];
+          items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+        } else {
+          items = [];
+        }
+
       } else {
         statusRequest = StatusRequest.failure;
       }

@@ -14,12 +14,15 @@ class OrdersPending extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   Get.put(OrdersPendingController());
+    Get.put(OrdersPendingController());
     Color primaryColor = AppColor.primaryColor;
 
     return Scaffold(
       appBar: AppBar(
-        title:  Text("تتبع الطلبات",style: TextStyle(color: primaryColor),),
+        title: Text(
+          "تتبع الطلبات",
+          style: TextStyle(color: primaryColor),
+        ),
         foregroundColor: primaryColor,
       ),
       body: Container(
@@ -39,9 +42,6 @@ class OrdersPending extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class CardListPOrders extends GetView<OrdersPendingController> {
   final OrdersModel ordersModel;
@@ -93,23 +93,23 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: double.parse(ordersModel.ordersStatus!) ==
-                                  0
+                                      0
                                   ? Colors.cyan
                                   : double.parse(ordersModel.ordersStatus!) == 1
-                                  ? Colors.greenAccent
-                                  : double.parse(
-                                  ordersModel.ordersStatus!) ==
-                                  2
-                                  ? Colors.grey
-                                  : double.parse(ordersModel
-                                  .ordersStatus!) ==
-                                  3
-                                  ? AppColor.bg.withOpacity(0.5)
-                                  : double.parse(ordersModel
-                                  .ordersStatus!) ==
-                                  4
-                                  ? AppColor.green
-                                  : Colors.red),
+                                      ? Colors.greenAccent
+                                      : double.parse(
+                                                  ordersModel.ordersStatus!) ==
+                                              2
+                                          ? Colors.grey
+                                          : double.parse(ordersModel
+                                                      .ordersStatus!) ==
+                                                  3
+                                              ? AppColor.bg.withOpacity(0.5)
+                                              : double.parse(ordersModel
+                                                          .ordersStatus!) ==
+                                                      4
+                                                  ? AppColor.green
+                                                  : Colors.red),
                           child: Text(
                             controller
                                 .printOrderStatus(ordersModel.ordersStatus!),
@@ -126,7 +126,10 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                   ],
                 ),
                 CachedNetworkImage(
-                  imageUrl: "${AppLink.imageItems}/${ordersModel.itemsImage}",
+                  imageUrl: controller.containsLink(ordersModel.itemsImage!)
+                      ? ordersModel.itemsImage!
+                      : '${AppLink.imageItems}/${ordersModel.itemsImage}'
+                          "${AppLink.imageItems}/${ordersModel.itemsImage}",
                   height: Get.width * 0.25,
                   width: Get.width * 0.25,
                 )

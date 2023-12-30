@@ -14,7 +14,13 @@ class OrdersAllController extends GetxController {
   OrdersData pendingData = OrdersData(Get.find());
   String? categoriesId;
   String? categoriesColor;
-
+  RegExp urlRegExp = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+    caseSensitive: false,
+  );
+  bool containsLink(String text) {
+    return urlRegExp.hasMatch(text);
+  }
   @override
   void onInit() {
     categoriesId = Get.arguments['categoriesId'].toString();

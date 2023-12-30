@@ -380,9 +380,7 @@ class DepartmentView extends StatelessWidget {
                                                       Get.toNamed(
                                                           AppRoute.itemsView,
                                                           arguments: {
-                                                            "itemsModel":
-                                                            controller
-                                                                .items[index],
+                                                            "itemsModel": controller .items[index],
                                                             "categoriesColor":
                                                             controller
                                                                 .categoriesColor,
@@ -420,11 +418,10 @@ class DepartmentView extends StatelessWidget {
                                                             .itemsId}",
                                                         child: CachedNetworkImage(
                                                             fit: BoxFit.contain,
-                                                            imageUrl:
-                                                            '${AppLink
-                                                                .imageItems}/${controller
-                                                                .items[index]
-                                                                .itemsImage}'),
+                                                            imageUrl:controller.containsLink(controller.items[index].itemsImage!) ?
+
+                                                            controller.items[index].itemsImage!:
+                                                            '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
                                                       ),
                                                     )),
                                             itemCount: controller.items.length,
@@ -434,7 +431,11 @@ class DepartmentView extends StatelessWidget {
                                                 crossAxisSpacing: 5,
                                                 mainAxisSpacing: 5),
                                           ),
-                                        SizedBox(
+
+                                        if (controller.items.isEmpty)
+                                          Center(child: Text("لم يتم اضافة منتجات بعد")),
+
+                                          SizedBox(
                                           height: 20,
                                         ),
                                         // if (controller.items.isNotEmpty)

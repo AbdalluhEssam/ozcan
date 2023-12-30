@@ -28,7 +28,13 @@ class ItemsControllerImp extends ItemsController {
   int? currentIndex = 0;
   ScrollController scrollController = ScrollController();
   RxInt selectedIndex = 0.obs;
-
+  RegExp urlRegExp = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+    caseSensitive: false,
+  );
+  bool containsLink(String text) {
+    return urlRegExp.hasMatch(text);
+  }
   late StatusRequest statusRequest;
 
   String? username;

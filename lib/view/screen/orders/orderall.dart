@@ -131,7 +131,10 @@ class CardListOrders extends GetView<OrdersAllController> {
                   ],
                 ),
                 CachedNetworkImage(
-                  imageUrl: "${AppLink.imageItems}/${ordersModel.itemsImage}",
+                  imageUrl:controller.containsLink(ordersModel.itemsImage!) ?
+
+                  ordersModel.itemsImage!:
+                  '${AppLink.imageItems}/${ordersModel.itemsImage}' "${AppLink.imageItems}/${ordersModel.itemsImage}",
                   height: Get.width * 0.25,
                   width: Get.width * 0.25,
                 )

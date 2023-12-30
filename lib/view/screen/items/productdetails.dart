@@ -14,8 +14,11 @@ class ProductDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ProductDetailsControllerImp controller = Get.put(ProductDetailsControllerImp());
-    Color primaryColor = controller.categoriesColor  == null ? AppColor.primaryColor:  Color(int.parse("0xff" + controller.categoriesColor!));
+    ProductDetailsControllerImp controller =
+        Get.put(ProductDetailsControllerImp());
+    Color primaryColor = controller.categoriesColor == null
+        ? AppColor.primaryColor
+        : Color(int.parse("0xff" + controller.categoriesColor!));
 
     return Scaffold(
       appBar: AppBar(
@@ -43,8 +46,10 @@ class ProductDetails extends StatelessWidget {
                 child: Hero(
                     tag: "${controller.itemsModel.itemsId}",
                     child: CachedNetworkImage(
-                      imageUrl:
-                          '${AppLink.imageItems}/${controller.itemsModel.itemsImage}',
+                      imageUrl: controller
+                              .containsLink(controller.itemsModel.itemsImage!)
+                          ? controller.itemsModel.itemsImage!
+                          : '${AppLink.imageItems}/${controller.itemsModel.itemsImage}',
                       fit: BoxFit.contain,
                       width: MediaQuery.of(context).size.width * 0.8,
                     )),
@@ -56,7 +61,9 @@ class ProductDetails extends StatelessWidget {
                   primaryColor: primaryColor,
                   ontap_prodect_details: () {},
                   ontap_to_make_order: () {
-                    if (controller.myServices.sharedPreferences.getString("username") != null){
+                    if (controller.myServices.sharedPreferences
+                            .getString("username") !=
+                        null) {
                       Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
                         "categoriesId": controller.categoriesId,
                         "adminId": controller.adminId,
@@ -64,12 +71,14 @@ class ProductDetails extends StatelessWidget {
                         "color": primaryColor,
                         "itemsName": controller.itemsModel.itemsName,
                         "ticketId": controller.ticketId,
-                        "itemsImage": "${AppLink.imageItems}/${controller.itemsModel.itemsImage}"
+                        "itemsImage":controller
+                            .containsLink(controller.itemsModel.itemsImage!)
+                            ? controller.itemsModel.itemsImage!
+                            : '${AppLink.imageItems}/${controller.itemsModel.itemsImage}'
                       });
-                    }else{
+                    } else {
                       Get.toNamed(AppRoute.login);
                     }
-
                   },
                   name_of_prodect: "${controller.itemsModel.itemsName}",
                   value_of_buy: "${controller.itemsModel.itemsCount}",

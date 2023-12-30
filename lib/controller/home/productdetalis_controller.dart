@@ -35,7 +35,13 @@ class ProductDetailsControllerImp extends ProductDetailsController {
     statusRequest = StatusRequest.success;
     update();
   }
-
+  RegExp urlRegExp = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+    caseSensitive: false,
+  );
+  bool containsLink(String text) {
+    return urlRegExp.hasMatch(text);
+  }
   List subItems = [
     {"name": "RED", "id": 1, "active": '0'},
     {"name": "Yellow", "id": 2, "active": '0'},

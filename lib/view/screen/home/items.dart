@@ -113,10 +113,10 @@ class ItemsView extends StatelessWidget {
                                 image: DecorationImage(
                                   alignment: Alignment.center,
                                   image: CachedNetworkImageProvider(controller
-                                              .items[index].itemsImage !=
-                                          null
-                                      ? '${AppLink.imageItems}/${controller.items[index].itemsImage}'
-                                      : 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fcursuripentruparinti.ro%2Fcursuri%2Fcursuri-prenatale%2Findividual&psig=AOvVaw3QIM1Xe5KUGZcrSZqbYLdU&ust=1702662179750000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCMi1pJK9j4MDFQAAAAAdAAAAABAI'),
+                                          .containsLink(controller
+                                              .items[index].itemsImage!)
+                                      ? controller.items[index].itemsImage!
+                                      : '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
                                   fit: BoxFit.contain,
                                 ),
                               ),
@@ -162,8 +162,13 @@ class ItemsView extends StatelessWidget {
                                             "ticketId": controller.ticketId,
                                             "itemsName": controller
                                                 .items[index].itemsName,
-                                            "itemsImage":
-                                                "${AppLink.imageItems}/${controller.items[index].itemsImage}"
+                                            "itemsImage": controller
+                                                    .containsLink(controller
+                                                        .items[index]
+                                                        .itemsImage!)
+                                                ? controller
+                                                    .items[index].itemsImage!
+                                                : '${AppLink.imageItems}/${controller.items[index].itemsImage}'
                                           });
                                     } else {
                                       Get.toNamed(AppRoute.login);
@@ -193,8 +198,8 @@ class ItemsView extends StatelessWidget {
                                     onPressed: () {
                                       shareContent(
                                           "${controller.items[index].itemsName}",
-                                          '${AppLink.imageItems}/${controller.items[index].itemsImage}',
-                                          '${controller.items[index].link}');
+                                          '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
+                                          '${controller.items[index].link_share}');
                                     },
                                     icon: Icon(Icons.link),
                                   ),
@@ -204,8 +209,8 @@ class ItemsView extends StatelessWidget {
                                       // Share.share('check out our product $url');
                                       shareContent(
                                           "${controller.items[index].itemsName}",
-                                          '${AppLink.imageItems}/${controller.items[index].itemsImage}',
-                                          '${controller.items[index].link}');
+                                          '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
+                                          '${controller.items[index].link_share}');
                                     },
                                     icon: Icon(Icons.share),
                                   ),
