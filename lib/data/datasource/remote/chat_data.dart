@@ -83,8 +83,10 @@ class ChatData {
     return response.fold((l) => l, (r) => r);
   }
 
-  orderId() async {
-    var response = await crud.postData(AppLink.orderId, {});
+  orderId(order_id) async {
+    var response = await crud.postData(AppLink.orderId, {
+      "order_id" : order_id
+    });
     return response.fold((l) => l, (r) => r);
   }
 

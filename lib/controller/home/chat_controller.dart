@@ -76,8 +76,9 @@ class ChatControllerImp extends ChatController {
   String? ticketId;
   String? itemsName;
   String? itemsImage;
+  int? index;
   Color? categoriesColor;
-  List order = [];
+  List ordersId = [];
 
   File? myFlie;
 
@@ -147,11 +148,12 @@ class ChatControllerImp extends ChatController {
 
   addImage() async {
     var response = await chatData.addImage(myFlie!);
-      log("========================================================================$response");
+    log("========================================================================$response");
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      myControllerMassage.text = "${AppLink.imageItems}/${response['image_name']}";
+      myControllerMassage.text =
+          "${AppLink.imageItems}/${response['image_name']}";
       addMassage();
       myControllerMassage.clear();
       hasLink = false;
@@ -162,8 +164,8 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  editStatus(orderId) async {
-    var response = await chatData.editStatus(orderId.toString());
+  editStatus(ordersId) async {
+    var response = await chatData.editStatus(ordersId.toString());
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -172,6 +174,7 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
       hasLink = false;
+      orderId(ordersId);
       Get.snackbar("${myServices.sharedPreferences.getString("username")} ",
           "تم تثبيت طلبك بنجاح".tr,
           icon: const Icon(Icons.add_shopping_cart),
@@ -187,8 +190,8 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  orderId() async {
-    var response = await chatData.orderId();
+  orderId(orderId) async {
+    var response = await chatData.orderId(orderId);
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -196,10 +199,12 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        order.addAll(response["orders"]);
+        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0})) || !ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))) {
+          ordersId.add({response["orders_id"], response["orders_status"]});
+        }
       }
     }
-    log(order.toString());
+    log(ordersId.toString());
   }
 
   addFirst() async {
@@ -253,13 +258,17 @@ class ChatControllerImp extends ChatController {
         }
       }
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Scroll to the end of the list
-      if (scrollController != "null") {
+
+    if (chat.length != index) {
+      index = chat.length;
+      WidgetsBinding.instance.addPostFrameCallback((_) {
         // Scroll to the end of the list
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      }
-    });
+        if (scrollController != "null") {
+          // Scroll to the end of the list
+          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+        }
+      });
+    }
     update();
   }
 
