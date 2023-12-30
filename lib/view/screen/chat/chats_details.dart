@@ -236,8 +236,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CachedNetworkImage(
-                              imageUrl:
-                                  '${controller.extractLink(model.description!)}',
+                              imageUrl: '${controller.extractLink(model.description!)}',
                               maxHeightDiskCache: 200,
                             ),
                             Text(controller
@@ -254,8 +253,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                                     '${controller.extractConfirmationCode(model.description!)}',
                                     '')),
                             if (!controller.isDateTimeAfter48Hours(
-                                DateTime.parse(model.createdAt!)
-                                    .subtract(Duration(hours: 47))))
+                                DateTime.parse(model.createdAt!).subtract(Duration(hours: 47))))
                               if (model.description!.contains("confirmBtn"))
                                 OutlinedButton.icon(
                                     style: ButtonStyle(

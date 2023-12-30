@@ -14,7 +14,6 @@ import 'package:ozcan/view/screen/chat/chats_details.dart';
 import 'package:ozcan/view/screen/home/home.dart';
 import 'package:ozcan/view/screen/home/homeScreen.dart';
 import 'package:ozcan/view/screen/home/items.dart';
-import 'package:ozcan/view/screen/home/notification_screen.dart';
 import 'package:ozcan/view/screen/home/splash_screen.dart';
 import 'package:ozcan/view/screen/home/stories.dart';
 import 'package:ozcan/view/screen/home/storiesTop.dart';
@@ -25,6 +24,7 @@ import 'package:ozcan/view/screen/language.dart';
 import 'package:ozcan/view/screen/munesetting/aboutus.dart';
 import 'package:ozcan/view/screen/munesetting/helppage.dart';
 import 'package:ozcan/view/screen/munesetting/policy.dart';
+import 'package:ozcan/view/screen/notification_screen.dart';
 import 'package:ozcan/view/screen/onboarding.dart';
 import 'package:ozcan/view/screen/orders/orderall.dart';
 import 'package:ozcan/view/screen/orders/pending.dart';
@@ -65,6 +65,7 @@ List<GetPage<dynamic>>? routes = [
   GetPage(name: AppRoute.storiesDepartment, page: () => const StoriesDepartment()),
   GetPage(name: AppRoute.storiesTopDepartment, page: () => const StoriesTopDepartment()),
   GetPage(name: AppRoute.chatsDetailsScreen, page: () => const ChatsDetailsScreen()),
+  GetPage(name: AppRoute.notificationScreen, page: () => const NotificationScreen()),
   GetPage(name: AppRoute.chatScreenWeb, page: () => const ChatScreenWeb()),
   GetPage(name: AppRoute.cart, page: () => const CartView()),
   GetPage(name: AppRoute.aboutUs, page: () => const AboutUs()),

@@ -124,7 +124,7 @@ class ChatControllerImp extends ChatController {
         }
       });
     }
-    _timer = Timer.periodic(Duration(seconds: 5), (timer) => viewChat());
+    _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
     super.onInit();
   }
 
@@ -164,8 +164,9 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  editStatus(ordersId) async {
-    var response = await chatData.editStatus(ordersId.toString());
+  editStatus(id) async {
+    ordersId.clear();
+    var response = await chatData.editStatus(id.toString(),idUser.toString());
     if (kDebugMode) {
       print(
           "========================================================================$response");
@@ -188,6 +189,13 @@ class ChatControllerImp extends ChatController {
       // viewChat();
     }
     update();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Scroll to the end of the list
+      if (scrollController != "null") {
+        // Scroll to the end of the list
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      }
+    });
   }
 
   orderId(orderId) async {

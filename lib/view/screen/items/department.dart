@@ -38,541 +38,620 @@ class DepartmentView extends StatelessWidget {
                 width: 15,
               ),
               GetBuilder<DepartmentControllerImp>(
-                builder: (controller) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "OZCAN ${controller.categoriesName}",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            height: 1,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                            color: primaryColor),
-                      ),
-                      Text(
-                        "مرحبا بك",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                builder: (controller) =>
+                    Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "OZCAN ${controller.categoriesName}",
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                height: 1,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                                color: primaryColor),
+                          ),
+                          Text(
+                            "مرحبا بك",
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
                               height: 1,
                               fontWeight: FontWeight.bold,
                             ),
-                      )
-                    ]),
+                          )
+                        ]),
               ),
             ],
           ),
           elevation: 1,
           actions: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Get.toNamed(AppRoute.notificationScreen,arguments: {
+                    "adminId": controller.adminId,
+                    "categoriesName": controller.categoriesName,
+                    "categoriesId": controller.categoriesId,
+                    "color": controller.categoriesColor,
+
+                  });
+                },
                 icon: Icon(
                   Icons.notifications_active_outlined,
                   color: primaryColor,
                 )),
             GetBuilder<DepartmentControllerImp>(
-                builder: (controller) => IconButton(
-                    onPressed: () {
-                      if (controller.myServices.sharedPreferences
+                builder: (controller) =>
+                    IconButton(
+                        onPressed: () {
+                          if (controller.myServices.sharedPreferences
                               .getString("username") ==
-                          null) {
-                        Get.toNamed(AppRoute.login);
-                      } else {
-                        Get.toNamed(AppRoute.chatsDetailsScreen, arguments: {
-                          "adminId": controller.adminId,
-                          "categoriesName": controller.categoriesName,
-                          "categoriesId": controller.categoriesId,
-                          "color": primaryColor,
-                          "ticketId": controller.ticketId,
-                        });
-                      }
-                    },
-                    icon: Icon(
-                      FontAwesome5.facebook_messenger,
-                      color: primaryColor,
-                    ))),
+                              null) {
+                            Get.toNamed(AppRoute.login);
+                          } else {
+                            Get.toNamed(
+                                AppRoute.chatsDetailsScreen, arguments: {
+                              "adminId": controller.adminId,
+                              "categoriesName": controller.categoriesName,
+                              "categoriesId": controller.categoriesId,
+                              "color": primaryColor,
+                              "ticketId": controller.ticketId,
+                            });
+                          }
+                        },
+                        icon: Icon(
+                          FontAwesome5.facebook_messenger,
+                          color: primaryColor,
+                        ))),
           ],
         ),
         body: GetBuilder<DepartmentControllerImp>(
-            builder: (controller) => Container(
-                padding:
+            builder: (controller) =>
+                Container(
+                    padding:
                     const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-                child: ListView(
-                    clipBehavior: Clip.antiAliasWithSaveLayer,
-                    physics: const BouncingScrollPhysics(),
-                    children: [
-                      GetBuilder<DepartmentControllerImp>(
-                        builder: (controller) => HandlingDataView(
-                            statusRequest: controller.statusRequest,
-                            widget: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SingleChildScrollView(
-                                  scrollDirection: Axis.horizontal,
-                                  child: Row(
-                                    children: [
-                                      StoresWidgetAfter(
-                                        photo: "assets/images/call.png",
-                                        primaryColor: primaryColor,
-                                        onTap: () {
-                                          if (controller.story.isNotEmpty)
-                                            Get.toNamed(
-                                                AppRoute.storiesDepartment,
-                                                arguments: {
-                                                  "categoriesId":
-                                                      controller.categoriesId,
-                                                  "categoriesColor": controller
-                                                      .categoriesColor,
-                                                  "adminId": controller.adminId,
-                                                  "categoriesName":
-                                                      controller.categoriesName,
-                                                  "ticketId": controller.ticketId,
-                                                });
-                                        },
-                                        show: controller.story.isNotEmpty,
-                                      ),
-                                      if (controller.departmentStory.isNotEmpty)
-                                        ...List.generate(
-                                          controller.departmentStory.length,
-                                          (index) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8),
-                                            child: StoresWidget(
+                    child: ListView(
+                        clipBehavior: Clip.antiAliasWithSaveLayer,
+                        physics: const BouncingScrollPhysics(),
+                        children: [
+                          GetBuilder<DepartmentControllerImp>(
+                            builder: (controller) =>
+                                HandlingDataView(
+                                    statusRequest: controller.statusRequest,
+                                    widget: Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .start,
+                                      mainAxisAlignment: MainAxisAlignment
+                                          .center,
+                                      children: [
+                                        SingleChildScrollView(
+                                          scrollDirection: Axis.horizontal,
+                                          child: Row(
+                                            children: [
+                                              StoresWidgetAfter(
+                                                photo: "assets/images/call.png",
+                                                primaryColor: primaryColor,
                                                 onTap: () {
-                                                  Get.toNamed(
-                                                      AppRoute
-                                                          .storiesTopDepartment,
-                                                      arguments: {
-                                                        "categoriesId":
+                                                  if (controller.story
+                                                      .isNotEmpty)
+                                                    Get.toNamed(
+                                                        AppRoute
+                                                            .storiesDepartment,
+                                                        arguments: {
+                                                          "categoriesId":
+                                                          controller
+                                                              .categoriesId,
+                                                          "categoriesColor": controller
+                                                              .categoriesColor,
+                                                          "adminId": controller
+                                                              .adminId,
+                                                          "categoriesName":
+                                                          controller
+                                                              .categoriesName,
+                                                          "ticketId": controller
+                                                              .ticketId,
+                                                        });
+                                                },
+                                                show: controller.story
+                                                    .isNotEmpty,
+                                              ),
+                                              if (controller.departmentStory
+                                                  .isNotEmpty)
+                                                ...List.generate(
+                                                  controller.departmentStory
+                                                      .length,
+                                                      (index) =>
+                                                      Padding(
+                                                        padding: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 8),
+                                                        child: StoresWidget(
+                                                            onTap: () {
+                                                              Get.toNamed(
+                                                                  AppRoute
+                                                                      .storiesTopDepartment,
+                                                                  arguments: {
+                                                                    "categoriesId":
+                                                                    controller
+                                                                        .categoriesId,
+                                                                    "categoriesColor":
+                                                                    controller
+                                                                        .categoriesColor,
+                                                                    "adminId":
+                                                                    controller
+                                                                        .adminId,
+                                                                    "ticketId": controller
+                                                                        .ticketId,
+                                                                    "categoriesName":
+                                                                    controller
+                                                                        .categoriesName,
+                                                                    "departmentId": controller
+                                                                        .departmentStory[
+                                                                    index]['department_id'],
+                                                                  });
+                                                            },
+                                                            primaryColor: primaryColor,
+                                                            title:
+                                                            "${controller
+                                                                .departmentStory[index]['title']}",
+                                                            photo:
+                                                            "${AppLink
+                                                                .imageStory}/${controller
+                                                                .departmentStory[index]['image']}"),
+                                                      ),
+                                                ),
+                                              if (controller.departmentStory
+                                                  .isEmpty)
+                                                Padding(
+                                                  padding: const EdgeInsets
+                                                      .only(
+                                                      right: 8, bottom: 20),
+                                                  child: CircleAvatar(
+                                                    radius: 32,
+                                                    backgroundColor: primaryColor,
+                                                    child: Container(
+                                                      alignment: Alignment
+                                                          .center,
+                                                      margin: EdgeInsets.all(3),
+                                                      clipBehavior:
+                                                      Clip
+                                                          .antiAliasWithSaveLayer,
+                                                      decoration: BoxDecoration(
+                                                          shape: BoxShape
+                                                              .circle),
+                                                      child: CircleAvatar(
+                                                        radius: 30,
+                                                        child: Text("لا يوجد"),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                            ],
+                                          ),
+                                        ),
+
+                                        const SizedBox(
+                                          height: 12,
+                                        ),
+                                        GetBuilder<DepartmentControllerImp>(
+                                          builder: (controller) =>
+                                              SizedBox(
+                                                height: 50,
+                                                child: TextFormField(
+                                                  textAlignVertical:
+                                                  TextAlignVertical.center,
+                                                  onTap: () {
+                                                    showSearch(
+                                                        context: context,
+                                                        delegate: SearchScreen());
+                                                  },
+                                                  // keyboardType: TextInputType.none,
+                                                  readOnly: true,
+                                                  decoration: InputDecoration(
+                                                      isDense: true,
+                                                      prefixIcon: const Icon(
+                                                          Icons.search,
+                                                          size: 25),
+                                                      hintText: "findproduct"
+                                                          .tr,
+                                                      border: OutlineInputBorder(
+                                                        borderSide: BorderSide
+                                                            .none,
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                      ),
+                                                      filled: true,
+                                                      fillColor: Color(
+                                                          int.parse("0xff" +
+                                                              controller
+                                                                  .categoriesColor!))
+                                                          .withOpacity(0.5)),
+                                                ),
+                                              ),
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        if (controller.banner.isNotEmpty)
+                                          Text("العروض الخاصة",
+                                              style: TextStyle(
+                                                  color: primaryColor,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 18)),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        if (controller.banner.isNotEmpty)
+                                          CarouselSlider(
+                                              items: controller.banner.map((
+                                                  imageUrl) {
+                                                return Container(
+                                                  clipBehavior: Clip.hardEdge,
+                                                  decoration: BoxDecoration(
+                                                      borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0)),
+                                                  child: CachedNetworkImage(
+                                                      imageUrl:
+                                                      "${AppLink
+                                                          .imageBanner}/${imageUrl['banner_image']}",
+                                                      width: double.infinity,
+                                                      fit: BoxFit.fill),
+                                                );
+                                              }).toList(),
+                                              options: CarouselOptions(
+                                                viewportFraction: 1,
+                                                // aspectRatio: 2.0,
+                                                // initialPage: 1,
+                                                height: Get.height * 0.24,
+                                                enableInfiniteScroll: true,
+                                                reverse: false,
+                                                autoPlay: true,
+                                                autoPlayInterval:
+                                                const Duration(seconds: 3),
+                                                autoPlayAnimationDuration:
+                                                const Duration(
+                                                    milliseconds: 800),
+                                                autoPlayCurve: Curves
+                                                    .fastOutSlowIn,
+                                                enlargeCenterPage: true,
+                                                scrollDirection: Axis
+                                                    .horizontal,
+                                                onPageChanged: (index, _) {
+                                                  controller.currentIndex =
+                                                      index;
+                                                  controller.update();
+                                                },
+                                              )),
+                                        // This trailing comma makes auto-formatting nicer for build methods.
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        if (controller.banner.isNotEmpty)
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment
+                                                .center,
+                                            children: controller.banner.map((
+                                                url) {
+                                              int index = controller.banner
+                                                  .lastIndexOf(url)
+                                                  .toInt();
+                                              // print(index);
+                                              return AnimatedContainer(
+                                                duration: const Duration(
+                                                  milliseconds: 800,
+                                                ),
+                                                width: controller
+                                                    .currentIndex == index
+                                                    ? 25
+                                                    : 5,
+                                                height: 5,
+                                                margin: const EdgeInsets
+                                                    .symmetric(
+                                                    horizontal: 2.0),
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                  BorderRadius.circular(5),
+                                                  color:
+                                                  controller.currentIndex ==
+                                                      index
+                                                      ? primaryColor
+                                                      : AppColor.gray,
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                        const SizedBox(
+                                          height: 20,
+                                        ),
+                                        if (controller.items.isNotEmpty)
+                                          GridView.builder(
+                                            shrinkWrap: true,
+                                            physics: NeverScrollableScrollPhysics(),
+                                            itemBuilder: (context, index) =>
+                                                InkWell(
+                                                    onTap: () {
+                                                      Get.toNamed(
+                                                          AppRoute.itemsView,
+                                                          arguments: {
+                                                            "itemsModel":
                                                             controller
-                                                                .categoriesId,
-                                                        "categoriesColor":
+                                                                .items[index],
+                                                            "categoriesColor":
                                                             controller
                                                                 .categoriesColor,
-                                                        "adminId":
-                                                            controller.adminId,
-                                                        "ticketId": controller.ticketId,
-                                                        "categoriesName":
+                                                            "ticketId": controller
+                                                                .ticketId,
+                                                            "categoriesId":
+                                                            controller
+                                                                .categoriesId,
+                                                            "adminId": controller
+                                                                .adminId,
+                                                            "categoriesName":
                                                             controller
                                                                 .categoriesName,
-                                                        "departmentId": controller
-                                                                .departmentStory[
-                                                            index]['department_id'],
-                                                      });
-                                                },
-                                                primaryColor: primaryColor,
-                                                title:
-                                                    "${controller.departmentStory[index]['title']}",
-                                                photo:
-                                                    "${AppLink.imageStory}/${controller.departmentStory[index]['image']}"),
+                                                            "itemId": index,
+                                                          });
+                                                    },
+                                                    child: Container(
+                                                      width: 150,
+                                                      height: 150,
+                                                      alignment: Alignment
+                                                          .center,
+                                                      clipBehavior:
+                                                      Clip
+                                                          .antiAliasWithSaveLayer,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                        BorderRadius.circular(
+                                                            15),
+                                                        color: primaryColor,
+                                                      ),
+                                                      child: Hero(
+                                                        tag:
+                                                        "${controller
+                                                            .items[index]
+                                                            .itemsId}",
+                                                        child: CachedNetworkImage(
+                                                            fit: BoxFit.contain,
+                                                            imageUrl:
+                                                            '${AppLink
+                                                                .imageItems}/${controller
+                                                                .items[index]
+                                                                .itemsImage}'),
+                                                      ),
+                                                    )),
+                                            itemCount: controller.items.length,
+                                            gridDelegate:
+                                            SliverGridDelegateWithFixedCrossAxisCount(
+                                                crossAxisCount: 3,
+                                                crossAxisSpacing: 5,
+                                                mainAxisSpacing: 5),
                                           ),
+                                        SizedBox(
+                                          height: 20,
                                         ),
-                                      if (controller.departmentStory.isEmpty)
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              right: 8, bottom: 20),
-                                          child: CircleAvatar(
-                                            radius: 32,
-                                            backgroundColor: primaryColor,
-                                            child: Container(
-                                              alignment: Alignment.center,
-                                              margin: EdgeInsets.all(3),
-                                              clipBehavior:
-                                                  Clip.antiAliasWithSaveLayer,
-                                              decoration: BoxDecoration(
-                                                  shape: BoxShape.circle),
-                                              child: CircleAvatar(
-                                                radius: 30,
-                                                child: Text("لا يوجد"),
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
+                                        // if (controller.items.isNotEmpty)
+                                        //   ListView.separated(
+                                        //     shrinkWrap: true,
+                                        //     physics: NeverScrollableScrollPhysics(),
+                                        //     itemBuilder: (context, index) => InkWell(
+                                        //       onTap: () {
+                                        //         Get.toNamed(AppRoute.productDetails,
+                                        //             arguments: {
+                                        //               "itemsModel":
+                                        //                   controller.items[index]
+                                        //             });
+                                        //       },
+                                        //       child: Card(
+                                        //         child: Container(
+                                        //           decoration: BoxDecoration(
+                                        //               color: Color(0xffECECEC),
+                                        //               borderRadius:
+                                        //                   BorderRadius.circular(15),
+                                        //               boxShadow: List.filled(
+                                        //                   2,
+                                        //                   BoxShadow(
+                                        //                       color: Colors.black,
+                                        //                       blurRadius: 2))),
+                                        //           child: Column(
+                                        //             children: [
+                                        //               Padding(
+                                        //                 padding:
+                                        //                     const EdgeInsets.all(5.0),
+                                        //                 child: Row(
+                                        //                   crossAxisAlignment:
+                                        //                       CrossAxisAlignment.center,
+                                        //                   mainAxisAlignment:
+                                        //                       MainAxisAlignment.end,
+                                        //                   children: [
+                                        //                     Icon(
+                                        //                       Icons.verified_outlined,
+                                        //                       color: Colors.blue,
+                                        //                     ),
+                                        //                     const SizedBox(
+                                        //                       width: 15,
+                                        //                     ),
+                                        //                     Text(
+                                        //                       "Ozcan ${controller.categoriesName}",
+                                        //                       style: Theme.of(context)
+                                        //                           .textTheme
+                                        //                           .bodyMedium!
+                                        //                           .copyWith(
+                                        //                               fontWeight:
+                                        //                                   FontWeight
+                                        //                                       .bold),
+                                        //                     ),
+                                        //                     const SizedBox(
+                                        //                       width: 10,
+                                        //                     ),
+                                        //                     CircleAvatar(
+                                        //                       radius: 28,
+                                        //                       backgroundColor:
+                                        //                           primaryColor,
+                                        //                       child: Container(
+                                        //                         alignment:
+                                        //                             Alignment.center,
+                                        //                         margin:
+                                        //                             EdgeInsets.all(3),
+                                        //                         clipBehavior: Clip
+                                        //                             .antiAliasWithSaveLayer,
+                                        //                         decoration:
+                                        //                             BoxDecoration(
+                                        //                                 shape: BoxShape
+                                        //                                     .circle),
+                                        //                         child: CircleAvatar(
+                                        //                           radius: 25,
+                                        //                           child: Image.asset(
+                                        //                             "assets/images/call.png",
+                                        //                             width: Get.width,
+                                        //                             fit: BoxFit.fill,
+                                        //                           ),
+                                        //                         ),
+                                        //                       ),
+                                        //                     ),
+                                        //                   ],
+                                        //                 ),
+                                        //               ),
+                                        //               Divider(
+                                        //                 color: Colors.black,
+                                        //                 height: 1,
+                                        //               ),
+                                        //               Container(
+                                        //                 height: Get.width * 0.9,
+                                        //                 decoration: BoxDecoration(
+                                        //                   color: Color(0xffECECEC),
+                                        //                   image: DecorationImage(
+                                        //                       image: CachedNetworkImageProvider(
+                                        //                           '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
+                                        //                       fit: BoxFit.fill),
+                                        //                 ),
+                                        //               ),
+                                        //               Container(
+                                        //                 height: Get.width * 0.12,
+                                        //                 decoration: BoxDecoration(
+                                        //                   borderRadius:
+                                        //                       BorderRadius.only(
+                                        //                     bottomRight:
+                                        //                         Radius.circular(0),
+                                        //                     bottomLeft:
+                                        //                         Radius.circular(0),
+                                        //                   ),
+                                        //                   color: primaryColor,
+                                        //                 ),
+                                        //                 child: Padding(
+                                        //                   padding:
+                                        //                       const EdgeInsets.only(
+                                        //                           left: 15, right: 15),
+                                        //                   child: Row(
+                                        //                     mainAxisAlignment:
+                                        //                         MainAxisAlignment
+                                        //                             .spaceBetween,
+                                        //                     children: [
+                                        //                       TextButton(
+                                        //                         onPressed: () {},
+                                        //                         child: Text(
+                                        //                           "تواصل معنا الان",
+                                        //                           style: TextStyle(
+                                        //                             color: Colors.white,
+                                        //                             fontWeight:
+                                        //                                 FontWeight.bold,
+                                        //                             fontSize: 16,
+                                        //                           ),
+                                        //                         ),
+                                        //                       ),
+                                        //                       IconButton(
+                                        //                         onPressed: () {},
+                                        //                         icon: Icon(
+                                        //                           FontAwesome5
+                                        //                               .telegram_plane,
+                                        //                           color:
+                                        //                               Colors.blueAccent,
+                                        //                         ),
+                                        //                       ),
+                                        //                     ],
+                                        //                   ),
+                                        //                 ),
+                                        //               ),
+                                        //               Container(
+                                        //                 decoration: BoxDecoration(
+                                        //                     borderRadius:
+                                        //                         BorderRadius.only(
+                                        //                       bottomLeft:
+                                        //                           Radius.circular(15),
+                                        //                       bottomRight:
+                                        //                           Radius.circular(15),
+                                        //                     ),
+                                        //                     color: Colors.white),
+                                        //                 child: Column(
+                                        //                   children: [
+                                        //                     Row(
+                                        //                       children: [
+                                        //                         IconButton(
+                                        //                           onPressed: () {},
+                                        //                           icon:
+                                        //                               Icon(Icons.link),
+                                        //                         ),
+                                        //                         Spacer(),
+                                        //                         IconButton(
+                                        //                           onPressed: () {
+                                        //                             // Share.share('check out our product $url');
+                                        //                           },
+                                        //                           icon:
+                                        //                               Icon(Icons.share),
+                                        //                         ),
+                                        //                         IconButton(
+                                        //                           onPressed: () {},
+                                        //                           icon: Icon(
+                                        //                               Icons.comment),
+                                        //                         ),
+                                        //                       ],
+                                        //                     ),
+                                        //                     Text(
+                                        //                       "${controller.items[index].itemsName}",
+                                        //                       style: TextStyle(
+                                        //                           color: Colors.black,
+                                        //                           fontWeight:
+                                        //                               FontWeight.bold,
+                                        //                           fontSize: 15),
+                                        //                     ),
+                                        //                     SizedBox(
+                                        //                       height: 8,
+                                        //                     )
+                                        //                   ],
+                                        //                 ),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ),
+                                        //     itemCount: controller.items.length,
+                                        //     separatorBuilder:
+                                        //         (BuildContext context, int index) =>
+                                        //             SizedBox(
+                                        //       height: 10,
+                                        //     ),
+                                        //   ),
 
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                GetBuilder<DepartmentControllerImp>(
-                                  builder: (controller) => SizedBox(
-                                    height: 50,
-                                    child: TextFormField(
-                                      textAlignVertical:
-                                          TextAlignVertical.center,
-                                      onTap: () {
-                                        showSearch(
-                                            context: context,
-                                            delegate: SearchScreen());
-                                      },
-                                      // keyboardType: TextInputType.none,
-                                      readOnly: true,
-                                      decoration: InputDecoration(
-                                          isDense: true,
-                                          prefixIcon: const Icon(Icons.search,
-                                              size: 25),
-                                          hintText: "findproduct".tr,
-                                          border: OutlineInputBorder(
-                                            borderSide: BorderSide.none,
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                          ),
-                                          filled: true,
-                                          fillColor: Color(int.parse("0xff" +
-                                                  controller.categoriesColor!))
-                                              .withOpacity(0.5)),
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                if (controller.banner.isNotEmpty)
-                                  Text("العروض الخاصة",
-                                      style: TextStyle(
-                                          color: primaryColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18)),
-                                const SizedBox(
-                                  height: 10,
-                                ),
-                                if (controller.banner.isNotEmpty)
-                                  CarouselSlider(
-                                      items: controller.banner.map((imageUrl) {
-                                        return Container(
-                                          clipBehavior: Clip.hardEdge,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0)),
-                                          child: CachedNetworkImage(
-                                              imageUrl:
-                                                  "${AppLink.imageBanner}/${imageUrl['banner_image']}",
-                                              width: double.infinity,
-                                              fit: BoxFit.fill),
-                                        );
-                                      }).toList(),
-                                      options: CarouselOptions(
-                                        viewportFraction: 1,
-                                        // aspectRatio: 2.0,
-                                        // initialPage: 1,
-                                        height: Get.height * 0.24,
-                                        enableInfiniteScroll: true,
-                                        reverse: false,
-                                        autoPlay: true,
-                                        autoPlayInterval:
-                                            const Duration(seconds: 3),
-                                        autoPlayAnimationDuration:
-                                            const Duration(milliseconds: 800),
-                                        autoPlayCurve: Curves.fastOutSlowIn,
-                                        enlargeCenterPage: true,
-                                        scrollDirection: Axis.horizontal,
-                                        onPageChanged: (index, _) {
-                                          controller.currentIndex = index;
-                                          controller.update();
-                                        },
-                                      )),
-                                // This trailing comma makes auto-formatting nicer for build methods.
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                if (controller.banner.isNotEmpty)
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: controller.banner.map((url) {
-                                      int index = controller.banner
-                                          .lastIndexOf(url)
-                                          .toInt();
-                                      // print(index);
-                                      return AnimatedContainer(
-                                        duration: const Duration(
-                                          milliseconds: 800,
-                                        ),
-                                        width: controller.currentIndex == index
-                                            ? 25
-                                            : 5,
-                                        height: 5,
-                                        margin: const EdgeInsets.symmetric(
-                                            horizontal: 2.0),
-                                        decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
-                                          color:
-                                              controller.currentIndex == index
-                                                  ? primaryColor
-                                                  : AppColor.gray,
-                                        ),
-                                      );
-                                    }).toList(),
-                                  ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                if (controller.items.isNotEmpty)
-                                  GridView.builder(
-                                    shrinkWrap: true,
-                                    physics: NeverScrollableScrollPhysics(),
-                                    itemBuilder: (context, index) => InkWell(
-                                        onTap: () {
-                                          Get.toNamed(AppRoute.itemsView,
-                                              arguments: {
-                                                "itemsModel":
-                                                    controller.items[index],
-                                                "categoriesColor":
-                                                    controller.categoriesColor,
-                                                "ticketId": controller.ticketId,
-                                                "categoriesId":
-                                                    controller.categoriesId,
-                                                "adminId": controller.adminId,
-                                                "categoriesName":
-                                                    controller.categoriesName,
-                                                "itemId": index,
-                                              });
-                                        },
-                                        child: Container(
-                                          width: 150,
-                                          height: 150,
-                                          alignment: Alignment.center,
-                                          clipBehavior:
-                                              Clip.antiAliasWithSaveLayer,
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(15),
-                                            color: primaryColor,
-                                          ),
-                                          child: Hero(
-                                            tag:
-                                                "${controller.items[index].itemsId}",
-                                            child: CachedNetworkImage(
-                                                fit: BoxFit.contain,
-                                                imageUrl:
-                                                    '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
-                                          ),
-                                        )),
-                                    itemCount: controller.items.length,
-                                    gridDelegate:
-                                        SliverGridDelegateWithFixedCrossAxisCount(
-                                            crossAxisCount: 3,
-                                            crossAxisSpacing: 5,
-                                            mainAxisSpacing: 5),
-                                  ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                // if (controller.items.isNotEmpty)
-                                //   ListView.separated(
-                                //     shrinkWrap: true,
-                                //     physics: NeverScrollableScrollPhysics(),
-                                //     itemBuilder: (context, index) => InkWell(
-                                //       onTap: () {
-                                //         Get.toNamed(AppRoute.productDetails,
-                                //             arguments: {
-                                //               "itemsModel":
-                                //                   controller.items[index]
-                                //             });
-                                //       },
-                                //       child: Card(
-                                //         child: Container(
-                                //           decoration: BoxDecoration(
-                                //               color: Color(0xffECECEC),
-                                //               borderRadius:
-                                //                   BorderRadius.circular(15),
-                                //               boxShadow: List.filled(
-                                //                   2,
-                                //                   BoxShadow(
-                                //                       color: Colors.black,
-                                //                       blurRadius: 2))),
-                                //           child: Column(
-                                //             children: [
-                                //               Padding(
-                                //                 padding:
-                                //                     const EdgeInsets.all(5.0),
-                                //                 child: Row(
-                                //                   crossAxisAlignment:
-                                //                       CrossAxisAlignment.center,
-                                //                   mainAxisAlignment:
-                                //                       MainAxisAlignment.end,
-                                //                   children: [
-                                //                     Icon(
-                                //                       Icons.verified_outlined,
-                                //                       color: Colors.blue,
-                                //                     ),
-                                //                     const SizedBox(
-                                //                       width: 15,
-                                //                     ),
-                                //                     Text(
-                                //                       "Ozcan ${controller.categoriesName}",
-                                //                       style: Theme.of(context)
-                                //                           .textTheme
-                                //                           .bodyMedium!
-                                //                           .copyWith(
-                                //                               fontWeight:
-                                //                                   FontWeight
-                                //                                       .bold),
-                                //                     ),
-                                //                     const SizedBox(
-                                //                       width: 10,
-                                //                     ),
-                                //                     CircleAvatar(
-                                //                       radius: 28,
-                                //                       backgroundColor:
-                                //                           primaryColor,
-                                //                       child: Container(
-                                //                         alignment:
-                                //                             Alignment.center,
-                                //                         margin:
-                                //                             EdgeInsets.all(3),
-                                //                         clipBehavior: Clip
-                                //                             .antiAliasWithSaveLayer,
-                                //                         decoration:
-                                //                             BoxDecoration(
-                                //                                 shape: BoxShape
-                                //                                     .circle),
-                                //                         child: CircleAvatar(
-                                //                           radius: 25,
-                                //                           child: Image.asset(
-                                //                             "assets/images/call.png",
-                                //                             width: Get.width,
-                                //                             fit: BoxFit.fill,
-                                //                           ),
-                                //                         ),
-                                //                       ),
-                                //                     ),
-                                //                   ],
-                                //                 ),
-                                //               ),
-                                //               Divider(
-                                //                 color: Colors.black,
-                                //                 height: 1,
-                                //               ),
-                                //               Container(
-                                //                 height: Get.width * 0.9,
-                                //                 decoration: BoxDecoration(
-                                //                   color: Color(0xffECECEC),
-                                //                   image: DecorationImage(
-                                //                       image: CachedNetworkImageProvider(
-                                //                           '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
-                                //                       fit: BoxFit.fill),
-                                //                 ),
-                                //               ),
-                                //               Container(
-                                //                 height: Get.width * 0.12,
-                                //                 decoration: BoxDecoration(
-                                //                   borderRadius:
-                                //                       BorderRadius.only(
-                                //                     bottomRight:
-                                //                         Radius.circular(0),
-                                //                     bottomLeft:
-                                //                         Radius.circular(0),
-                                //                   ),
-                                //                   color: primaryColor,
-                                //                 ),
-                                //                 child: Padding(
-                                //                   padding:
-                                //                       const EdgeInsets.only(
-                                //                           left: 15, right: 15),
-                                //                   child: Row(
-                                //                     mainAxisAlignment:
-                                //                         MainAxisAlignment
-                                //                             .spaceBetween,
-                                //                     children: [
-                                //                       TextButton(
-                                //                         onPressed: () {},
-                                //                         child: Text(
-                                //                           "تواصل معنا الان",
-                                //                           style: TextStyle(
-                                //                             color: Colors.white,
-                                //                             fontWeight:
-                                //                                 FontWeight.bold,
-                                //                             fontSize: 16,
-                                //                           ),
-                                //                         ),
-                                //                       ),
-                                //                       IconButton(
-                                //                         onPressed: () {},
-                                //                         icon: Icon(
-                                //                           FontAwesome5
-                                //                               .telegram_plane,
-                                //                           color:
-                                //                               Colors.blueAccent,
-                                //                         ),
-                                //                       ),
-                                //                     ],
-                                //                   ),
-                                //                 ),
-                                //               ),
-                                //               Container(
-                                //                 decoration: BoxDecoration(
-                                //                     borderRadius:
-                                //                         BorderRadius.only(
-                                //                       bottomLeft:
-                                //                           Radius.circular(15),
-                                //                       bottomRight:
-                                //                           Radius.circular(15),
-                                //                     ),
-                                //                     color: Colors.white),
-                                //                 child: Column(
-                                //                   children: [
-                                //                     Row(
-                                //                       children: [
-                                //                         IconButton(
-                                //                           onPressed: () {},
-                                //                           icon:
-                                //                               Icon(Icons.link),
-                                //                         ),
-                                //                         Spacer(),
-                                //                         IconButton(
-                                //                           onPressed: () {
-                                //                             // Share.share('check out our product $url');
-                                //                           },
-                                //                           icon:
-                                //                               Icon(Icons.share),
-                                //                         ),
-                                //                         IconButton(
-                                //                           onPressed: () {},
-                                //                           icon: Icon(
-                                //                               Icons.comment),
-                                //                         ),
-                                //                       ],
-                                //                     ),
-                                //                     Text(
-                                //                       "${controller.items[index].itemsName}",
-                                //                       style: TextStyle(
-                                //                           color: Colors.black,
-                                //                           fontWeight:
-                                //                               FontWeight.bold,
-                                //                           fontSize: 15),
-                                //                     ),
-                                //                     SizedBox(
-                                //                       height: 8,
-                                //                     )
-                                //                   ],
-                                //                 ),
-                                //               ),
-                                //             ],
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //     itemCount: controller.items.length,
-                                //     separatorBuilder:
-                                //         (BuildContext context, int index) =>
-                                //             SizedBox(
-                                //       height: 10,
-                                //     ),
-                                //   ),
-
-                                // ProductItems(
-                                //     onTapDetails: () {},
-                                //     onTapOrder: () {},
-                                //     nameProduct: "حذاء نايك زووم",
-                                //     value_of_buy: "8.174",
-                                //     numberStar: "4.9",
-                                //     description:
-                                //         "لا يتطلب دعم اضافي مقدمة القدم كما يمكن لمعظم المشاة استخدامه واضافة وسادة به لتعطي وظن اكبر اضافي للحصول علي درجة راحة اكثر اثناء المشي وبذلك يخفف من صدمة القدمية والساق",
-                                //     priceProject: "690.00")
-                              ],
-                            )),
-                      )
-                    ]))));
+                                        // ProductItems(
+                                        //     onTapDetails: () {},
+                                        //     onTapOrder: () {},
+                                        //     nameProduct: "حذاء نايك زووم",
+                                        //     value_of_buy: "8.174",
+                                        //     numberStar: "4.9",
+                                        //     description:
+                                        //         "لا يتطلب دعم اضافي مقدمة القدم كما يمكن لمعظم المشاة استخدامه واضافة وسادة به لتعطي وظن اكبر اضافي للحصول علي درجة راحة اكثر اثناء المشي وبذلك يخفف من صدمة القدمية والساق",
+                                        //     priceProject: "690.00")
+                                      ],
+                                    )),
+                          )
+                        ]))));
   }
 }

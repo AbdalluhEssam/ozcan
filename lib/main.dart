@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -5,12 +8,27 @@ import 'binding.dart';
 import 'core/localization/changelocal.dart';
 import 'core/localization/translation.dart';
 import 'core/services/services.dart';
+import 'firebase_options.dart';
 import 'routes.dart';
+import 'package:firebase_core/firebase_core.dart';
 
+Future<void> _backgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  log("Message from background : ${message.notification?.body}");
+}
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  FirebaseMessaging.onBackgroundMessage(_backgroundHandler);
+  await initFcm();
+
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
   await initialServices();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseMessaging.onMessageOpenedApp.listen((event) {
+    Get.toNamed(event.data['pagename']);
+  });
   runApp(const MyApp());
 }
 

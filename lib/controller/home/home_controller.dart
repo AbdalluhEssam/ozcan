@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:developer';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,6 +13,7 @@ import '../../data/model/itemsmodel.dart';
 
 abstract class HomeController extends SearchMaxController {
   initialData();
+
   getData();
 }
 
@@ -39,8 +42,18 @@ class HomeControllerImp extends HomeController {
 
   @override
   void onInit() {
-    getData();
     initialData();
+    FirebaseMessaging.instance.getToken().then((value) {
+      String? token = value;
+      log(token.toString());
+    });
+    String id = myServices.sharedPreferences.getString("id")!;
+    FirebaseMessaging.instance.subscribeToTopic("users");
+    if (myServices.sharedPreferences.getString("id") != null) {
+      FirebaseMessaging.instance.subscribeToTopic("user$id");
+    }
+    getData();
+
     super.onInit();
   }
 
@@ -63,7 +76,6 @@ class HomeControllerImp extends HomeController {
     }
     update();
   }
-
 }
 
 class SearchMaxController extends GetxController {

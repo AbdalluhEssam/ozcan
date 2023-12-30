@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "445758985130",
+    "project_id": "ozcan-4075e",
+    "storage_bucket": "ozcan-4075e.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:445758985130:android:9da6ea08a7e452249211d3",
+        "android_client_info": {
+          "package_name": "com.example.ozcan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQ4XAT-rlxA7FodVIMYw8z9YcSw4iocUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

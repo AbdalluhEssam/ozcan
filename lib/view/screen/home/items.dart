@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
+import 'package:share/share.dart';
 import '../../../controller/items/items_controller.dart';
 import '../../../core/constant/routes.dart';
 import '../../../likeapi.dart';
@@ -158,8 +159,7 @@ class ItemsView extends StatelessWidget {
                                             "adminId": controller.adminId,
                                             "categoriesName":
                                                 controller.categoriesName,
-                                            "ticketId":
-                                                controller.ticketId,
+                                            "ticketId": controller.ticketId,
                                             "itemsName": controller
                                                 .items[index].itemsName,
                                             "itemsImage":
@@ -190,20 +190,29 @@ class ItemsView extends StatelessWidget {
                               Row(
                                 children: [
                                   IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      shareContent(
+                                          "${controller.items[index].itemsName}",
+                                          '${AppLink.imageItems}/${controller.items[index].itemsImage}',
+                                          '${controller.items[index].link}');
+                                    },
                                     icon: Icon(Icons.link),
                                   ),
                                   Spacer(),
                                   IconButton(
                                     onPressed: () {
                                       // Share.share('check out our product $url');
+                                      shareContent(
+                                          "${controller.items[index].itemsName}",
+                                          '${AppLink.imageItems}/${controller.items[index].itemsImage}',
+                                          '${controller.items[index].link}');
                                     },
                                     icon: Icon(Icons.share),
                                   ),
-                                  IconButton(
-                                    onPressed: () {},
-                                    icon: Icon(Icons.comment),
-                                  ),
+                                  // IconButton(
+                                  //   onPressed: () {},
+                                  //   icon: Icon(Icons.comment),
+                                  // ),
                                 ],
                               ),
                               Text(
@@ -233,5 +242,9 @@ class ItemsView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  shareContent(text, imageUrl, linkUrl) {
+    Share.share('$imageUrl\n$text\n$linkUrl');
   }
 }

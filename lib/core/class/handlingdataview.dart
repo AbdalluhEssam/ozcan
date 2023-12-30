@@ -86,6 +86,55 @@ class HandlingDataViewNot extends StatelessWidget {
                     : widget;
   }
 }
+class HandlingDataViewNotification extends StatelessWidget {
+  final StatusRequest statusRequest;
+  final Widget widget;
+
+  const HandlingDataViewNotification({
+    Key? key,
+    required this.statusRequest,
+    required this.widget,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return statusRequest == StatusRequest.loading
+        ? Center(
+      child:
+      Lottie.asset(AppImageAssets.loading, width: 250, height: 250),
+    )
+        : statusRequest == StatusRequest.offlineFailure
+        ? Center(
+      child: Lottie.asset(AppImageAssets.offline,
+          width: 250, height: 250),
+    )
+        : statusRequest == StatusRequest.serverFailure
+        ? Center(
+      child: Lottie.asset(AppImageAssets.server,
+          width: 250, height: 250),
+    )
+        : statusRequest == StatusRequest.failure
+        ? Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              "assets/lottie/empty.json",
+              // width: 300,
+              // height: 300,
+              alignment: Alignment.center,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Text("لا توجد اشعارات",style: TextStyle(color: Colors.black,fontSize: 20)),
+
+          ],
+        ))
+        : widget;
+  }
+}
 
 class HandlingDataRequest extends StatelessWidget {
   final StatusRequest statusRequest;

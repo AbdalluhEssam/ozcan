@@ -75,17 +75,18 @@ class ChatData {
     return response.fold((l) => l, (r) => r);
   }
 
-  editStatus(String orderId) async {
+  editStatus(String orderId,userId) async {
     var response = await crud.postData(AppLink.editStatus, {
       "order_id": orderId,
       "orders_status": "1",
+      "user_id": userId,
     });
     return response.fold((l) => l, (r) => r);
   }
 
   orderId(order_id) async {
     var response = await crud.postData(AppLink.orderId, {
-      "order_id" : order_id
+      "order_id" : order_id,
     });
     return response.fold((l) => l, (r) => r);
   }
