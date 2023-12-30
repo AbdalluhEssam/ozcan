@@ -203,9 +203,11 @@ class ChatsDetailsScreen extends StatelessWidget {
 
   Widget buildMessage(MassageBotModel model) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
-    if (model.description!.contains("confirmBtn"))
+    if (model.description!.contains("confirmBtn")) {
       controller
           .orderId(controller.extractConfirmationCode(model.description!));
+    }
+
     return Align(
       alignment: AlignmentDirectional.centerEnd,
       child: Container(
@@ -247,6 +249,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                                 .replaceAll('<br />', '')
                                 .replaceAll('<br>', '')
                                 .replaceAll('confirmBtn|', '')
+                                .replaceAll('|', '')
                                 .replaceAll(
                                     '${controller.extractConfirmationCode(model.description!)}',
                                     '')),
@@ -254,32 +257,43 @@ class ChatsDetailsScreen extends StatelessWidget {
                                 DateTime.parse(model.createdAt!)
                                     .subtract(Duration(hours: 47))))
                               if (model.description!.contains("confirmBtn"))
-                                Text(
-                                    "${controller.ordersId.contains(int.parse(controller.extractConfirmationCode(model.description!)))}"),
-                            if (model.description!.contains("confirmBtn"))
-                              OutlinedButton.icon(
-                                  style: ButtonStyle(
-                                      minimumSize: MaterialStatePropertyAll(
-                                          Size(Get.width, 40)),
-                                      alignment: Alignment.center,
-                                      backgroundColor: MaterialStatePropertyAll(
-                                          controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 1}))
-
-                                              ? Colors.green
-                                              : Colors.greenAccent)),
-                                  onPressed: () {
-                                    if (controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 0}))) {
-                                      controller.editStatus( controller.extractConfirmationCode( model.description!));
-                                    }
-                                  },
-                                  icon: Icon(Icons.add_shopping_cart_outlined,
-                                      color: Colors.white),
-                                  label: Text(
-                                    controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 1}))
-                                        ? "تثبيت"
-                                        : "تم التثبيت",
-                                    style: TextStyle(color: Colors.white),
-                                  ))
+                                OutlinedButton.icon(
+                                    style: ButtonStyle(
+                                        minimumSize: MaterialStatePropertyAll(
+                                            Size(Get.width, 40)),
+                                        alignment: Alignment.center,
+                                        backgroundColor: MaterialStatePropertyAll(
+                                            controller.ordersId.any((element) => element.containsAll(
+                                                    {int.parse(controller.extractConfirmationCode(model.description!)), 1}))
+                                                ? Colors.greenAccent
+                                                : Colors.green)),
+                                    onPressed: () {
+                                      if (controller.ordersId.any((element) =>
+                                          element.containsAll({
+                                            int.parse(controller
+                                                .extractConfirmationCode(
+                                                    model.description!)),
+                                            0
+                                          }))) {
+                                        controller.editStatus(
+                                            controller.extractConfirmationCode(
+                                                model.description!));
+                                      }
+                                    },
+                                    icon: Icon(Icons.add_shopping_cart_outlined,
+                                        color: Colors.white),
+                                    label: Text(
+                                      controller.ordersId.any((element) =>
+                                              element.containsAll({
+                                                int.parse(controller
+                                                    .extractConfirmationCode(
+                                                        model.description!)),
+                                                1
+                                              }))
+                                          ? "تم التثبيت"
+                                          : "تثبيت",
+                                      style: TextStyle(color: Colors.white),
+                                    ))
                           ],
                         ),
                       )

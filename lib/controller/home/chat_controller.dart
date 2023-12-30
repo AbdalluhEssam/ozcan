@@ -199,11 +199,15 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0})) || !ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))) {
-          ordersId.add({response["orders_id"], response["orders_status"]});
+        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0}))) {
+          if(!ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))){
+            ordersId.add({response["orders_id"], response["orders_status"]});
+            update();
+          }
         }
       }
     }
+
     log(ordersId.toString());
   }
 
