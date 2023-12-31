@@ -134,16 +134,16 @@ Future<void> initFcm() async {
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   refreshPageNotification(data) {
-    if (Get.currentRoute == "/OrdersAll" &&
-        data['pagename'] == "OrdersAll") {
-      OrdersPendingController controller = Get.find();
-      controller.refreshOrder();
-    }
-
-    if (data['pagename'] == "OrdersAll") {
-      NotificationControllerImp controllerImp = Get.find();
-      controllerImp.getData();
-    }
+    // if (Get.currentRoute == "/OrdersAll" &&
+    //     data['pagename'] == "OrdersAll") {
+    //   OrdersPendingController controller = Get.find();
+    //   controller.refreshOrder();
+    // }
+    //
+    // if (data['pagename'] == "OrdersAll") {
+    //   NotificationControllerImp controllerImp = Get.find();
+    //   controllerImp.getData();
+    // }
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage? message) async {

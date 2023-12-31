@@ -23,10 +23,8 @@ abstract class ChatController extends GetxController {
 class ChatControllerImp extends ChatController {
   MyServices myServices = Get.find();
   ChatData chatData = ChatData(Get.find());
-  RegExp urlRegExp = RegExp(
-    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
-    caseSensitive: false,
-  );
+  RegExp urlRegExp = RegExp(r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
+      caseSensitive: false, multiLine: true);
   bool hasLink = false;
   bool hasLinkController = false;
 
@@ -61,7 +59,8 @@ class ChatControllerImp extends ChatController {
   }
 
   List<MassageBotModel> chat = [];
-  List<UserTicketsModel> ticket = [];
+  List<MassageBotModel> chatNew = [];
+  late UserTicketsModel ticket ;
   late TextEditingController myControllerMassage;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late Timer _timer;
@@ -202,8 +201,10 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0}))) {
-          if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))) {
+        if (!ordersId
+            .any((element) => element.containsAll({int.parse(orderId), 0}))) {
+          if (!ordersId
+              .any((element) => element.containsAll({int.parse(orderId), 1}))) {
             ordersId.add({response["orders_id"], response["orders_status"]});
             update();
           }
@@ -230,8 +231,11 @@ class ChatControllerImp extends ChatController {
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      log("aaaaaaaaaaaaaaaaaaaaaaaaaaaaa/////  Message Sent ");
-      getTicket();
+      if (response['message'] == "Already Ticket Found") {
+        getTicket();
+      } else {
+        getTicket();
+      }
     }
     update();
   }
@@ -251,7 +255,6 @@ class ChatControllerImp extends ChatController {
 
   @override
   viewChat() async {
-    chat.clear();
     if (ticketId != "null") {
       var response = await chatData.getData(ticketId.toString());
       log("========================================================================$response");
@@ -260,6 +263,7 @@ class ChatControllerImp extends ChatController {
         if (response['message'] != "No Messages Found") {
           List massage = response['messages'];
           if (massage.length != chat.length) {
+            chat.clear();
             chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
           }
         } else {
@@ -283,7 +287,6 @@ class ChatControllerImp extends ChatController {
   }
 
   getTicket() async {
-    ticket.clear();
     chat.clear();
     var response = await chatData.getTicketData(
         idUser.toString(), categoriesId.toString());
@@ -291,16 +294,15 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['message'] != "No Ticket Yet") {
-        List massage = response['User_Tickets'];
-        ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+        ticket= UserTicketsModel.fromJson(response['User_Tickets']);
       } else {
-        ticket = [];
+        ticket = UserTicketsModel();
       }
     }
-    log("message : ${ticket.any((element) => element.category.toString() == categoriesId)}");
+    log("message : ${ticket.id}");
 
-    if (ticket.isNotEmpty) {
-      ticketId = ticket.last.id.toString();
+    if (ticket.id!.isNotEmpty) {
+      ticketId = ticket.id.toString();
       viewChat();
     }
 

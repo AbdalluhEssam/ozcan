@@ -248,8 +248,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             CachedNetworkImage(
-                              imageUrl:
-                                  '${controller.extractLink(model.description!)}',
+                              imageUrl:'${controller.extractLink(model.description!)}',
                               maxHeightDiskCache: 200,
                             ),
                             Text(controller

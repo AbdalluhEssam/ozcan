@@ -21,7 +21,7 @@ class DepartmentControllerImp extends DepartmentController {
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   ChatData chatData = ChatData(Get.find());
 
-  List<UserTicketsModel> ticket = [];
+  late UserTicketsModel ticket ;
   List banner = [];
   List departmentStory = [];
   List story = [];
@@ -58,6 +58,7 @@ class DepartmentControllerImp extends DepartmentController {
 
   @override
   void onInit() {
+    ticket =UserTicketsModel();
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesName = Get.arguments['categoriesName'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
@@ -139,23 +140,25 @@ class DepartmentControllerImp extends DepartmentController {
   }
 
   getTicket() async {
-    ticket.clear();
     var response =
         await chatData.getTicketData(id.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['message'] != "No Ticket Yet") {
-        List massage = response['User_Tickets'];
-        ticket.addAll(massage.map((e) => UserTicketsModel.fromJson(e)));
+        ticket= UserTicketsModel.fromJson(response['User_Tickets']);
       } else {
-        ticket = [];
+        ticket = UserTicketsModel();
+      }
+
+      if (response['message'] == "No Ticket Yet") {
+        ticketId = "null";
       }
     }
-    if (ticket.isEmpty) {
+    if (ticket.id!.isEmpty) {
       ticketId = "null";
     } else {
-      ticketId = ticket.last.id ?? "null";
+      ticketId = ticket.id ?? "null";
     }
 
     log("message : ${ticketId}");

@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:ozcan/controller/home/notification_controller.dart';
 import 'controller/auth/signup_controller.dart';
 import 'controller/cart/cart_controller.dart';
 import 'controller/home/personinformation_controller.dart';
@@ -14,5 +15,6 @@ class MyBinding extends Bindings {
     Get.lazyPut(() => ProductDetailsControllerImp(), fenix: true);
     Get.lazyPut(() => PersonInfoControllerImp(), fenix: true);
     Get.lazyPut(() => CartControllerImp(), fenix: true);
+    Get.lazyPut(() => NotificationControllerImp(), fenix: true);
   }
 }
