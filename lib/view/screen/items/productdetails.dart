@@ -7,7 +7,6 @@ import 'package:ozcan/controller/home/productdetalis_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
 import 'package:ozcan/view/widget/view/Projects_pages.dart';
-
 import '../../../likeapi.dart';
 
 class ProductDetails extends StatelessWidget {
