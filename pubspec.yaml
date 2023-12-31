@@ -67,7 +67,7 @@ dependencies:
   # Firebase And Notification
   firebase_messaging: ^14.0.3
   firebase_core: ^2.1.1
-  flutter_local_notifications: ^9.5.3+1
+  flutter_local_notifications: ^16.3.0
   cloud_firestore: ^4.0.3
   # Local Data Cache
   sqflite: ^2.0.2
