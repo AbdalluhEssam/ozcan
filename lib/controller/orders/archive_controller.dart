@@ -35,11 +35,13 @@ class OrdersAllController extends GetxController {
     } else if (val == "1") {
       return "تم الموافقة على طلبك";
     } else if (val == "2") {
+      return "جارى الشحن";
+    } else if (val == "3") {
       return "فى الطريق";
     } else if (val == "5") {
       return "تم الغاء الطلب";
     } else {
-      return "تم الانتهاء";
+      return "تم استلام طلبك";
     }
   }
 

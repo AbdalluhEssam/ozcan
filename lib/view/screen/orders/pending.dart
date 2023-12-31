@@ -24,6 +24,7 @@ class OrdersPending extends StatelessWidget {
           style: TextStyle(color: primaryColor),
         ),
         foregroundColor: primaryColor,
+        automaticallyImplyLeading: false,
       ),
       body: Container(
         padding: const EdgeInsets.all(10),
@@ -128,8 +129,7 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                 CachedNetworkImage(
                   imageUrl: controller.containsLink(ordersModel.itemsImage!)
                       ? ordersModel.itemsImage!
-                      : '${AppLink.imageItems}/${ordersModel.itemsImage}'
-                          "${AppLink.imageItems}/${ordersModel.itemsImage}",
+                      : '${AppLink.imageItems}/${ordersModel.itemsImage}',
                   height: Get.width * 0.25,
                   width: Get.width * 0.25,
                 )

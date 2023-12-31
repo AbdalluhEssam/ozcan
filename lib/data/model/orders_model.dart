@@ -29,6 +29,7 @@ class OrdersModel {
   String? usersVerfiycode;
   String? usersApprove;
   String? usersCreate;
+  String? items_ordered_times;
 
   OrdersModel(
       {this.ordersId,
@@ -59,6 +60,7 @@ class OrdersModel {
         this.usersPassword,
         this.usersPhone,
         this.usersVerfiycode,
+        this.items_ordered_times,
         this.usersApprove,
         this.usersCreate});
 
@@ -93,6 +95,7 @@ class OrdersModel {
     usersVerfiycode = json['users_verfiycode'].toString();
     usersApprove = json['users_approve'].toString();
     usersCreate = json['users_create'].toString();
+    items_ordered_times = json['items_ordered_times'].toString();
   }
 
   Map<String, dynamic> toJson() {
@@ -127,6 +130,7 @@ class OrdersModel {
     data['users_verfiycode'] = this.usersVerfiycode;
     data['users_approve'] = this.usersApprove;
     data['users_create'] = this.usersCreate;
+    data['items_ordered_times'] = this.items_ordered_times;
     return data;
   }
 }

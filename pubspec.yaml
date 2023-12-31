@@ -98,6 +98,7 @@ dependencies:
   webview_flutter: ^4.4.2
   file_picker: ^6.1.1
   share_plus: ^7.2.1
+  card_swiper: ^3.0.1
 
 dev_dependencies:
   flutter_test:

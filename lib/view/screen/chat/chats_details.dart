@@ -79,7 +79,10 @@ class ChatsDetailsScreen extends StatelessWidget {
                               return buildMyMessage(controller.chat[index],
                                   controller.categoriesColor!);
                             }
-                            return buildMessage(controller.chat[index]);
+                            return GetBuilder<ChatControllerImp>(
+                              builder: (controller) =>
+                                  buildMessage(controller.chat[index]),
+                            );
                           },
                           separatorBuilder: (context, index) => const SizedBox(
                                 height: 8,
@@ -205,8 +208,11 @@ class ChatsDetailsScreen extends StatelessWidget {
   Widget buildMessage(MassageBotModel model) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
     if (model.description!.contains("confirmBtn")) {
-      controller
-          .orderId(controller.extractConfirmationCode(model.description!));
+      if (!controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 0}))) {
+        if (!controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 1}))) {
+          controller.orderId(controller.extractConfirmationCode(model.description!));
+        }
+      }
 
       log(controller.indexOrder.toString());
       // if(controller){
@@ -269,8 +275,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                                             Size(Get.width, 40)),
                                         alignment: Alignment.center,
                                         backgroundColor: MaterialStatePropertyAll(
-                                            controller.ordersId.any((element) => element.containsAll(
-                                                    {int.parse(controller.extractConfirmationCode(model.description!)), 1}))
+                                            controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.description!)), 1}))
                                                 ? Colors.greenAccent
                                                 : Colors.green)),
                                     onPressed: () {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -27,21 +29,19 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late ItemsModel itemsModel;
   CartData cartData = CartData(Get.find());
 
+  List<ImagesProduct> images = [];
 
   @override
-  initialData() async {
-    statusRequest = StatusRequest.loading;
-    itemsModel = Get.arguments['itemsModel'];
-    statusRequest = StatusRequest.success;
-    update();
-  }
+  initialData() async {}
   RegExp urlRegExp = RegExp(
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
   );
+
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+
   List subItems = [
     {"name": "RED", "id": 1, "active": '0'},
     {"name": "Yellow", "id": 2, "active": '0'},
@@ -50,18 +50,38 @@ class ProductDetailsControllerImp extends ProductDetailsController {
 
   @override
   void onInit() {
+    itemsModel = Get.arguments['itemsModel'];
     categoriesColor = Get.arguments['color'];
     categoriesId = Get.arguments['categoriesId'];
     adminId = Get.arguments['adminId'];
     ticketId = Get.arguments['ticketId'];
-
     categoriesName = Get.arguments['categoriesName'];
+    getData();
     initialData();
     super.onInit();
   }
 
   @override
-  getData() async {}
+  getData() async {
+    images.clear();
+    statusRequest = StatusRequest.loading;
+    update();
+    cartData.ViewImage(itemsModel.itemsId).then((value) {
+      log("$value");
+      statusRequest = handlingData(value);
+      if (StatusRequest.success == statusRequest) {
+        if (value['status'] == "success") {
+          List pending = value['data'];
+          images.addAll(pending.map((e) => ImagesProduct.fromJson(e)));
+        } else {
+          statusRequest = StatusRequest.failure;
+        }
+      }
+
+      update();
+    });
+    update();
+  }
 
   addItems(String itemId) async {
     statusRequest = StatusRequest.loading;
@@ -77,8 +97,7 @@ class ProductDetailsControllerImp extends ProductDetailsController {
             title: "notice".tr,
             messageText: Text("addCart".tr),
             backgroundColor: AppColor.primaryColor,
-            duration: const Duration(seconds: 1)
-        );
+            duration: const Duration(seconds: 1));
       } else {
         statusRequest = StatusRequest.failure;
       }

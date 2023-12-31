@@ -12,6 +12,8 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
   final String containt_of_descripation;
   final String price_of_project;
   final Color primaryColor;
+  final String size;
+  final String color;
 
   const Descripation_and_containt_of_prodect(
       {super.key,
@@ -22,11 +24,14 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
       required this.price_of_project,
       this.ontap_prodect_details,
       required this.primaryColor,
+      required this.size,
+      required this.color,
       this.ontap_to_make_order});
 
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
@@ -34,42 +39,46 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "$name_of_prodect",
-                  style: Main_font,
-                ),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  height: MediaQuery.of(context).size.height * 0.05,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xffF7F7F7),
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "$name_of_prodect",
+                    style: Main_font,
                   ),
-                  child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "$value_of_buy",
-                            style:  TextStyle(
-                                color: primaryColor, fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                          Text(
-                            "  شراء",
-                            style:  TextStyle(
-                                color: primaryColor, fontWeight: FontWeight.bold, fontSize: 14),
-                          ),
-                        ],
-                      )),
-                )
-              ],
-            ),
+                  Container(
+                    width: MediaQuery.of(context).size.width * 0.35,
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffF7F7F7),
+                    ),
+                    child: Center(
+                        child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "$value_of_buy",
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                        Text(
+                          "  شراء",
+                          style: TextStyle(
+                              color: primaryColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        ),
+                      ],
+                    )),
+                  )
+                ],
+              ),
               LikeButton(
                 size: 50,
-                circleColor: CircleColor(
-                    start: Color(0xffA659A9), end: primaryColor),
+                circleColor:
+                    CircleColor(start: Color(0xffA659A9), end: primaryColor),
                 bubblesColor: BubblesColor(
                   dotPrimaryColor: Color(0xffA659A9),
                   dotSecondaryColor: Colors.black,
@@ -82,17 +91,15 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                   );
                 },
                 countPostion: CountPostion.left,
-                likeCount: 14,
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
               ),
-
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Divider(
-            color:primaryColor,
+            color: primaryColor,
             thickness: 1.5,
           ),
         ),
@@ -130,24 +137,40 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-
               Text(
                 "تفاصيل المنتج",
                 style: Main_font,
               ),
-              IconButton(
-                  onPressed: ontap_prodect_details,
-                  icon: Icon(
-                    Icons.arrow_drop_down,
-                    size: 40,
-                  )),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 15, right: 15),
           child: Divider(
-            color:primaryColor,
+            color: primaryColor,
+            thickness: 1.5,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            "المقاس : $size",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(
+            "اللون : $color",
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.black),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 15, right: 15),
+          child: Divider(
+            color: primaryColor,
             thickness: 1.5,
           ),
         ),
@@ -157,31 +180,31 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  "مجموع الدفع",
-                  style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                        onPressed: () {},
-                        icon: Icon(
-                          Icons.attach_money_outlined,
-                          color: Colors.black,
-                        )),
-                    Text(
-                      "$price_of_project",
-                      style: Main_font1,
-                    ),
-                  ],
-                )
-              ],
-            ),
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(
+                    "مجموع الدفع",
+                    style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black),
+                  ),
+                  Row(
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.attach_money_outlined,
+                            color: Colors.black,
+                          )),
+                      Text(
+                        "$price_of_project",
+                        style: Main_font1,
+                      ),
+                    ],
+                  )
+                ],
+              ),
               Container(
                 width: MediaQuery.of(context).size.width * 0.45,
                 height: MediaQuery.of(context).size.height * 0.06,
@@ -199,7 +222,6 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                   ),
                 ),
               ),
-
             ],
           ),
         ),

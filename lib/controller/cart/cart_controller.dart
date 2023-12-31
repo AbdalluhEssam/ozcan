@@ -181,24 +181,24 @@ class CartControllerImp extends CartController {
     // cart.clear();
     statusRequest = StatusRequest.loading;
     update();
-    var response = await cartData.viewCart();
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        cart.clear();
-        Map countPrice = response['countprice'];
-        List dataCart = response['cart'];
-        cart.addAll(dataCart.map((e) => CartModel.fromJson(e)));
-        totalCountItems = int.parse(countPrice['totalcount']);
-        priceOrder = double.parse(countPrice['totalprice']);
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
-    }
+    // var response = await cartData.viewCart();
+    // if (kDebugMode) {
+    //   print(
+    //       "========================================================================$response");
+    // }
+    // statusRequest = handlingData(response);
+    // if (StatusRequest.success == statusRequest) {
+    //   if (response['status'] == "success") {
+    //     cart.clear();
+    //     Map countPrice = response['countprice'];
+    //     List dataCart = response['cart'];
+    //     cart.addAll(dataCart.map((e) => CartModel.fromJson(e)));
+    //     totalCountItems = int.parse(countPrice['totalcount']);
+    //     priceOrder = double.parse(countPrice['totalprice']);
+    //   } else {
+    //     statusRequest = StatusRequest.failure;
+    //   }
+    // }
     update();
   }
 

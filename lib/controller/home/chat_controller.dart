@@ -109,7 +109,9 @@ class ChatControllerImp extends ChatController {
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     if (ticketId == "null") {
-      addFirst();
+      Timer(Duration(seconds: 3), () {
+        addFirst();
+      });
     }
     if (ticketId != "null") {
       viewChat();
@@ -121,7 +123,7 @@ class ChatControllerImp extends ChatController {
         // Scroll to the end of the list
         if (scrollController != null) {
           // Scroll to the end of the list
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          scrollController.jumpTo(scrollController.position.extentTotal);
         }
       });
     }
@@ -189,35 +191,25 @@ class ChatControllerImp extends ChatController {
           borderRadius: 0);
       // viewChat();
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Scroll to the end of the list
-      if (scrollController != "null") {
-        // Scroll to the end of the list
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
-      }
-    });
   }
 
   orderId(orderId) async {
-      var response = await chatData.orderId(orderId);
-      if (kDebugMode) {
-        print(
-            "========================================================================$response");
-      }
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          if (!ordersId
-              .any((element) => element.containsAll({int.parse(orderId), 0}))) {
-            if (!ordersId.any(
-                (element) => element.containsAll({int.parse(orderId), 1}))) {
-              ordersId.add({response["orders_id"], response["orders_status"]});
-              update();
-            }
+    var response = await chatData.orderId(orderId);
+    if (kDebugMode) {
+      print(
+          "========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      if (response['status'] == "success") {
+        if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 0}))) {
+          if (!ordersId.any((element) => element.containsAll({int.parse(orderId), 1}))) {
+            ordersId.add({response["orders_id"], response["orders_status"]});
+            update();
           }
         }
       }
-
+    }
 
     log(ordersId.toString());
   }
@@ -282,7 +274,8 @@ class ChatControllerImp extends ChatController {
         // Scroll to the end of the list
         if (scrollController != "null") {
           // Scroll to the end of the list
-          scrollController.jumpTo(scrollController.position.maxScrollExtent);
+          scrollController.jumpTo(scrollController.position.extentTotal);
+          // scrollController.jumpTo(scrollController.position.maxScrollExtent);
         }
       });
     }
