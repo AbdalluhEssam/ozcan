@@ -155,7 +155,7 @@ class DepartmentControllerImp extends DepartmentController {
         ticketId = "null";
       }
     }
-    if (ticket.ticketId!.isEmpty) {
+    if (ticket.ticketId == '') {
       ticketId = "null";
     } else {
       ticketId = ticket.ticketId ?? "null";

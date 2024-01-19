@@ -40,7 +40,6 @@ dependencies:
   carousel_slider: ^4.2.1
   flutter_speed_dial: ^7.0.0
   like_button: ^2.0.5
-  flutter_svg: ^2.0.7
   persistent_bottom_nav_bar: ^5.0.2
   animated_icon: ^0.0.5
   image_picker: ^1.0.4
@@ -76,7 +75,7 @@ dependencies:
   rating_dialog: ^2.0.4
   flutter_launcher_icons: ^0.13.1
   lottie: ^2.7.0
-  webview_flutter: ^4.4.2
+#  webview_flutter: ^4.4.4
   file_picker: ^6.1.1
   share_plus: ^7.2.1
   card_swiper: ^3.0.1

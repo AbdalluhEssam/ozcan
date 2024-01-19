@@ -33,15 +33,28 @@ class ChatControllerImp extends ChatController {
   ChatData chatData = ChatData(Get.find());
   RegExp urlRegExp = RegExp(r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
       caseSensitive: false, multiLine: true);
+
+  RegExp urlRegExpImage = RegExp(
+    r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?\.(jpeg|jpg|gif|png|bmp)",
+    caseSensitive: false,
+    multiLine: true,
+  );
   bool hasLink = false;
   bool hasLinkController = false;
 
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+  bool containsLinkImage(String text) {
+    return urlRegExpImage.hasMatch(text);
+  }
 
   String extractLink(String text) {
     RegExpMatch? match = urlRegExp.firstMatch(text);
+    return match != null ? match.group(0)! : '';
+  }
+  String extractLinkImage(String text) {
+    RegExpMatch? match = urlRegExpImage.firstMatch(text);
     return match != null ? match.group(0)! : '';
   }
 
@@ -96,7 +109,6 @@ class ChatControllerImp extends ChatController {
   late String recordFilePath;
   final record = AudioRecorder();
 
-
   @override
   initialData() {
     username = myServices.sharedPreferences.getString("username");
@@ -121,7 +133,6 @@ class ChatControllerImp extends ChatController {
     record.dispose();
     super.dispose();
   }
-
 
   @override
   void onInit() async {
@@ -148,9 +159,7 @@ class ChatControllerImp extends ChatController {
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     if (ticketId == "null") {
-      Timer(Duration(seconds: 1), () {
-        addFirst();
-      });
+      addFirst();
     }
     if (ticketId != "null") {
       viewChat();
@@ -283,6 +292,7 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       if (response['message'] == "Already Ticket Found") {
         getTicket();
+
       } else {
         getTicket();
       }
@@ -333,7 +343,8 @@ class ChatControllerImp extends ChatController {
             WidgetsBinding.instance.addPostFrameCallback((_) {
               // Scroll to the end of the list
               if (scrollController != null && scrollController.hasClients) {
-                scrollController.jumpTo(scrollController.position.maxScrollExtent);
+                scrollController
+                    .jumpTo(scrollController.position.maxScrollExtent);
               }
             });
           }
@@ -352,8 +363,9 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       if (response['message'] != "No Ticket Yet") {
         ticket = UserTicketsModel.fromJson(response['User_Tickets']);
+        viewChat();
       } else {
-        ticket = UserTicketsModel();
+        // ticket = UserTicketsModel();
       }
     }
     log("message : ${ticket.id}");
@@ -366,9 +378,9 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-
   AudioPlayer audioPlayer = AudioPlayer();
   String audioURL = "";
+
   // Future<bool> checkPermission() async {
   //   if (!await Permission.microphone.isGranted) {
   //     PermissionStatus status = await Permission.microphone.request();
@@ -379,26 +391,27 @@ class ChatControllerImp extends ChatController {
   //   return true;
   // }
   bool recording = false;
-  recordingChanged(value){
+
+  recordingChanged(value) {
     recording = value;
     update();
   }
-  Future<File> getTempFile(String fileName) async{
 
-    final dir =await getTemporaryDirectory();
-    return  File('${dir.path}/$fileName');
+  Future<File> getTempFile(String fileName) async {
+    final dir = await getTemporaryDirectory();
+    return File('${dir.path}/$fileName');
   }
+
   getRecordingFile() async {
     final file = await getTempFile('$username.mp3');
     return file.path;
   }
-  void startStopRecord() async {
 
-    if(recording == true){
+  void startStopRecord() async {
+    if (recording == true) {
       stopRecord();
       recordingChanged(false);
-    }else{
-
+    } else {
       // Check and request permission
       if (await record.hasPermission()) {
         recordingChanged(true);
@@ -413,21 +426,20 @@ class ChatControllerImp extends ChatController {
         );
       }
     }
-
   }
 
   void stopRecord() async {
-
     // Get the state of the recorder
     bool isRecording = await record.isRecording();
-    if(isRecording == true){
+    if (isRecording == true) {
       await record.stop();
       var response = await chatData.addAudio(File(recordFilePath));
       log("========================================================================$response");
 
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
+        myControllerMassage.text =
+            "${AppLink.imageItems}/${response['image_name']}";
       }
       if (recordFilePath != 'null') {
         addMassage();
@@ -439,10 +451,7 @@ class ChatControllerImp extends ChatController {
       await record.stop();
     }
     //39397
-
   }
-
-
 
   int i = 0;
 
@@ -456,26 +465,20 @@ class ChatControllerImp extends ChatController {
 
     return filePath;
   }
-  // uploadAudio() async {
-  //   var response = await chatData.addAudio(File(recordFilePath));
-  //   log("========================================================================$response");
-  //
-  //   statusRequest = handlingData(response);
-  //   if (StatusRequest.success == statusRequest) {
-  //     myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
-  //     addMassage();
-  //     myControllerMassage.clear();
-  //     hasLink = false;
-  //     hasLinkController = false;
-  //     myFlie = null;
-  //     // viewChat();
-  //   }
-  //   update();
-  // }
-
-
+// uploadAudio() async {
+//   var response = await chatData.addAudio(File(recordFilePath));
+//   log("========================================================================$response");
+//
+//   statusRequest = handlingData(response);
+//   if (StatusRequest.success == statusRequest) {
+//     myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
+//     addMassage();
+//     myControllerMassage.clear();
+//     hasLink = false;
+//     hasLinkController = false;
+//     myFlie = null;
+//     // viewChat();
+//   }
+//   update();
+// }
 }
-
-
-
-

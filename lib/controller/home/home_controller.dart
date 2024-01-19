@@ -45,9 +45,9 @@ class HomeControllerImp extends HomeController {
       String? token = value;
       log(token.toString());
     });
-    String id = myServices.sharedPreferences.getString("id")!;
     FirebaseMessaging.instance.subscribeToTopic("users");
     if (myServices.sharedPreferences.getString("id") != null) {
+       String id = myServices.sharedPreferences.getString("id") ?? "";
       FirebaseMessaging.instance.subscribeToTopic("user$id");
     }
     getData();

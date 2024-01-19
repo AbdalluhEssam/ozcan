@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:like_button/like_button.dart';
-
 import '../../../Constants.dart';
 
 class Descripation_and_containt_of_prodect extends StatelessWidget {
@@ -109,14 +107,14 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Container(
-                width: MediaQuery.of(context).size.width,
-                child: Text(
-                  "$containt_of_descripation",
-                  style: Second_font,
-                  textAlign: TextAlign.start,
+              Text(
+                containt_of_descripation.replaceAll(
+                  RegExp(r'<[^>]*>'),
+                  '',
                 ),
-              ),
+                style: Second_font,
+                textAlign: TextAlign.start,
+              )
             ],
           ),
         ),
