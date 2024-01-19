@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:share/share.dart';
 import '../../../controller/items/items_controller.dart';
@@ -104,23 +105,16 @@ class ItemsView extends StatelessWidget {
                           color: Colors.black,
                           height: 1,
                         ),
-                        Hero(
-                            tag: "${controller.items[index].itemsId}",
-                            child: Container(
-                              height: Get.width * 0.9,
-                              decoration: BoxDecoration(
-                                color: Color(0xffECECEC),
-                                image: DecorationImage(
-                                  alignment: Alignment.center,
-                                  image: CachedNetworkImageProvider(controller
-                                          .containsLink(controller
-                                              .items[index].itemsImage!)
+                        Container(
+                          constraints: BoxConstraints(maxHeight: Get.width * 0.65),
+                          child: Hero(
+                              tag: "${controller.items[index].itemsId}",
+                              child: CachedNetworkImage(
+                                  imageUrl: controller.containsLink(
+                                          controller.items[index].itemsImage!)
                                       ? controller.items[index].itemsImage!
-                                      : '${AppLink.imageItems}/${controller.items[index].itemsImage}'),
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            )),
+                                      : '${AppLink.imageItems}/${controller.items[index].itemsImage}')),
+                        ),
                         Container(
                           height: Get.width * 0.12,
                           decoration: BoxDecoration(
@@ -199,21 +193,43 @@ class ItemsView extends StatelessWidget {
                                       shareContent(
                                           "${controller.items[index].itemsName}",
                                           '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
-                                          '${controller.items[index].link_share}');
+                                          '${controller.items[index].linkShare}');
                                     },
                                     icon: Icon(Icons.link),
                                   ),
-                                  Spacer(),
+
                                   IconButton(
                                     onPressed: () {
                                       // Share.share('check out our product $url');
                                       shareContent(
                                           "${controller.items[index].itemsName}",
                                           '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
-                                          '${controller.items[index].link_share}');
+                                          '${controller.items[index].linkShare}');
                                     },
                                     icon: Icon(Icons.share),
                                   ),
+                                  Spacer(),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal:10),
+                                    child: LikeButton(
+                                      isLiked: controller.items[index].usersId
+                                          ?.contains(
+                                              controller.userId.toString()),
+                                      likeCount: int.parse(
+                                          controller.items[index].count!),
+                                      countPostion: CountPostion.left,
+                                      circleColor: CircleColor(
+                                          start: Colors.white, end: primaryColor),
+                                      onTap: (isLiked) {
+                                        if (controller.userId == "null") {
+                                          Get.toNamed(AppRoute.login);
+                                        }
+                                        return controller.addLike(
+                                            controller.items[index].itemsId,
+                                            index);
+                                      },
+                                    ),
+                                  )
                                   // IconButton(
                                   //   onPressed: () {},
                                   //   icon: Icon(Icons.comment),

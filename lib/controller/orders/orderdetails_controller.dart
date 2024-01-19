@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:ozcan/data/datasource/remote/orders/pending_data.dart';
 import 'package:ozcan/data/model/orders_model.dart';
 import '../../core/class/statusrequest.dart';
@@ -19,24 +18,16 @@ class OrderDetailsViewControllerImp extends OrderDetailsViewController {
   List<OrdersDetailsModel> ordersDetails = [];
   late OrdersModel ordersModel;
 
-  Completer<GoogleMapController>? completerController;
-  List<Marker> markers = [];
-  CameraPosition? cameraPosition;
   double? lat;
   double? long;
   late String orderId;
 
   late StatusRequest statusRequest;
 
-  initData() {
-    completerController = Completer<GoogleMapController>();
-    update();
-  }
 
   @override
   void onInit() {
     ordersModel = Get.arguments['ordersModel'];
-    initData();
     getDataCart();
     super.onInit();
   }

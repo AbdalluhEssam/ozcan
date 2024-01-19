@@ -1,16 +1,24 @@
 import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
+import 'package:audioplayers/audioplayers.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:jiffy/jiffy.dart';
 import 'package:ozcan/data/datasource/remote/chat_data.dart';
 import 'package:ozcan/data/model/massage_model.dart';
 import 'package:ozcan/likeapi.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
+import 'package:record/record.dart';
 
 abstract class ChatController extends GetxController {
   initialData();
@@ -58,12 +66,14 @@ class ChatControllerImp extends ChatController {
     return match != null ? match.group(1)! : '';
   }
 
-  List<MassageBotModel> chat = [];
-  List<MassageBotModel> chatNew = [];
-  late UserTicketsModel ticket ;
-  late TextEditingController myControllerMassage;
+  List<Ticket> chat = [];
+  List<Ticket> chatNew = [];
+  late UserTicketsModel ticket;
+
+  TextEditingController myControllerMassage = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  late Timer _timer;
+
+  // late Timer _timer;
   late String enteredText;
   late StatusRequest statusRequest;
   String? idUser;
@@ -77,10 +87,15 @@ class ChatControllerImp extends ChatController {
   String? itemsImage;
   int? index;
   int indexOrder = 0;
+  int count = 0;
   Color? categoriesColor;
   List ordersId = [];
-
+  bool showPlayer = false;
   File? myFlie;
+
+  late String recordFilePath;
+  final record = AudioRecorder();
+
 
   @override
   initialData() {
@@ -89,8 +104,33 @@ class ChatControllerImp extends ChatController {
     idUser = myServices.sharedPreferences.getString("id");
   }
 
+  Future<void> playRecording() async {
+    try {
+      UrlSource urlSource = UrlSource(recordFilePath);
+      await audioPlayer.play(urlSource);
+
+      update();
+    } catch (e) {
+      log("Error stopping recording: $e");
+    }
+  }
+
   @override
-  void onInit() {
+  void dispose() {
+    audioPlayer.dispose();
+    record.dispose();
+    super.dispose();
+  }
+
+
+  @override
+  void onInit() async {
+    // audioPlayer = AudioPlayer();
+    // audioRecord = AudioRecorder();
+    // initializeDateFormatting("ar");
+    await Jiffy.setLocale("ar");
+    // Intl("ar_EG");
+    await Firebase.initializeApp();
     initialData();
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
@@ -108,7 +148,7 @@ class ChatControllerImp extends ChatController {
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     if (ticketId == "null") {
-      Timer(Duration(seconds: 3), () {
+      Timer(Duration(seconds: 1), () {
         addFirst();
       });
     }
@@ -120,30 +160,40 @@ class ChatControllerImp extends ChatController {
     if (chat.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // Scroll to the end of the list
-        if (scrollController != null) {
-          // Scroll to the end of the list
+        if (scrollController != null && scrollController.hasClients) {
           scrollController.jumpTo(scrollController.position.extentTotal);
         }
       });
     }
-    _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
+    // _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
     super.onInit();
   }
 
   @override
   addMassage() async {
-    var response = await chatData.addMassage(
-        ticketId.toString(), myControllerMassage.text);
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      myControllerMassage.clear();
-      hasLink = false;
-      hasLinkController = false;
-      // viewChat();
+    if (formKey.currentState!.validate()) {
+      FirebaseFirestore.instance
+          .collection('messages')
+          .doc(ticketId)
+          .collection('messages')
+          .add({
+        "category": categoriesId.toString(),
+        "msg": myControllerMassage.text,
+        "reply": "0", // Convert numbers to strings
+        "send": "Admin", // Convert numbers to strings
+        "status": "1", // Convert numbers to strings
+        "t": DateTime.now().toUtc().toString(),
+        "ticketId": ticketId.toString(),
+        "usr": username.toString(),
+      }).then((value) {
+        myControllerMassage.clear();
+        hasLinkController = false;
+        hasLink = false;
+        update();
+      }).catchError((onError) {
+        print("Error Is $onError");
+        update();
+      });
     }
     update();
   }
@@ -177,7 +227,6 @@ class ChatControllerImp extends ChatController {
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
       hasLink = false;
-      orderId(ordersId);
       Get.snackbar("${myServices.sharedPreferences.getString("username")} ",
           "تم تثبيت طلبك بنجاح".tr,
           icon: const Icon(Icons.add_shopping_cart),
@@ -188,6 +237,7 @@ class ChatControllerImp extends ChatController {
           duration: const Duration(seconds: 3),
           colorText: AppColor.white,
           borderRadius: 0);
+      orderId(id);
       // viewChat();
     }
   }
@@ -240,50 +290,57 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  @override
-  void dispose() {
-    _timer.cancel();
-    myControllerMassage.dispose();
-    super.dispose();
-  }
-
-  @override
-  void onClose() {
-    _timer.cancel();
-    super.onClose();
-  }
+  List<Ticket> messages = [];
+  DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
   @override
   viewChat() async {
+    // if (ticketId != "null") {
+    //   dbRef.child("messages/$ticketId").onChildAdded.listen((event) {
+    //     var data = event.snapshot.value;
+    //     Ticket ticketData = Ticket.fromJson(Map<String, dynamic>.from(data as Map<String, dynamic>));
+    //     chat.add(ticketData);
+    //       log("ppppppppppppppppppppp : ${chat}");
+    //     if (chat.length != count) {
+    //       count += 1;
+    //       WidgetsBinding.instance.addPostFrameCallback((_) {
+    //         // Scroll to the end of the list
+    //         if (scrollController != null && scrollController.hasClients) {
+    //           scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    //         }
+    //       });
+    //     }
+    //
+    //     print("RealTime DB: $data");
+    //   }).onError((handleError){
+    //     log("pppERRRRRRRRRRRRRRRR : ${handleError}");
+    //
+    //   });
+    // }
     if (ticketId != "null") {
-      var response = await chatData.getData(ticketId.toString());
-      log("========================================================================$response");
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        if (response['message'] != "No Messages Found") {
-          List massage = response['messages'];
-          if (massage.length != chat.length) {
-            chat.clear();
-            chat.addAll(massage.map((e) => MassageBotModel.fromJson(e)));
+      FirebaseFirestore.instance
+          .collection('messages')
+          .doc(ticketId)
+          .collection('messages')
+          .orderBy('t')
+          .snapshots()
+          .listen((event) {
+        chat.clear();
+        for (var element in event.docs) {
+          chat.add(Ticket.fromJson(element.data()));
+          if (chat.length != count) {
+            count += 1;
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              // Scroll to the end of the list
+              if (scrollController != null && scrollController.hasClients) {
+                scrollController.jumpTo(scrollController.position.maxScrollExtent);
+              }
+            });
           }
-        } else {
-          chat.clear();
         }
-      }
-    }
-
-    if (chat.length != index) {
-      index = chat.length;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Scroll to the end of the list
-        if (scrollController != "null") {
-          // Scroll to the end of the list
-          scrollController.jumpTo(scrollController.position.extentTotal);
-          // scrollController.jumpTo(scrollController.position.maxScrollExtent);
-        }
+        update();
       });
     }
-    update();
   }
 
   getTicket() async {
@@ -294,7 +351,7 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['message'] != "No Ticket Yet") {
-        ticket= UserTicketsModel.fromJson(response['User_Tickets']);
+        ticket = UserTicketsModel.fromJson(response['User_Tickets']);
       } else {
         ticket = UserTicketsModel();
       }
@@ -308,4 +365,117 @@ class ChatControllerImp extends ChatController {
 
     update();
   }
+
+
+  AudioPlayer audioPlayer = AudioPlayer();
+  String audioURL = "";
+  // Future<bool> checkPermission() async {
+  //   if (!await Permission.microphone.isGranted) {
+  //     PermissionStatus status = await Permission.microphone.request();
+  //     if (status != PermissionStatus.granted) {
+  //       return false;
+  //     }
+  //   }
+  //   return true;
+  // }
+  bool recording = false;
+  recordingChanged(value){
+    recording = value;
+    update();
+  }
+  Future<File> getTempFile(String fileName) async{
+
+    final dir =await getTemporaryDirectory();
+    return  File('${dir.path}/$fileName');
+  }
+  getRecordingFile() async {
+    final file = await getTempFile('$username.mp3');
+    return file.path;
+  }
+  void startStopRecord() async {
+
+    if(recording == true){
+      stopRecord();
+      recordingChanged(false);
+    }else{
+
+      // Check and request permission
+      if (await record.hasPermission()) {
+        recordingChanged(true);
+        recordFilePath = await getRecordingFile();
+        // Start recording
+        await record.start(
+          RecordConfig(
+            encoder: AudioEncoder.aacLc, // by default
+            bitRate: 128000, // by default
+          ),
+          path: recordFilePath,
+        );
+      }
+    }
+
+  }
+
+  void stopRecord() async {
+
+    // Get the state of the recorder
+    bool isRecording = await record.isRecording();
+    if(isRecording == true){
+      await record.stop();
+      var response = await chatData.addAudio(File(recordFilePath));
+      log("========================================================================$response");
+
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
+      }
+      if (recordFilePath != 'null') {
+        addMassage();
+        myControllerMassage.clear();
+
+        recordFilePath = '';
+      }
+      // Stop recording
+      await record.stop();
+    }
+    //39397
+
+  }
+
+
+
+  int i = 0;
+
+  Future<String> getFilePath() async {
+    Directory storageDirectory = await getApplicationDocumentsDirectory();
+    String fileName = "test_${DateTime.now().microsecondsSinceEpoch}_$i.mp3";
+    String filePath = "${storageDirectory.path}/$fileName";
+    log(filePath);
+
+    i++; // Increment the counter for the next file
+
+    return filePath;
+  }
+  // uploadAudio() async {
+  //   var response = await chatData.addAudio(File(recordFilePath));
+  //   log("========================================================================$response");
+  //
+  //   statusRequest = handlingData(response);
+  //   if (StatusRequest.success == statusRequest) {
+  //     myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
+  //     addMassage();
+  //     myControllerMassage.clear();
+  //     hasLink = false;
+  //     hasLinkController = false;
+  //     myFlie = null;
+  //     // viewChat();
+  //   }
+  //   update();
+  // }
+
+
 }
+
+
+
+

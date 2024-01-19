@@ -3,12 +3,14 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/controller/items/items_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/data/model/itemsmodel.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/cart/cart_data.dart';
+import '../../data/datasource/remote/department_data.dart';
 
 abstract class ProductDetailsController extends GetxController {
   initialData();
@@ -25,14 +27,18 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late String? adminId;
   late String? categoriesName;
   late String? ticketId;
+  late String? userId;
   String? categoriesColor;
   late ItemsModel itemsModel;
   CartData cartData = CartData(Get.find());
+  DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
 
   List<ImagesProduct> images = [];
 
   @override
-  initialData() async {}
+  initialData() async {
+    userId = myServices.sharedPreferences.getString('id');
+  }
   RegExp urlRegExp = RegExp(
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
@@ -59,6 +65,25 @@ class ProductDetailsControllerImp extends ProductDetailsController {
     getData();
     initialData();
     super.onInit();
+  }
+  Future<bool?> addLike(id) async {
+    if (!itemsModel.usersId!.contains(userId.toString())) {
+      var response = await departmentViewData.addLike(id);
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          itemsModel.count = (int.parse(itemsModel.count!) + 1).toString();
+          itemsModel.usersId =  "${userId}";
+          print(itemsModel.usersId );
+          update();
+          ItemsControllerImp controllerImp = Get.put(ItemsControllerImp());
+          controllerImp.getData();
+        }
+      }
+      update();
+    }
+    return statusRequest == StatusRequest.success ? true : false;
   }
 
   @override

@@ -32,9 +32,11 @@ class StoriesTopControllerImp extends StoriesTopController {
   String? id;
   String? categoriesId;
   String? adminId;
+  String? ticketId;
   String? departmentId;
   String? categoriesColor;
   String? itemsName;
+  String? image;
 
   @override
   initialData() {
@@ -49,6 +51,8 @@ class StoriesTopControllerImp extends StoriesTopController {
     categoriesColor = Get.arguments['categoriesColor'].toString();
     departmentId = Get.arguments['departmentId'].toString();
     adminId = Get.arguments['adminId'].toString();
+    ticketId = Get.arguments['ticketId'];
+
     getData();
     statusRequest = StatusRequest.success;
     super.onInit();
@@ -74,7 +78,7 @@ class StoriesTopControllerImp extends StoriesTopController {
   addLikes() async {
     story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.addLikes(currentIndex.toString());
+    var response = await departmentViewData.addLike(currentIndex.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {

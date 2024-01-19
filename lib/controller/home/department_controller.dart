@@ -155,10 +155,10 @@ class DepartmentControllerImp extends DepartmentController {
         ticketId = "null";
       }
     }
-    if (ticket.id!.isEmpty) {
+    if (ticket.ticketId!.isEmpty) {
       ticketId = "null";
     } else {
-      ticketId = ticket.id ?? "null";
+      ticketId = ticket.ticketId ?? "null";
     }
 
     log("message : ${ticketId}");

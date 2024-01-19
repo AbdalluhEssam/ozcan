@@ -14,6 +14,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
   final Color primaryColor;
   final String size;
   final String color;
+  final Widget widget;
 
   const Descripation_and_containt_of_prodect(
       {super.key,
@@ -26,7 +27,8 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
       required this.primaryColor,
       required this.size,
       required this.color,
-      this.ontap_to_make_order});
+      this.ontap_to_make_order,
+      required this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,9 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                   Text(
                     "$name_of_prodect",
                     style: Main_font,
+                  ),
+                  SizedBox(
+                    height: 5,
                   ),
                   Container(
                     width: MediaQuery.of(context).size.width * 0.35,
@@ -75,24 +80,7 @@ class Descripation_and_containt_of_prodect extends StatelessWidget {
                   )
                 ],
               ),
-              LikeButton(
-                size: 50,
-                circleColor:
-                    CircleColor(start: Color(0xffA659A9), end: primaryColor),
-                bubblesColor: BubblesColor(
-                  dotPrimaryColor: Color(0xffA659A9),
-                  dotSecondaryColor: Colors.black,
-                ),
-                likeBuilder: (bool isLiked) {
-                  return Icon(
-                    Icons.favorite_outline,
-                    color: isLiked ? primaryColor : Colors.black,
-                    size: 30,
-                  );
-                },
-                countPostion: CountPostion.left,
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-              ),
+              widget,
             ],
           ),
         ),

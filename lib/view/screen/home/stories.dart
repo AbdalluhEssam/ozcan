@@ -81,21 +81,26 @@ class StoriesDepartment extends StatelessWidget {
                                 (index) {
                                   controller.currentIndex = index;
                                   controller.itemsName =
-                                      controller.story[index]['note'];
+                                      controller.story[index].note;
+                                  controller.image =
+                                      "${AppLink.imageStory}/${controller.story[index].image}";
+                                  controller.update();
                                   print(controller.currentIndex);
-                                  if (controller.story[index]['video'].toString() == "0") {
+                                  if (controller.story[index].video
+                                          .toString() ==
+                                      "0") {
                                     return StoryItem.pageImage(
                                       caption:
-                                          "${controller.story[index]['note']}",
+                                          "${controller.story[index].note}",
                                       url:
-                                          "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                          "${AppLink.imageStory}/${controller.story[index].image}",
                                       controller: StoryController(),
                                     );
                                   } else {
                                     return StoryItem.pageVideo(
-                                      "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                      "${AppLink.imageStory}/${controller.story[index].image}",
                                       caption:
-                                          "${controller.story[index]['note']}",
+                                          "${controller.story[index].note}",
                                       controller: StoryController(),
                                     );
                                   }
@@ -106,6 +111,7 @@ class StoriesDepartment extends StatelessWidget {
                             inline: true,
                             repeat: false,
                             indicatorForegroundColor: primaryColor,
+                            onStoryShow: (value) {},
                             onComplete: () {
                               Get.back();
                             },
@@ -137,6 +143,8 @@ class StoriesDepartment extends StatelessWidget {
                                   "categoriesId": controller.categoriesId,
                                   "adminId": controller.adminId,
                                   "itemsName": controller.itemsName,
+                                  "itemsImage": controller.image,
+                                  "ticketId": controller.ticketId,
                                 });
                           } else {
                             Get.toNamed(AppRoute.login);
@@ -190,26 +198,47 @@ class StoriesDepartment extends StatelessWidget {
                     SizedBox(
                       width: 15,
                     ),
+                    controller.story.isNotEmpty?
+                      LikeButton(
+                        isLiked: controller
+                            .story[controller.currentIndex ?? 0].userId
+                            ?.contains(controller.userId.toString()),
+                        likeCount: int.parse(controller.story[controller.currentIndex ?? 0].count!),
+                        countPostion: CountPostion.left,
+                        circleColor:
+                            CircleColor(start: Colors.white, end: primaryColor),
+                        onTap: (isLiked) {
+                          print("controller.currentIndex : ${controller.currentIndex}");
+                          print("controller.currentIndex : ${controller.story[controller.currentIndex ?? 0].storyId!}");
+                          if (controller.userId == "null") {
+                            Get.toNamed(AppRoute.login);
+                          }
+                          return controller.addLike(
+                              controller
+                                  .story[controller.currentIndex ?? 0].storyId,
+                              controller.currentIndex ?? 0);
+                        },
+                      ) :
                     LikeButton(
-                      size: 50,
-                      circleColor: CircleColor(
-                          start: Color(0xffA659A9), end: Color(0xffA659A9)),
-                      bubblesColor: BubblesColor(
-                        dotPrimaryColor: primaryColor,
-                        dotSecondaryColor: Colors.black,
-                      ),
-                      likeBuilder: (bool isLiked) {
-                        return Icon(
-                          Icons.favorite_outline,
-                          color: isLiked ? Color(0xffA659A9) : Colors.black,
-                          size: 40,
-                        );
+                      likeCount: 0,
+                      countPostion: CountPostion.left,
+                      circleColor:
+                      CircleColor(start: Colors.white, end: primaryColor),
+                      onTap: (isLiked) {
+                        print(
+                            "controller.currentIndex : ${controller.currentIndex}");
+                        if (controller.userId == "null") {
+                          Get.toNamed(AppRoute.login);
+                        }
+                        return controller.addLike(
+                            controller
+                                .story[controller.currentIndex ?? 0].storyId,
+                            controller.currentIndex ?? 0);
                       },
-                      countPostion: CountPostion.right,
                     ),
                   ],
                 ),
-              )
+              ),
             ],
           ),
         ),

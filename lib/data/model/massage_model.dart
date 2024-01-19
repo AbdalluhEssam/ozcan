@@ -114,6 +114,55 @@ class MassageBotModel {
     return data;
   }
 }
+class Ticket {
+  String category;
+  String? msg;
+  String reply;
+  String send;
+  String status;
+  String t;
+  String ticketId;
+  String usr;
+
+  Ticket({
+    required this.category,
+    required this.msg,
+    required this.reply,
+    required this.send,
+    required this.status,
+    required this.t,
+    required this.ticketId,
+    required this.usr,
+  });
+
+  // Named constructor to create a Ticket instance from a Map
+  factory Ticket.fromJson(Map<String, dynamic> json) {
+    return Ticket(
+      category: json['category'].toString() ?? '', // Provide a default value if it's null
+      msg: json['msg'].toString(),
+      reply: json['reply'].toString() ?? '', // Provide a default value if it's null
+      send: json['send'].toString() ?? '', // Provide a default value if it's null
+      status: json['status'].toString() ?? '', // Provide a default value if it's null
+      t: json['t'].toString() ?? '', // Provide a default value if it's null
+      ticketId: json['ticketId'].toString() ?? '', // Provide a default value if it's null
+      usr: json['usr'].toString() ?? '', // Provide a default value if it's null
+    );
+  }
+
+  // Method to convert a Ticket instance to a Map
+  Map<String, dynamic> toJson() {
+    return {
+      'category': category,
+      'msg': msg,
+      'reply': reply,
+      'send': send,
+      'status': status,
+      't': t,
+      'ticketId': ticketId,
+      'usr': usr,
+    };
+  }
+}
 
 
 class Messages {

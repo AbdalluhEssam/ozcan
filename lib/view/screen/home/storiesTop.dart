@@ -78,9 +78,8 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
-                                  controller.itemsName =
-                                      controller.story[index]['note'];
-
+                                  controller.itemsName = controller.story[index]['note'];
+                                  controller.image = controller.story[index]['itemsImage'];
                                   controller.update();
                                   print(controller.currentIndex);
                                   if (controller.story[index]['video'].toString() == "0") {
@@ -137,6 +136,9 @@ class StoriesTopDepartment extends StatelessWidget {
                                   "categoriesId": controller.categoriesId,
                                   "adminId": controller.adminId,
                                   "itemsName": controller.itemsName,
+                                  "itemsImage": controller.image,
+                                  "ticketId": controller.ticketId,
+
                                 });
                           } else {
                             Get.toNamed(AppRoute.login);
@@ -199,8 +201,9 @@ class StoriesTopDepartment extends StatelessWidget {
                         dotSecondaryColor: Colors.black,
                       ),
                       likeBuilder: (bool isLiked) {
+                        controller.update();
                         return Icon(
-                          Icons.favorite_outline,
+                          isLiked ? Icons.favorite: Icons.favorite_outline,
                           color: isLiked ? Color(0xffA659A9) : Colors.black,
                           size: 40,
                         );

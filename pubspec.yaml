@@ -46,7 +46,6 @@ dependencies:
   image_picker: ^1.0.4
   animated_text_kit: ^4.2.2
   flutter_carousel_slider: ^1.1.0
-  video_player: ^2.8.1
   cached_network_image: ^3.3.0
   story_view: ^0.15.0
   share: ^2.0.4
@@ -56,14 +55,6 @@ dependencies:
   intl: ^0.18.0
   http: ^0.13.4
   # Images
-  # Animate
-  show_up_animation: ^2.0.0
-  auto_animated: ^3.0.1
-  # Google Map
-  flutter_polyline_points: ^1.0.0
-  google_maps_flutter: ^2.5.0
-  geolocator: ^10.1.0
-  geocoding: ^2.1.1
   # Firebase And Notification
   firebase_messaging: ^14.0.3
   firebase_core: ^2.1.1
@@ -73,22 +64,12 @@ dependencies:
   sqflite: ^2.0.2
   shared_preferences: ^2.0.15
   path: ^1.8.0
-  pdf: ^3.8.0
   open_file: ^3.2.1
   path_provider: ^2.0.11
-  # Qrcode
-  scan: ^1.6.0
-  grouped_list: ^4.2.0
-  dropdown_search: ^3.0.1
-  badges: ^2.0.2
   # Icon
   font_awesome_flutter: ^10.1.0
   fluttericon: ^2.0.0
   dartz: ^0.10.1
-  # Google Auth
-  google_sign_in: ^5.3.1
-  #  device_preview: ^0.7.5
-  responsive_builder: ^0.4.2
   image_pickers: ^2.0.4+2
   flutter_otp_text_field: ^1.1.0
   status_change: ^2.0.0
@@ -99,6 +80,10 @@ dependencies:
   file_picker: ^6.1.1
   share_plus: ^7.2.1
   card_swiper: ^3.0.1
+  firebase_database: ^10.4.0
+  record: ^5.0.4
+  audioplayers: ^5.2.1
+  voice_message_package: ^2.1.4
 
 dev_dependencies:
   flutter_test:
@@ -108,7 +93,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "ic_launcher"
   ios: true
-  image_path: "assets/images/ozcan.jpg"
+  image_path: "assets/images/logooo.jpg"
 
   flutter_lints: ^2.0.0
 

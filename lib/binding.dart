@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
-import 'package:ozcan/controller/home/notification_controller.dart';
 import 'controller/auth/signup_controller.dart';
 import 'controller/cart/cart_controller.dart';
 import 'controller/home/personinformation_controller.dart';
 import 'controller/home/productdetalis_controller.dart';
+import 'controller/notification_controller.dart';
 import 'core/class/crud.dart';
 
 

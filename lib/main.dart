@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +15,8 @@ Future<void> _backgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   log("Message from background : ${message.notification?.body}");
 }
+final kWebRecaptchaSiteKey = 'AD8B37B7-0F25-4A9A-BEE1-F26D7536E0EF';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FirebaseMessaging.onBackgroundMessage(_backgroundHandler);

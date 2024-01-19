@@ -102,4 +102,9 @@ class ChatData {
         await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
     return response;
   }
+  Future addAudio(File myFlie) async {
+    var response =
+        await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
+    return response;
+  }
 }

@@ -3,6 +3,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:like_button/like_button.dart';
 import 'package:ozcan/controller/home/productdetalis_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
@@ -39,9 +40,7 @@ class ProductDetails extends StatelessWidget {
           builder: (controller) => Column(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height * 0.25,
-                alignment: Alignment.center,
+                constraints: BoxConstraints(maxHeight: Get.width * 0.6),
                 color: primaryColor,
                 child: Visibility(
                   replacement: Swiper(
@@ -51,6 +50,8 @@ class ProductDetails extends StatelessWidget {
                         imageUrl:
                             '${AppLink.imageItems}/${controller.images[index].image.toString()}',
                         fit: BoxFit.contain,
+                        width: Get.width,
+
                       );
                     },
                     itemCount: controller.images.length,
@@ -69,7 +70,7 @@ class ProductDetails extends StatelessWidget {
                             ? controller.itemsModel.itemsImage!
                             : '${AppLink.imageItems}/${controller.itemsModel.itemsImage}',
                         fit: BoxFit.contain,
-                        width: MediaQuery.of(context).size.width * 0.8,
+                        width: Get.width,
                       )),
                 ),
               ),
@@ -100,12 +101,28 @@ class ProductDetails extends StatelessWidget {
                   }
                 },
                 name_of_prodect: "${controller.itemsModel.itemsName}",
-                value_of_buy: "${controller.itemsModel.items_ordered_times}",
-                number_of_star: "${controller.itemsModel.itemsCount}",
+                value_of_buy: "${controller.itemsModel.itemsOrderedTimes}",
+                number_of_star: "${controller.itemsModel.count}",
                 containt_of_descripation: "${controller.itemsModel.itemsDesc}",
                 price_of_project: "${controller.itemsModel.itemsPrice}",
                 size: "${controller.itemsModel.size}",
                 color: "${controller.itemsModel.color}",
+                widget: LikeButton(
+                isLiked: controller.itemsModel.usersId
+                    ?.contains(
+                    controller.userId.toString()),
+                likeCount: int.parse(
+                    controller.itemsModel.count!),
+                countPostion: CountPostion.left,
+                circleColor: CircleColor(
+                    start: Colors.white, end: primaryColor),
+                onTap: (isLiked) {
+                  if (controller.userId == "null") {
+                    Get.toNamed(AppRoute.login);
+                  }
+                  return controller.addLike(controller.itemsModel.itemsId,);
+                },
+              ),
               )
             ],
           ),

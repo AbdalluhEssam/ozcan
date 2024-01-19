@@ -1,94 +1,84 @@
 class ItemsModel {
+  String? count;
+  String? usersId;
   String? itemsId;
   String? itemsName;
   String? itemsDesc;
   String? itemsImage;
-  String? itemsCount;
-  String? items_ordered_times;
+  String? qty;
+  String? size;
   String? itemsActive;
   String? itemsPrice;
   String? itemsDescount;
-  String? size;
   String? itemsDate;
   String? itemsCat;
+  String? days;
+  String? itemsOrderedTimes;
+  String? linkShare;
   String? color;
-  String? itemsPriceDiscount;
-  String? categoriesId;
-  String? categoriesName;
-  String? categoriesNameAr;
-  String? categoriesImage;
-  String? categoriesDatetime;
-  String? favorite;
-  String? link_share;
+  String? itemsLikes;
 
   ItemsModel(
-      {this.itemsId,
+      {this.count,
+        this.usersId,
+        this.itemsId,
         this.itemsName,
         this.itemsDesc,
-        this.size,
         this.itemsImage,
-        this.itemsCount,
+        this.qty,
+        this.size,
         this.itemsActive,
         this.itemsPrice,
         this.itemsDescount,
         this.itemsDate,
-        this.color,
-        this.itemsPriceDiscount,
         this.itemsCat,
-        this.categoriesId,
-        this.categoriesName,
-        this.items_ordered_times,
-        this.categoriesNameAr,
-        this.categoriesImage,
-        this.categoriesDatetime,
-        this.link_share,
-        this.favorite});
+        this.days,
+        this.itemsOrderedTimes,
+        this.linkShare,
+        this.color,
+        this.itemsLikes});
 
   ItemsModel.fromJson(Map<String, dynamic> json) {
+    count = json['count'].toString();
+    usersId = json['users_id'].toString();
     itemsId = json['items_id'].toString();
     itemsName = json['items_name'].toString();
     itemsDesc = json['items_desc'].toString();
     itemsImage = json['items_image'].toString();
-    itemsCount = json['qty'].toString();
-    color = json['color'].toString();
+    qty = json['qty'].toString();
     size = json['size'].toString();
     itemsActive = json['items_active'].toString();
     itemsPrice = json['items_price'].toString();
     itemsDescount = json['items_descount'].toString();
-    itemsPriceDiscount = json['itemspricedisount'].toString();
     itemsDate = json['items_date'].toString();
     itemsCat = json['items_cat'].toString();
-    categoriesId = json['categories_id'].toString();
-    categoriesName = json['categories_name'].toString();
-    categoriesNameAr = json['categories_name_ar'].toString();
-    categoriesImage = json['categories_image'].toString();
-    categoriesDatetime = json['categories_datetime'].toString();
-    items_ordered_times = json['items_ordered_times'].toString();
-    link_share = json['link_share'].toString();
+    days = json['days'].toString();
+    itemsOrderedTimes = json['items_ordered_times'].toString();
+    linkShare = json['link_share'].toString();
+    color = json['color'].toString();
+    itemsLikes = json['items_likes'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['count'] = this.count;
+    data['users_id'] = this.usersId;
     data['items_id'] = this.itemsId;
     data['items_name'] = this.itemsName;
-    data['size'] = this.size;
     data['items_desc'] = this.itemsDesc;
     data['items_image'] = this.itemsImage;
-    data['qty'] = this.itemsCount;
+    data['qty'] = this.qty;
+    data['size'] = this.size;
     data['items_active'] = this.itemsActive;
     data['items_price'] = this.itemsPrice;
-    data['color'] = this.color;
     data['items_descount'] = this.itemsDescount;
-    data['itemspricedisount'] = this.itemsPriceDiscount;
     data['items_date'] = this.itemsDate;
     data['items_cat'] = this.itemsCat;
-    data['categories_id'] = this.categoriesId;
-    data['categories_name'] = this.categoriesName;
-    data['items_ordered_times'] = this.items_ordered_times;
-    data['categories_name_ar'] = this.categoriesNameAr;
-    data['categories_image'] = this.categoriesImage;
-    data['categories_datetime'] = this.categoriesDatetime;
-    data['link_share'] = this.link_share;
+    data['days'] = this.days;
+    data['items_ordered_times'] = this.itemsOrderedTimes;
+    data['link_share'] = this.linkShare;
+    data['color'] = this.color;
+    data['items_likes'] = this.itemsLikes;
     return data;
   }
 }

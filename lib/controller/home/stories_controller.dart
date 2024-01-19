@@ -6,6 +6,7 @@ import 'package:story_view/controller/story_controller.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
+import '../../data/model/story.dart';
 import 'home_controller.dart';
 
 abstract class StoriesDepartmentController extends SearchMaxController {
@@ -21,7 +22,7 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   StoryController storyController = StoryController();
   TextEditingController textController = TextEditingController();
-  List story = [];
+  List<StoryModel> story = [];
 
   int? currentIndex = 0;
 
@@ -29,17 +30,19 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
 
   String? username;
   String? email;
-  String? id;
+  String? userId;
   String? categoriesId;
   String? adminId;
+  String? ticketId;
   String? categoriesColor;
   String? itemsName;
+  String? image;
 
   @override
   initialData() {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
-    id = myServices.sharedPreferences.getString("id");
+    userId = myServices.sharedPreferences.getString("id");
   }
 
   @override
@@ -47,6 +50,7 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
     categoriesId = Get.arguments['categoriesId'];
     categoriesColor = Get.arguments['categoriesColor'];
     adminId = Get.arguments['adminId'];
+    ticketId = Get.arguments['ticketId'];
     initialData();
     getData();
     statusRequest = StatusRequest.success;
@@ -62,7 +66,8 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       if (response['status'] == "success") {
-        story.addAll(response['story']);
+        List stores = response['story'];
+        story.addAll(stores.map((e) => StoryModel.fromJson(e)));
       } else {
         statusRequest = StatusRequest.failure;
       }
@@ -70,18 +75,22 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
     update();
   }
 
-  addLikes() async {
-    story.clear();
-    statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.addLikes(currentIndex.toString());
-    log("========================================================================$response");
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        update();
+  Future<bool?> addLike(id, index) async {
+    if (!story[index].userId!.contains(userId.toString())) {
+      var response = await departmentViewData.addLikeStory(id);
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          story[index].count = (int.parse(story[index].count!) + 1).toString();
+          story[index].userId = "${userId}";
+          print(story[index].userId);
+          update();
+        }
       }
+      update();
     }
-    update();
+    return statusRequest == StatusRequest.success ? true : false;
   }
 
   @override

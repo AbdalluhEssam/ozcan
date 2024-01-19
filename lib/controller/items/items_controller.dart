@@ -32,14 +32,16 @@ class ItemsControllerImp extends ItemsController {
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
   );
+
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+
   late StatusRequest statusRequest;
 
   String? username;
   String? email;
-  String? id;
+  String? userId;
   String? categoriesId;
   String? categoriesName;
   String? categoriesColor;
@@ -51,11 +53,8 @@ class ItemsControllerImp extends ItemsController {
   initialData() {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
-    id = myServices.sharedPreferences.getString("id");
+    userId = myServices.sharedPreferences.getString("id");
   }
-
-  // ScrollPosition currentScrollPosition = scrollController.position;
-  // double currentOffset = scrollController.offset;
 
   scrollToIndex() {
     if (itemId != null) {
@@ -87,15 +86,26 @@ class ItemsControllerImp extends ItemsController {
     log(itemId.toString());
     initialData();
     getData();
-    Timer(Duration(milliseconds: 500), () {
-      scrollController.addListener(() {
-        scrollToIndex();
-        print(["log", scrollController.offset]);
+    if (items.isNotEmpty) {
+      Timer(Duration(milliseconds: 500), () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          // Scroll to the end of the list
+          if (scrollController != null && scrollController.hasClients) {
+            scrollController.addListener(() {
+              scrollToIndex();
+              update();
+              print(["log", scrollController.offset]);
+            });
+          }
+          scrollController.notifyListeners();
+          scrollController.keepScrollOffset;
+          scrollController.dispose();
+        });
+
+        update();
       });
-      scrollController.notifyListeners();
-      scrollController.keepScrollOffset;
-      scrollController.dispose();
-    });
+    }
+
     super.onInit();
   }
 
@@ -119,6 +129,23 @@ class ItemsControllerImp extends ItemsController {
     update();
   }
 
+  Future<bool?> addLike(id, index) async {
+    if (!items[index].usersId!.contains(userId.toString())) {
+      var response = await departmentViewData.addLike(id);
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        if (response['status'] == "success") {
+          items[index].count = (int.parse(items[index].count!) + 1).toString();
+          items[index].usersId = "${userId}";
+          print(items[index].usersId);
+          update();
+        }
+      }
+      update();
+    }
+    return statusRequest == StatusRequest.success ? true : false;
+  }
 
   @override
   goToItems(categories, selectedCat, catId) {

@@ -31,11 +31,12 @@ class AppLink {
   static const String imageProduct = "$serverLink/categories/image.php";
   static const String departmentView = "$serverLink/categories/viewbanner.php";
   static const String glusSerPage = "$serverLink/categories/glusservies.php";
-//================================== Favorite ===============================//
-  static const String addFavorite       = "$serverLink/favorite/add.php";
-  static const String deleteFavorite    = "$serverLink/favorite/delete.php";
-  static const String deleteEndFavorite = "$serverLink/favorite/deleteend.php";
-  static const String viewFavorite      = "$serverLink/favorite/view.php";
+//================================== Like ===============================//
+  static const String addLike           = "$serverLink/categories/likes/add.php";
+  static const String deleteLikes    = "$serverLink/categories/likes/delete.php";
+//================================== LikeStory ===============================//
+  static const String addLikeStory           = "$serverLink/categories/likesstory/add.php";
+  static const String deleteLikesStory    = "$serverLink/categories/likesstory/delete.php";
 //================================== CART ===============================//
   static const String orderView      = "$serverLink/cart/view.php";
   static const String cardAdd       = "$serverLink/cart/insertcart.php";

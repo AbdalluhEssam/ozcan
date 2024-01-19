@@ -392,9 +392,8 @@ class DepartmentView extends StatelessWidget {
                                                             "adminId": controller
                                                                 .adminId,
                                                             "categoriesName":
-                                                            controller
-                                                                .categoriesName,
-                                                            "itemId": index,
+                                                            controller.categoriesName,
+                                                            "itemId": index.toInt(),
                                                           });
                                                     },
                                                     child: Container(
