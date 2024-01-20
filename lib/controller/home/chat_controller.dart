@@ -188,7 +188,7 @@ class ChatControllerImp extends ChatController {
           .add({
         "category": categoriesId.toString(),
         "msg": myControllerMassage.text,
-        "reply": "0", // Convert numbers to strings
+        "reply": "", // Convert numbers to strings
         "send": "Admin", // Convert numbers to strings
         "status": "1", // Convert numbers to strings
         "t": DateTime.now().toUtc().toString(),
