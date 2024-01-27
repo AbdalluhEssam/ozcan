@@ -284,9 +284,9 @@ class ChatsDetailsScreen extends StatelessWidget {
                   circlesColor: controller.categoriesColor!,
                   backgroundColor: Colors.grey[300]!,
                   controller: VoiceController(
-                    audioSrc: '${controller.extractLink(model.msg!)}',
+                    audioSrc: '${controller.extractLinkAudio(model.msg!)}',
                     maxDuration: const Duration(seconds: 10),
-                    isFile: true,
+                    isFile: false,
                     onComplete: () {},
                     onPause: () {},
                     onPlaying: () {},
@@ -295,13 +295,29 @@ class ChatsDetailsScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Text(
-                  DateFormat.yMMMMd('ar_EG')
-                      .format(DateTime.parse(model.t))
-                      .toString(),
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(fontSize: 10),
-                ),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      DateFormat.Hm('ar_EG')
+                          .format(DateTime.parse(model.t))
+                          .toString(),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    Text("  -  "),
+                    Text(
+                      DateFormat.yMMMMd('ar_EG')
+                          .format(DateTime.parse(model.t))
+                          .toString(),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+
+
+                  ],
+                )
               ],
             )
           : Container(
@@ -594,13 +610,27 @@ class ChatsDetailsScreen extends StatelessWidget {
                     },
                   ),
                 ),
-                Text(
-                  DateFormat.yMMMMd('ar_EG')
-                      .format(DateTime.parse(model.t))
-                      .toString(),
-                  textAlign: TextAlign.right,
-                  style: const TextStyle(fontSize: 10),
-                ),
+                Row(
+                  children: [
+                    Text(
+                      DateFormat.Hm('ar_EG')
+                          .format(DateTime.parse(model.t))
+                          .toString(),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+                    Text("  -  "),
+                    Text(
+                      DateFormat.yMMMMd('ar_EG')
+                          .format(DateTime.parse(model.t))
+                          .toString(),
+                      textAlign: TextAlign.right,
+                      style: const TextStyle(fontSize: 10),
+                    ),
+
+
+                  ],
+                )
               ],
             )
           : Container(

@@ -8,7 +8,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:ozcan/data/datasource/remote/chat_data.dart';
 import 'package:ozcan/data/model/massage_model.dart';
@@ -39,6 +38,9 @@ class ChatControllerImp extends ChatController {
     caseSensitive: false,
     multiLine: true,
   );
+
+  final RegExp urlRegExpAudio = RegExp(r'https?://\S+');
+
   bool hasLink = false;
   bool hasLinkController = false;
 
@@ -51,6 +53,10 @@ class ChatControllerImp extends ChatController {
 
   String extractLink(String text) {
     RegExpMatch? match = urlRegExp.firstMatch(text);
+    return match != null ? match.group(0)! : '';
+  }
+  String extractLinkAudio(String text) {
+    RegExpMatch? match = urlRegExpAudio.firstMatch(text);
     return match != null ? match.group(0)! : '';
   }
   String extractLinkImage(String text) {
