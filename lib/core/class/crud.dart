@@ -9,49 +9,57 @@ import '../functions/checkinterner.dart';
 
 class Crud {
   Future<Either<StatusRequest, Map>> postData(String linkurl, Map data) async {
-      try{
-        if (await checkInternet()) {
-          var response = await http.post(Uri.parse(linkurl), body: data);
-          print(response.statusCode);
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            Map responsebody = jsonDecode(response.body);
-            print(responsebody);
-            return Right(responsebody);
-          } else {
-            return const Left(StatusRequest.serverFailure);
-          }
+    try {
+      if (await checkInternet()) {
+        var response = await http.post(Uri.parse(linkurl),
+            body: data,
+        //     headers: {
+        //   "Content-Type": "application/json",
+        //   "Accept": "application/json",
+        // }
+        );
+        print(response.statusCode);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responseBody = jsonDecode(response.body);
+          print(responseBody);
+          return Right(responseBody);
         } else {
-          return const Left(StatusRequest.offlineFailure);
+          return const Left(StatusRequest.serverFailure);
         }
-      }catch(_){
-        return const Left(StatusRequest.serverFailure);
+      } else {
+        return const Left(StatusRequest.offlineFailure);
       }
-  }
-  Future<Either<StatusRequest, Map>> getData(String linkurl, Map data) async {
-      try{
-        if (await checkInternet()) {
-          var response = await http.get(Uri.parse(linkurl));
-          print(response.statusCode);
-          if (response.statusCode == 200 || response.statusCode == 201) {
-            Map responsebody = jsonDecode(response.body);
-            print(responsebody);
-            return Right(responsebody);
-          } else {
-            return const Left(StatusRequest.serverFailure);
-          }
-        } else {
-          return const Left(StatusRequest.offlineFailure);
-        }
-      }catch(_){
-        return const Left(StatusRequest.serverFailure);
-      }
+    } catch (_) {
+      return const Left(StatusRequest.serverFailure);
+    }
   }
 
-  postRequestWithFiles(String url, Map data, File file,String filename) async {
+  Future<Either<StatusRequest, Map>> getData(String linkurl, Map data) async {
+    try {
+      if (await checkInternet()) {
+        var response = await http.get(Uri.parse(linkurl));
+        print(response.statusCode);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          Map responsebody = jsonDecode(response.body);
+          print(responsebody);
+          return Right(responsebody);
+        } else {
+          return const Left(StatusRequest.serverFailure);
+        }
+      } else {
+        return const Left(StatusRequest.offlineFailure);
+      }
+    } catch (_) {
+      return const Left(StatusRequest.serverFailure);
+    }
+  }
+
+  postRequestWithFiles(String url, Map data, File file, String filename) async {
     var request = http.MultipartRequest("POST", Uri.parse(url));
     var length = await file.length();
     var stream = http.ByteStream(file.openRead());
-    var multipartFile = http.MultipartFile(filename, stream, length, filename: basename(file.path));
+    var multipartFile = http.MultipartFile(filename, stream, length,
+        filename: basename(file.path));
     request.files.add(multipartFile);
     data.forEach((key, value) {
       request.fields[key] = value;
@@ -62,7 +70,7 @@ class Crud {
     if (myrequest.statusCode == 200) {
       return jsonDecode(response.body);
     } else {
-        print("Error${myrequest.statusCode}");
+      print("Error${myrequest.statusCode}");
     }
   }
 }

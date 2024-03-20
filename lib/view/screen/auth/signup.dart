@@ -19,10 +19,7 @@ class SignUp extends StatelessWidget {
         appBar: AppBar(
           title: Text(
             "signup".tr,
-            style: Theme.of(context)
-                .textTheme
-                .displayLarge
-                ,
+            style: Theme.of(context).textTheme.displayLarge,
           ),
           elevation: 0,
           centerTitle: true,
@@ -36,7 +33,7 @@ class SignUp extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             vertical: 15, horizontal: 30),
                         child: Form(
-                          key: controller.formstate,
+                          key: controller.formState,
                           child: ListView(
                             children: [
                               const SizedBox(
@@ -110,6 +107,31 @@ class SignUp extends StatelessWidget {
                                 ),
                               ),
                               // Text("forget".tr,textAlign:TextAlign.end,style: const TextStyle(color: AppColor.gray),),
+
+                              DropdownButton<Gender>(
+                                isDense: true,
+                                isExpanded: true,
+                                borderRadius: BorderRadius.circular(12),
+                                value: controller.selectedGender,
+                                onChanged: (Gender? value) {
+                                  controller.selectedGender = value!;
+                                  controller.update();
+                                },
+                                items: [
+                                  DropdownMenuItem<Gender>(
+                                    value: Gender.male,
+                                    child: Text('Male'),
+                                  ),
+                                  DropdownMenuItem<Gender>(
+                                    value: Gender.female,
+                                    child: Text('Female'),
+                                  ),
+                                  DropdownMenuItem<Gender>(
+                                    value: Gender.other,
+                                    child: Text('Other'),
+                                  ),
+                                ],
+                              ),
                               const SizedBox(
                                 height: 20,
                               ),

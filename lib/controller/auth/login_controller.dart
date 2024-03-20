@@ -55,16 +55,15 @@ class LoginControllerImp extends LoginController {
           password.text.trim(), email.text.trimLeft().trimRight());
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          if (response['data']['users_approve'].toString() == "1") {
+        if (response['status'] == 200) {
+            myServices.sharedPreferences.setString("token", response['data']['token'].toString());
+            myServices.sharedPreferences.setString("id", response['data']['user']['id'].toString());
             myServices.sharedPreferences
-                .setString("id", response['data']['users_id'].toString());
+                .setString("username", response['data']['user']['name'].toString());
             myServices.sharedPreferences
-                .setString("username", response['data']['users_name'].toString());
+                .setString("email", response['data']['user']['email'].toString());
             myServices.sharedPreferences
-                .setString("email", response['data']['users_email'].toString());
-            myServices.sharedPreferences
-                .setString("phone", response['data']['users_phone'].toString());
+                .setString("phone", response['data']['user']['phone'].toString());
             myServices.sharedPreferences.setString("step", "2");
             Get.offNamed(AppRoute.homeScreen);
             Get.snackbar(
@@ -78,11 +77,7 @@ class LoginControllerImp extends LoginController {
                 duration: const Duration(seconds: 3),
                 colorText: AppColor.white,
                 borderRadius: 0);
-          } else {
-            Get.offNamed(AppRoute.verfiyCodeSignUp, arguments: {
-              "email": email.text,
-            });
-          }
+
         } else {
           Get.defaultDialog(
               title: "Warning", middleText: " Email Or Password Not Correct");

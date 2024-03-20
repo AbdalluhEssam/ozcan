@@ -78,14 +78,18 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
-                                  controller.itemsName = controller.story[index]['note'];
-                                  controller.image = controller.story[index]['itemsImage'];
+                                  controller.itemsName =
+                                      controller.story[index]['note'];
+                                  controller.image =
+                                      controller.story[index]['itemsImage'];
                                   controller.update();
                                   print(controller.currentIndex);
-                                  if (controller.story[index]['video'].toString() == "0") {
+                                  if (controller.story[index]['video']
+                                          .toString() ==
+                                      "0") {
                                     return StoryItem.pageImage(
-                                      caption:
-                                          "${controller.story[index]['note']}",
+                                      caption: Text(
+                                          "${controller.story[index].note}"),
                                       url:
                                           "${AppLink.imageStory}/${controller.story[index]['image']}",
                                       controller: controller.storyController,
@@ -93,8 +97,8 @@ class StoriesTopDepartment extends StatelessWidget {
                                   } else {
                                     return StoryItem.pageVideo(
                                       "${AppLink.imageStory}/${controller.story[index]['image']}",
-                                      caption:
-                                          "${controller.story[index]['note']}",
+                                      caption: Text(
+                                          "${controller.story[index].note}"),
                                       controller: controller.storyController,
                                     );
                                   }
@@ -138,7 +142,6 @@ class StoriesTopDepartment extends StatelessWidget {
                                   "itemsName": controller.itemsName,
                                   "itemsImage": controller.image,
                                   "ticketId": controller.ticketId,
-
                                 });
                           } else {
                             Get.toNamed(AppRoute.login);
@@ -203,7 +206,7 @@ class StoriesTopDepartment extends StatelessWidget {
                       likeBuilder: (bool isLiked) {
                         controller.update();
                         return Icon(
-                          isLiked ? Icons.favorite: Icons.favorite_outline,
+                          isLiked ? Icons.favorite : Icons.favorite_outline,
                           color: isLiked ? Color(0xffA659A9) : Colors.black,
                           size: 40,
                         );

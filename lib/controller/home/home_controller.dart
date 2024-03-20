@@ -51,7 +51,7 @@ class HomeControllerImp extends HomeController {
       FirebaseMessaging.instance.subscribeToTopic("user$id");
     }
     getData();
-
+    getCategoriesData();
     super.onInit();
   }
 
@@ -65,12 +65,28 @@ class HomeControllerImp extends HomeController {
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        images.addAll(response['home']);
-        categories.addAll(response['categories']);
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+        images.addAll(response['data']);
+        // categories.addAll(response['categories']);
+
+    }else {
+      statusRequest = StatusRequest.failure;
+    }
+    update();
+  }
+  getCategoriesData() async {
+    statusRequest = StatusRequest.loading;
+    var response = await homeData.getCategoriesData();
+    if (kDebugMode) {
+      print(
+          "========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+        categories.addAll(response['data']);
+        // categories.addAll(response['categories']);
+
+    }else {
+      statusRequest = StatusRequest.failure;
     }
     update();
   }

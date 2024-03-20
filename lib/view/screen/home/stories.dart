@@ -91,7 +91,7 @@ class StoriesDepartment extends StatelessWidget {
                                       "0") {
                                     return StoryItem.pageImage(
                                       caption:
-                                          "${controller.story[index].note}",
+                                          Text("${controller.story[index].note}"),
                                       url:
                                           "${AppLink.imageStory}/${controller.story[index].image}",
                                       controller: StoryController(),
@@ -100,7 +100,7 @@ class StoriesDepartment extends StatelessWidget {
                                     return StoryItem.pageVideo(
                                       "${AppLink.imageStory}/${controller.story[index].image}",
                                       caption:
-                                          "${controller.story[index].note}",
+                                          Text("${controller.story[index].note}"),
                                       controller: StoryController(),
                                     );
                                   }
@@ -111,7 +111,9 @@ class StoriesDepartment extends StatelessWidget {
                             inline: true,
                             repeat: false,
                             indicatorForegroundColor: primaryColor,
-                            onStoryShow: (value) {},
+                            onStoryShow:(storyItem, index) {
+
+                            },
                             onComplete: () {
                               Get.back();
                             },

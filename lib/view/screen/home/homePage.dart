@@ -26,9 +26,8 @@ class HomePageView extends StatelessWidget {
                 children: [
                   CarouselSlider.builder(
                     itemBuilder: (context, index, realIndex) {
-                      final image = controller.images[index]['image'];
                       return PhotoProdects(
-                        photo_prodect: '${AppLink.imageHome}/$image',
+                        photo_prodect: '${controller.images[index]['image']}',
                       );
                     },
                     options: CarouselOptions(

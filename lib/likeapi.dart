@@ -1,6 +1,6 @@
 class AppLink {
 //================================== Hosting ===============================//
-  static const String serverLink = "https://ozcan.almirsystem.com/ozcan";
+  static const String serverLink = "https://back.cp.ozcanbrand.com/api/v1";
   static const String serverImage = "https://ozcan.almirsystem.com/uploads";
 //================================== Image ===============================//
   static const String imageStatic = "$serverImage";
@@ -12,16 +12,17 @@ class AppLink {
   static const String imageInfo = "$serverImage";
   static const String imageStory = "$serverImage";
 //================================== Auth ===============================//
-  static const String signUp = "$serverLink/auth/signup.php";
+  static const String signUp = "$serverLink/register";
   static const String verfiyCodeSignUp = "$serverLink/auth/verfiycode.php";
   static const String reSend = "$serverLink/auth/resend.php";
-  static const String login = "$serverLink/auth/login.php";
+  static const String login = "$serverLink/login";
 //================================== Forget Password ===============================//
   static const String checkEmail = "$serverLink/forgetpassword/checkemail.php";
   static const String verfiyCodeForgetPass ="$serverLink/forgetpassword/verfiycode.php";
   static const String resetPassword ="$serverLink/forgetpassword/resetpassword.php";
 //================================== Home ===============================//
-  static const String homePage = "$serverLink/home.php";
+  static const String homePage = "$serverLink/home/images";
+  static const String categories = "$serverLink/categories";
   static const String aboutUs = "$serverLink/aboutus.php";
   static const String infoPage = "$serverLink/info.php";
   static const String searchPage = "$serverLink/search.php";
