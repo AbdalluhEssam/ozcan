@@ -48,6 +48,7 @@ class DepartmentControllerImp extends DepartmentController {
   String? categoriesColor;
   String? adminId;
   String? ticketId;
+  String? slug;
 
   @override
   initialData() {
@@ -58,15 +59,14 @@ class DepartmentControllerImp extends DepartmentController {
 
   @override
   void onInit() {
-    ticket =UserTicketsModel();
+    // ticket =UserTicketsModel();
+    initialData();
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesName = Get.arguments['categoriesName'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
-    adminId = Get.arguments['adminId'].toString();
-    initialData();
+    slug = Get.arguments['slug'].toString();
     getData();
-    getStory();
-    getTicket();
+    // getStory();
     super.onInit();
   }
 
@@ -74,37 +74,43 @@ class DepartmentControllerImp extends DepartmentController {
   getData() async {
     banner.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.getData(categoriesId!);
+    var response = await departmentViewData.getData(slug!);
     if (kDebugMode) {
       print(
           "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        if (response['banner'] != '{"status":"failure"}') {
-          banner.addAll(response['banner']);
-        } else {
-          banner = [];
-        }
 
-        if (response['department_story'] != '{"status":"failure"}') {
-          departmentStory.addAll(response['department_story']);
-        } else {
-          departmentStory = [];
-        }
-
-        if (response['items'] != '{"status":"failure"}') {
-          List item = response['items'];
+        banner.addAll(response['data']['banners']);
+        story.addAll(response['data']['daily_stories']);
+        storyTop.addAll(response['data']['highlights']);
+          List item = response['data']['products'];
           items.addAll(item.map((e) => ItemsModel.fromJson(e)));
-        } else {
-          items = [];
-        }
 
-      } else {
-        statusRequest = StatusRequest.failure;
+        // if (response['banner'] != '{"status":"failure"}') {
+        //   banner.addAll(response['banner']);
+        // } else {
+        //   banner = [];
+        // }
+
+        // if (response['department_story'] != '{"status":"failure"}') {
+        //   departmentStory.addAll(response['department_story']);
+        // } else {
+        //   departmentStory = [];
+        // }
+
+        // if (response['items'] != '{"status":"failure"}') {
+        //   List item = response['items'];
+        //   items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+        // } else {
+        //   items = [];
+        // }
+
+
+    }else {
+      statusRequest = StatusRequest.failure;
       }
-    }
     update();
   }
 
@@ -139,30 +145,5 @@ class DepartmentControllerImp extends DepartmentController {
     super.dispose();
   }
 
-  getTicket() async {
-    var response =
-        await chatData.getTicketData(id.toString(), categoriesId.toString());
-    log("========================================================================$response");
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['message'] != "No Ticket Yet") {
-        ticket= UserTicketsModel.fromJson(response['User_Tickets']);
-      } else {
-        ticket = UserTicketsModel();
-      }
 
-      if (response['message'] == "No Ticket Yet") {
-        ticketId = "null";
-      }
-    }
-    if (ticket.ticketId == '') {
-      ticketId = "null";
-    } else {
-      ticketId = ticket.ticketId ?? "null";
-    }
-
-    log("message : ${ticketId}");
-
-    update();
-  }
 }

@@ -28,7 +28,7 @@ class ProductDetails extends StatelessWidget {
         systemOverlayStyle: SystemUiOverlayStyle(
             statusBarColor: primaryColor,
             statusBarIconBrightness: Brightness.light),
-        title: Text("${controller.itemsModel.itemsName}",
+        title: Text("${controller.itemsModel.name}",
             style: TextStyle(
               color: Colors.white,
               fontSize: 18,
@@ -39,41 +39,51 @@ class ProductDetails extends StatelessWidget {
         child: GetBuilder<ProductDetailsControllerImp>(
           builder: (controller) => Column(
             children: [
-              Container(
-                constraints: BoxConstraints(maxHeight: Get.width * 0.6),
-                color: primaryColor,
-                child: Visibility(
-                  replacement: Swiper(
-                    itemBuilder: (BuildContext context, int index) {
-                      return CachedNetworkImage(
-                        alignment: Alignment.center,
-                        imageUrl:
-                            '${AppLink.imageItems}/${controller.images[index].image.toString()}',
-                        fit: BoxFit.contain,
-                        width: Get.width,
-
-                      );
-                    },
-                    itemCount: controller.images.length,
-                    pagination: const SwiperPagination(
-                        alignment: Alignment.bottomCenter),
-                    control: const SwiperControl(
-                        color: Colors.white,
-                        padding: EdgeInsets.symmetric(horizontal: 15)),
-                  ),
-                  visible: controller.images.isEmpty,
-                  child: Hero(
-                      tag: "${controller.itemsModel.itemsId}",
-                      child: CachedNetworkImage(
-                        imageUrl: controller
-                                .containsLink(controller.itemsModel.itemsImage!)
-                            ? controller.itemsModel.itemsImage!
-                            : '${AppLink.imageItems}/${controller.itemsModel.itemsImage}',
-                        fit: BoxFit.contain,
-                        width: Get.width,
-                      )),
-                ),
-              ),
+              // Container(
+              //   constraints: BoxConstraints(maxHeight: Get.width * 0.6),
+              //   color: primaryColor,
+              //   child: Visibility(
+              //     replacement: Swiper(
+              //       itemBuilder: (BuildContext context, int index) {
+              //         return CachedNetworkImage(
+              //           alignment: Alignment.center,
+              //           imageUrl:
+              //               '${controller.itemsModel.image}',
+              //           fit: BoxFit.contain,
+              //           width: Get.width,
+              //
+              //         );
+              //       },
+              //       itemCount: controller.images.length,
+              //       pagination: const SwiperPagination(
+              //           alignment: Alignment.bottomCenter),
+              //       control: const SwiperControl(
+              //           color: Colors.white,
+              //           padding: EdgeInsets.symmetric(horizontal: 15)),
+              //     ),
+              //     visible: controller.images.isEmpty,
+              //     child: Hero(
+              //         tag: "${controller.itemsModel.id}",
+              //         child: CachedNetworkImage(
+              //           imageUrl: controller
+              //                   .containsLink(controller.itemsModel.image!)
+              //               ? controller.itemsModel.image!
+              //               : '${controller.itemsModel.image}',
+              //           fit: BoxFit.contain,
+              //           width: Get.width,
+              //         )),
+              //   ),
+              // ),
+              Hero(
+                  tag: "${controller.itemsModel.id}",
+                  child: CachedNetworkImage(
+                    imageUrl: controller
+                        .containsLink(controller.itemsModel.image!)
+                        ? controller.itemsModel.image!
+                        : '${controller.itemsModel.image}',
+                    fit: BoxFit.contain,
+                    width: Get.width,
+                  )),
               SizedBox(
                 height: 20,
               ),
@@ -89,30 +99,29 @@ class ProductDetails extends StatelessWidget {
                       "adminId": controller.adminId,
                       "categoriesName": controller.categoriesName,
                       "color": primaryColor,
-                      "itemsName": controller.itemsModel.itemsName,
+                      "itemsName": controller.itemsModel.name,
                       "ticketId": controller.ticketId,
                       "itemsImage": controller
-                              .containsLink(controller.itemsModel.itemsImage!)
-                          ? controller.itemsModel.itemsImage!
-                          : '${AppLink.imageItems}/${controller.itemsModel.itemsImage}'
+                              .containsLink(controller.itemsModel.image!)
+                          ? controller.itemsModel.image!
+                          : '${controller.itemsModel.image}'
                     });
                   } else {
                     Get.toNamed(AppRoute.login);
                   }
                 },
-                name_of_prodect: "${controller.itemsModel.itemsName}",
-                value_of_buy: "${controller.itemsModel.itemsOrderedTimes}",
-                number_of_star: "${controller.itemsModel.count}",
-                containt_of_descripation: "${controller.itemsModel.itemsDesc}",
-                price_of_project: "${controller.itemsModel.itemsPrice}",
-                size: "${controller.itemsModel.size}",
-                color: "${controller.itemsModel.color}",
+                name_of_prodect: "${controller.itemsModel.name}",
+                value_of_buy: "${controller.itemsModel.id}",
+                number_of_star: "${controller.itemsModel.name}",
+                containt_of_descripation: "${controller.itemsModel.description}",
+                price_of_project: "${controller.itemsModel.id}",
+                size: "${controller.itemsModel.id}",
+                color: "${controller.itemsModel.categoryName}",
                 widget: LikeButton(
-                isLiked: controller.itemsModel.usersId
+                isLiked: controller.itemsModel.image
                     ?.contains(
                     controller.userId.toString()),
-                likeCount: int.parse(
-                    controller.itemsModel.count!),
+                likeCount: 5,
                 countPostion: CountPostion.left,
                 circleColor: CircleColor(
                     start: Colors.white, end: primaryColor),
@@ -120,7 +129,7 @@ class ProductDetails extends StatelessWidget {
                   if (controller.userId == "null") {
                     Get.toNamed(AppRoute.login);
                   }
-                  return controller.addLike(controller.itemsModel.itemsId,);
+                  return controller.addLike(controller.itemsModel.id,);
                 },
               ),
               )

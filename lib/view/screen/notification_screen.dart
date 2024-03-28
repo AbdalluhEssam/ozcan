@@ -11,7 +11,7 @@ class NotificationScreen extends GetView<NotificationControllerImp> {
   @override
   Widget build(BuildContext context) {
     NotificationControllerImp controller = Get.put(NotificationControllerImp());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = Color(int.parse(controller.categoriesColor ?? "0xffa056a5"));
 
     return Scaffold(
         appBar: AppBar(

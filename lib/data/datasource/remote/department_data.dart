@@ -10,9 +10,9 @@ class DepartmentViewData {
 
   DepartmentViewData(this.crud);
 
-  getData(String categoriesId) async {
-    var response = await crud.postData(AppLink.departmentView, {
-      "categories_id": categoriesId,
+  getData(String categoriesName) async {
+    var response = await crud.getData("${AppLink.departmentView}/$categoriesName", {
+
     });
     return response.fold((l) => l, (r) => r);
   }

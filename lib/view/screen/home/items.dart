@@ -15,7 +15,7 @@ class ItemsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ItemsControllerImp controller = Get.put(ItemsControllerImp());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = Color(int.parse(controller.categoriesColor!));
 
     return Scaffold(
       appBar: AppBar(
@@ -108,12 +108,12 @@ class ItemsView extends StatelessWidget {
                         Container(
                           constraints: BoxConstraints(maxHeight: Get.width * 0.65),
                           child: Hero(
-                              tag: "${controller.items[index].itemsId}",
+                              tag: "${controller.items[index].id}",
                               child: CachedNetworkImage(
                                   imageUrl: controller.containsLink(
-                                          controller.items[index].itemsImage!)
-                                      ? controller.items[index].itemsImage!
-                                      : '${AppLink.imageItems}/${controller.items[index].itemsImage}')),
+                                          controller.items[index].image!)
+                                      ? controller.items[index].image!
+                                      : '${controller.items[index].image}')),
                         ),
                         Container(
                           height: Get.width * 0.12,
@@ -155,14 +155,14 @@ class ItemsView extends StatelessWidget {
                                                 controller.categoriesName,
                                             "ticketId": controller.ticketId,
                                             "itemsName": controller
-                                                .items[index].itemsName,
+                                                .items[index].name,
                                             "itemsImage": controller
                                                     .containsLink(controller
                                                         .items[index]
-                                                        .itemsImage!)
+                                                        .image!)
                                                 ? controller
-                                                    .items[index].itemsImage!
-                                                : '${AppLink.imageItems}/${controller.items[index].itemsImage}'
+                                                    .items[index].image!
+                                                : '${controller.items[index].image}'
                                           });
                                     } else {
                                       Get.toNamed(AppRoute.login);
@@ -191,9 +191,9 @@ class ItemsView extends StatelessWidget {
                                   IconButton(
                                     onPressed: () {
                                       shareContent(
-                                          "${controller.items[index].itemsName}",
-                                          '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
-                                          '${controller.items[index].linkShare}');
+                                          "${controller.items[index].name}",
+                                          '${controller.containsLink(controller.items[index].image!) ? controller.items[index].image! : '${controller.items[index].image}'}',
+                                          '${controller.items[index].slug}');
                                     },
                                     icon: Icon(Icons.link),
                                   ),
@@ -202,9 +202,9 @@ class ItemsView extends StatelessWidget {
                                     onPressed: () {
                                       // Share.share('check out our product $url');
                                       shareContent(
-                                          "${controller.items[index].itemsName}",
-                                          '${controller.containsLink(controller.items[index].itemsImage!) ? controller.items[index].itemsImage! : '${AppLink.imageItems}/${controller.items[index].itemsImage}'}',
-                                          '${controller.items[index].linkShare}');
+                                          "${controller.items[index].name}",
+                                          '${controller.containsLink(controller.items[index].image!) ? controller.items[index].image! : '${controller.items[index].image}'}',
+                                          '${controller.items[index].slug}');
                                     },
                                     icon: Icon(Icons.share),
                                   ),
@@ -212,11 +212,7 @@ class ItemsView extends StatelessWidget {
                                   Padding(
                                     padding: const EdgeInsets.symmetric(horizontal:10),
                                     child: LikeButton(
-                                      isLiked: controller.items[index].usersId
-                                          ?.contains(
-                                              controller.userId.toString()),
-                                      likeCount: int.parse(
-                                          controller.items[index].count!),
+                                      likeCount: 50,
                                       countPostion: CountPostion.left,
                                       circleColor: CircleColor(
                                           start: Colors.white, end: primaryColor),
@@ -225,7 +221,7 @@ class ItemsView extends StatelessWidget {
                                           Get.toNamed(AppRoute.login);
                                         }
                                         return controller.addLike(
-                                            controller.items[index].itemsId,
+                                            controller.items[index].id,
                                             index);
                                       },
                                     ),
@@ -237,7 +233,7 @@ class ItemsView extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                "${controller.items[index].itemsName}",
+                                "${controller.items[index].name}",
                                 style: TextStyle(
                                     color: Colors.black,
                                     fontWeight: FontWeight.bold,

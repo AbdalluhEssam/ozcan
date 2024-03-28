@@ -130,20 +130,20 @@ class ItemsControllerImp extends ItemsController {
   }
 
   Future<bool?> addLike(id, index) async {
-    if (!items[index].usersId!.contains(userId.toString())) {
-      var response = await departmentViewData.addLike(id);
-      log("========================================================================$response");
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          items[index].count = (int.parse(items[index].count!) + 1).toString();
-          items[index].usersId = "${userId}";
-          print(items[index].usersId);
-          update();
-        }
-      }
-      update();
-    }
+    // if (!items[index].usersId!.contains(userId.toString())) {
+    //   var response = await departmentViewData.addLike(id);
+    //   log("========================================================================$response");
+    //   statusRequest = handlingData(response);
+    //   if (StatusRequest.success == statusRequest) {
+    //     if (response['status'] == "success") {
+    //       items[index].count = (int.parse(items[index].count!) + 1).toString();
+    //       items[index].usersId = "${userId}";
+    //       print(items[index].usersId);
+    //       update();
+    //     }
+    //   }
+    //   update();
+    // }
     return statusRequest == StatusRequest.success ? true : false;
   }
 

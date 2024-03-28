@@ -40,11 +40,11 @@ class AboutUsControllerImp extends AboutUsController {
   @override
   getData() async {
     statusRequest = StatusRequest.loading;
-    var response = await homeData.aboutUs();
+    var response = await homeData.aboutUs("aboutus");
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
+      if (response['status'] == 200) {
         aboutUsModel = AboutUsModel.fromJson(response['data']);
       } else {
         statusRequest = StatusRequest.failure;

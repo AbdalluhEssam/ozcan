@@ -20,7 +20,7 @@ class StoriesDepartment extends StatelessWidget {
   Widget build(BuildContext context) {
     StoriesDepartmentControllerImp controller =
         Get.put(StoriesDepartmentControllerImp());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = Color(int.parse(controller.categoriesColor!));
 
     return Scaffold(
       appBar: AppBar(

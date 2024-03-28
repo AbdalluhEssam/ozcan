@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:ozcan/controller/home/home_controller.dart';
 import 'package:ozcan/data/model/itemsmodel.dart';
 import '../../../core/constant/color.dart';
-import '../../../likeapi.dart';
 
 class ItemsView extends GetView<HomeControllerImp> {
   const ItemsView({Key? key}) : super(key: key);
@@ -67,7 +66,7 @@ class ListItemsView extends GetView<HomeControllerImp> {
             Padding(
               padding: const EdgeInsetsDirectional.only(start: 10),
               child: Text(
-                itemsModel.itemsName.toString(),
+                itemsModel.name.toString(),
                 style: const TextStyle(
                     color: AppColor.primaryColor,
                     fontSize: 13,
@@ -79,7 +78,7 @@ class ListItemsView extends GetView<HomeControllerImp> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 0),
                 child: CachedNetworkImage(
-                  imageUrl: "${AppLink.imageItems}/${itemsModel.itemsImage}",
+                  imageUrl: "${itemsModel.image}",
                   width: Get.width * 0.35,
                   fit: BoxFit.cover,
                   alignment: Alignment.center,

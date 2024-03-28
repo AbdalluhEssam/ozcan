@@ -22,7 +22,7 @@ class TopProductPageDetails extends GetView<ProductDetailsControllerImp> {
               color: AppColor.primaryColor,
               borderRadius: BorderRadius.vertical(bottom: Radius.circular(30))),
         ),
-        controller.itemsModel.itemsDescount != "0"
+        controller.itemsModel.description != "0"
             ? Positioned(
                 left: 10,
                 top: 10,
@@ -36,10 +36,10 @@ class TopProductPageDetails extends GetView<ProductDetailsControllerImp> {
           right: Get.width / 8,
           left: Get.width / 8,
           child: Hero(
-            tag: "${controller.itemsModel.itemsId}",
+            tag: "${controller.itemsModel.id}",
             child: CachedNetworkImage(
               imageUrl:
-                  "${AppLink.imageItems}/${controller.itemsModel.itemsImage}",
+                  "${AppLink.imageItems}/${controller.itemsModel.image}",
               height: size.height / 2,
               width: size.width,
 // fit: BoxFit.fill,

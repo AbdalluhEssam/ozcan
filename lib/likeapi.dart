@@ -23,14 +23,14 @@ class AppLink {
 //================================== Home ===============================//
   static const String homePage = "$serverLink/home/images";
   static const String categories = "$serverLink/categories";
-  static const String aboutUs = "$serverLink/aboutus.php";
+  static const String aboutUs = "$serverLink/pages";
   static const String infoPage = "$serverLink/info.php";
   static const String searchPage = "$serverLink/search.php";
   static const String senp = "$serverLink/s.php";
   static const String search  = "$serverLink/items/search.php";
   static const String items = "$serverLink/categories/view.php";
   static const String imageProduct = "$serverLink/categories/image.php";
-  static const String departmentView = "$serverLink/categories/viewbanner.php";
+  static const String departmentView = "$serverLink/categories";
   static const String glusSerPage = "$serverLink/categories/glusservies.php";
 //================================== Like ===============================//
   static const String addLike           = "$serverLink/categories/likes/add.php";

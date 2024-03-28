@@ -14,8 +14,8 @@ class HomeData {
     var response = await crud.getData(AppLink.categories, {});
     return response.fold((l) => l, (r) => r);
   }
-  aboutUs() async {
-    var response = await crud.postData(AppLink.aboutUs, {});
+  aboutUs(String aboutUs) async {
+    var response = await crud.getData("${AppLink.aboutUs}?page_name=$aboutUs", {});
     return response.fold((l) => l, (r) => r);
   }
 

@@ -33,7 +33,7 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   CartData cartData = CartData(Get.find());
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
 
-  List<ImagesProduct> images = [];
+  // List<ImagesProduct> images = [];
 
   @override
   initialData() async {
@@ -67,44 +67,44 @@ class ProductDetailsControllerImp extends ProductDetailsController {
     super.onInit();
   }
   Future<bool?> addLike(id) async {
-    if (!itemsModel.usersId!.contains(userId.toString())) {
-      var response = await departmentViewData.addLike(id);
-      log("========================================================================$response");
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          itemsModel.count = (int.parse(itemsModel.count!) + 1).toString();
-          itemsModel.usersId =  "${userId}";
-          print(itemsModel.usersId );
-          update();
-          ItemsControllerImp controllerImp = Get.put(ItemsControllerImp());
-          controllerImp.getData();
-        }
-      }
-      update();
-    }
+    // if (!itemsModel.usersId!.contains(userId.toString())) {
+    //   var response = await departmentViewData.addLike(id);
+    //   log("========================================================================$response");
+    //   statusRequest = handlingData(response);
+    //   if (StatusRequest.success == statusRequest) {
+    //     if (response['status'] == "success") {
+    //       itemsModel.count = (int.parse(itemsModel.count!) + 1).toString();
+    //       itemsModel.usersId =  "${userId}";
+    //       print(itemsModel.usersId );
+    //       update();
+    //       ItemsControllerImp controllerImp = Get.put(ItemsControllerImp());
+    //       controllerImp.getData();
+    //     }
+    //   }
+    //   update();
+    // }
     return statusRequest == StatusRequest.success ? true : false;
   }
 
   @override
   getData() async {
-    images.clear();
+    // images.clear();
     statusRequest = StatusRequest.loading;
     update();
-    cartData.ViewImage(itemsModel.itemsId).then((value) {
-      log("$value");
-      statusRequest = handlingData(value);
-      if (StatusRequest.success == statusRequest) {
-        if (value['status'] == "success") {
-          List pending = value['data'];
-          images.addAll(pending.map((e) => ImagesProduct.fromJson(e)));
-        } else {
-          statusRequest = StatusRequest.failure;
-        }
-      }
-
-      update();
-    });
+    // cartData.ViewImage(itemsModel.itemsId).then((value) {
+    //   log("$value");
+    //   statusRequest = handlingData(value);
+    //   if (StatusRequest.success == statusRequest) {
+    //     if (value['status'] == "success") {
+    //       List pending = value['data'];
+    //       images.addAll(pending.map((e) => ImagesProduct.fromJson(e)));
+    //     } else {
+    //       statusRequest = StatusRequest.failure;
+    //     }
+    //   }
+    //
+    //   update();
+    // });
     update();
   }
 

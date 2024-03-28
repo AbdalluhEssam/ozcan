@@ -32,19 +32,21 @@ class AboutUs extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 40),
                     child:CachedNetworkImage(
-                      imageUrl: "${AppLink.imageItems}/${controller.aboutUsModel.image}",
+                      imageUrl: "${controller.aboutUsModel.image}",
                       alignment: Alignment.center,
                       fit: BoxFit.fill,
                     ),
                   ),
-                  Container(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 30, horizontal: 15),
-                      child: Text(
-                        "${controller.aboutUsModel.body}",
-                        textAlign: TextAlign.justify,
-                        style: TextStyle(fontSize: 13, color: AppColor.black),
-                      )),
+                  Expanded(
+                    child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 30, horizontal: 15),
+                        child: Text(
+                          "${controller.aboutUsModel.description}",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 13, color: AppColor.black),
+                        )),
+                  ),
                   const Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
