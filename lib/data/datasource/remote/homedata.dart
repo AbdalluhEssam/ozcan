@@ -20,7 +20,7 @@ class HomeData {
   }
 
   infoData() async {
-    var response = await crud.postData(AppLink.infoPage, {});
+    var response = await crud.getData(AppLink.infoPage, {});
     return response.fold((l) => l, (r) => r);
   }
   getOffersData() async {

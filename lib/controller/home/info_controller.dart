@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/data/model/social_model.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -13,7 +14,7 @@ abstract class InfoController extends GetxController {
 class InfoControllerImp extends InfoController {
   MyServices myServices = Get.find();
 
-  List info = [];
+  List<SocialAccountsModel> info = [];
 
   HomeData homeData = HomeData(Get.find());
   late StatusRequest statusRequest;
@@ -46,8 +47,9 @@ class InfoControllerImp extends InfoController {
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        info.addAll(response['info']);
+      if (response['status'] == 200) {
+        List infoA =  response['data'];
+        info.addAll(infoA.map((e) => SocialAccountsModel.fromJson(e)));
       } else {
         statusRequest = StatusRequest.failure;
       }

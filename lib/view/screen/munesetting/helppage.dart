@@ -4,7 +4,6 @@ import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/controller/home/info_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
-import 'package:ozcan/likeapi.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/constant/color.dart';
 
@@ -53,13 +52,12 @@ class HelpPage extends StatelessWidget {
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  Text("${controller.info[index]['name']}"),
+                                  Text("${controller.info[index].name}"),
                                   SizedBox(
                                     width: 20,
                                   ),
                                   CachedNetworkImage(
-                                    imageUrl:
-                                        "${AppLink.imageInfo}/${controller.info[index]['image']}",
+                                    imageUrl:"${controller.info[index].image}",
                                     height: 80,
                                     width: 80,
                                     fit: BoxFit.cover,
@@ -67,7 +65,7 @@ class HelpPage extends StatelessWidget {
                                 ],
                               ),
                               Divider(),
-                              Text("${controller.info[index]['description']}"),
+                              Text("${controller.info[index].description}"),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -77,21 +75,21 @@ class HelpPage extends StatelessWidget {
                                       text: "Instagram",
                                       onPressed: () async {
                                         await facebook(
-                                            "${controller.info[index]['instagram']}");
+                                            "${controller.info[index].instagram}");
                                       }),
                                   buildMedia(
                                       icon: Icons.facebook,
                                       text: "Facebook",
                                       onPressed: () async {
                                         await facebook(
-                                            "${controller.info[index]['facebook']}");
+                                            "${controller.info[index].facebook}");
                                       }),
                                   buildMedia(
                                       icon: FontAwesome5.whatsapp,
                                       text: "Whatsapp",
                                       onPressed: () async {
                                         await whatsapp(
-                                            "${controller.info[index]['phone']}");
+                                            "${controller.info[index].phone}");
                                       }),
                                 ],
                               ),

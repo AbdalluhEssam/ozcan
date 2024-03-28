@@ -24,7 +24,7 @@ class AppLink {
   static const String homePage = "$serverLink/home/images";
   static const String categories = "$serverLink/categories";
   static const String aboutUs = "$serverLink/pages";
-  static const String infoPage = "$serverLink/info.php";
+  static const String infoPage = "$serverLink/social-accounts";
   static const String searchPage = "$serverLink/search.php";
   static const String senp = "$serverLink/s.php";
   static const String search  = "$serverLink/items/search.php";
