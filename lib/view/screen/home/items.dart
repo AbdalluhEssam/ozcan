@@ -7,7 +7,6 @@ import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:share/share.dart';
 import '../../../controller/items/items_controller.dart';
 import '../../../core/constant/routes.dart';
-import '../../../likeapi.dart';
 
 class ItemsView extends StatelessWidget {
   const ItemsView({Key? key}) : super(key: key);
@@ -43,6 +42,7 @@ class ItemsView extends StatelessWidget {
                     "adminId": controller.adminId,
                     "categoriesName": controller.categoriesName,
                     "ticketId": controller.ticketId,
+                    "slug": controller.items[index].slug,
                   });
                 },
                 child: Card(

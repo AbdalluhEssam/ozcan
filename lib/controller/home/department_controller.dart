@@ -59,7 +59,6 @@ class DepartmentControllerImp extends DepartmentController {
 
   @override
   void onInit() {
-    // ticket =UserTicketsModel();
     initialData();
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesName = Get.arguments['categoriesName'].toString();

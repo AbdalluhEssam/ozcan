@@ -22,9 +22,9 @@ class CategoriesPage extends GetView<HomeControllerImp> {
           automaticallyImplyLeading: false,
         ),
         body: GetBuilder<HomeControllerImp>(
-            builder: (controller) => Container(
+            builder: (controller) => HandlingDataView(statusRequest: controller.statusRequest, widget: Container(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
                 child: HandlingDataView(
                     statusRequest: controller.statusRequest,
                     widget: ListView.separated(
@@ -41,8 +41,8 @@ class CategoriesPage extends GetView<HomeControllerImp> {
                       itemCount: controller.categories.length,
                       separatorBuilder: (BuildContext context, int index) =>
                           SizedBox(
-                        height: 12,
-                      ),
-                    )))));
+                            height: 12,
+                          ),
+                    ))))));
   }
 }

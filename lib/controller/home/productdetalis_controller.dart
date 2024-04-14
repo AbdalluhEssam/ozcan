@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:ozcan/controller/items/items_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/data/model/itemsmodel.dart';
 import '../../core/class/statusrequest.dart';
@@ -28,8 +27,9 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late String? categoriesName;
   late String? ticketId;
   late String? userId;
+  late String? slug;
   String? categoriesColor;
-  late ItemsModel itemsModel;
+  late ItemsDetailsModel itemsModel;
   CartData cartData = CartData(Get.find());
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
 
@@ -39,6 +39,7 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   initialData() async {
     userId = myServices.sharedPreferences.getString('id');
   }
+
   RegExp urlRegExp = RegExp(
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
@@ -56,16 +57,16 @@ class ProductDetailsControllerImp extends ProductDetailsController {
 
   @override
   void onInit() {
-    itemsModel = Get.arguments['itemsModel'];
+    itemsModel = ItemsDetailsModel();
+    slug = Get.arguments['slug'];
     categoriesColor = Get.arguments['color'];
     categoriesId = Get.arguments['categoriesId'];
-    adminId = Get.arguments['adminId'];
-    ticketId = Get.arguments['ticketId'];
     categoriesName = Get.arguments['categoriesName'];
-    getData();
     initialData();
+    getData();
     super.onInit();
   }
+
   Future<bool?> addLike(id) async {
     // if (!itemsModel.usersId!.contains(userId.toString())) {
     //   var response = await departmentViewData.addLike(id);
@@ -88,23 +89,20 @@ class ProductDetailsControllerImp extends ProductDetailsController {
 
   @override
   getData() async {
-    // images.clear();
     statusRequest = StatusRequest.loading;
+    itemsModel = ItemsDetailsModel();
     update();
-    // cartData.ViewImage(itemsModel.itemsId).then((value) {
-    //   log("$value");
-    //   statusRequest = handlingData(value);
-    //   if (StatusRequest.success == statusRequest) {
-    //     if (value['status'] == "success") {
-    //       List pending = value['data'];
-    //       images.addAll(pending.map((e) => ImagesProduct.fromJson(e)));
-    //     } else {
-    //       statusRequest = StatusRequest.failure;
-    //     }
-    //   }
-    //
-    //   update();
-    // });
+    departmentViewData.getItemsDetailsData(slug!).then((value) {
+      log("$value");
+      statusRequest = handlingData(value);
+      if (StatusRequest.success == statusRequest) {
+        itemsModel = ItemsDetailsModel.fromJson(value['data']);
+      } else {
+        statusRequest = StatusRequest.failure;
+      }
+
+      update();
+    });
     update();
   }
 

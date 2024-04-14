@@ -16,6 +16,18 @@ class DepartmentViewData {
     });
     return response.fold((l) => l, (r) => r);
   }
+  getItemsData(String categoriesName) async {
+    var response = await crud.getData("${AppLink.items}?category_name=$categoriesName", {
+
+    });
+    return response.fold((l) => l, (r) => r);
+  }
+  getItemsDetailsData(String itemsName) async {
+    var response = await crud.getData("${AppLink.items}/$itemsName", {
+
+    });
+    return response.fold((l) => l, (r) => r);
+  }
 
   getTicketData(String userId,String categoriesId) async {
     var response = await crud.postData("https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$userId&category=$categoriesId", {

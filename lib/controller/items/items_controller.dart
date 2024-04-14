@@ -48,6 +48,7 @@ class ItemsControllerImp extends ItemsController {
   String? adminId;
   int? itemId;
   String? ticketId;
+  String? slug;
 
   @override
   initialData() {
@@ -77,12 +78,10 @@ class ItemsControllerImp extends ItemsController {
 
   @override
   void onInit() {
+    slug = Get.arguments['slug'].toString();
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesName = Get.arguments['categoriesName'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
-    adminId = Get.arguments['adminId'].toString();
-    itemId = Get.arguments['itemId'];
-    ticketId = Get.arguments['ticketId'];
     log(itemId.toString());
     initialData();
     getData();
@@ -112,19 +111,17 @@ class ItemsControllerImp extends ItemsController {
   @override
   getData() async {
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.getData(categoriesId!);
+    var response = await departmentViewData.getItemsData(slug!);
     if (kDebugMode) {
       print(
           "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        List item = response['items'];
-        items.addAll(item.map((e) => ItemsModel.fromJson(e)));
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      List item = response['data'];
+      items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+    } else {
+      statusRequest = StatusRequest.failure;
     }
     update();
   }

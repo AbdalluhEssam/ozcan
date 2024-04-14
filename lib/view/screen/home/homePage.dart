@@ -24,33 +24,34 @@ class HomePageView extends StatelessWidget {
               decoration: BoxDecoration(),
               child: Stack(
                 children: [
-                  CarouselSlider.builder(
-                    itemBuilder: (context, index, realIndex) {
-                      return PhotoProdects(
-                        photo_prodect: '${controller.images[index]['image']}',
-                      );
-                    },
-                    options: CarouselOptions(
-                      pageViewKey: PageStorageKey<String>('carousel_slider'),
-                      scrollPhysics: FixedExtentScrollPhysics(),
-                      reverse: false,
-                      height: Get.height,
-                      viewportFraction: 1,
-                      enlargeCenterPage: true,
-                      enableInfiniteScroll: true,
-                      autoPlay: true,
-                      autoPlayInterval: const Duration(seconds: 4),
-                      autoPlayAnimationDuration:
-                          const Duration(milliseconds: 800),
-                      autoPlayCurve: Curves.linear,
-                      onPageChanged: (index, _) {
-                        controller.currentIndex = index;
-                        controller.update();
+                  if (controller.images.isNotEmpty)
+                    CarouselSlider.builder(
+                      itemBuilder: (context, index, realIndex) {
+                        return PhotoProdects(
+                          photo_prodect: '${controller.images[index]['image']}',
+                        );
                       },
-                      scrollDirection: Axis.vertical,
+                      options: CarouselOptions(
+                        pageViewKey: PageStorageKey<String>('carousel_slider'),
+                        scrollPhysics: FixedExtentScrollPhysics(),
+                        reverse: false,
+                        height: Get.height,
+                        viewportFraction: 1,
+                        enlargeCenterPage: true,
+                        enableInfiniteScroll: true,
+                        autoPlay: true,
+                        autoPlayInterval: const Duration(seconds: 4),
+                        autoPlayAnimationDuration:
+                            const Duration(milliseconds: 800),
+                        autoPlayCurve: Curves.linear,
+                        onPageChanged: (index, _) {
+                          controller.currentIndex = index;
+                          controller.update();
+                        },
+                        scrollDirection: Axis.vertical,
+                      ),
+                      itemCount: controller.images.length,
                     ),
-                    itemCount: controller.images.length,
-                  ),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
