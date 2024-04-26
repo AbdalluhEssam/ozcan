@@ -18,7 +18,7 @@ class StoriesTopDepartment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StoriesTopControllerImp controller = Get.put(StoriesTopControllerImp());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = Color(int.parse(controller.categoriesColor!));
 
     return Scaffold(
       appBar: AppBar(
@@ -79,26 +79,26 @@ class StoriesTopDepartment extends StatelessWidget {
                                 (index) {
                                   controller.currentIndex = index;
                                   controller.itemsName =
-                                      controller.story[index]['note'];
+                                      controller.story[index].type;
                                   controller.image =
-                                      controller.story[index]['itemsImage'];
+                                      controller.story[index].mediaPath;
                                   controller.update();
                                   print(controller.currentIndex);
-                                  if (controller.story[index]['video']
+                                  if (controller.story[index].mediaType
                                           .toString() ==
-                                      "0") {
+                                      "image") {
                                     return StoryItem.pageImage(
                                       caption: Text(
-                                          "${controller.story[index].note}"),
+                                          "${controller.story[index].type}"),
                                       url:
-                                          "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                          "${controller.story[index].mediaPath}",
                                       controller: controller.storyController,
                                     );
                                   } else {
                                     return StoryItem.pageVideo(
-                                      "${AppLink.imageStory}/${controller.story[index]['image']}",
+                                      "${controller.story[index].mediaPath}",
                                       caption: Text(
-                                          "${controller.story[index].note}"),
+                                          "${controller.story[index].type}"),
                                       controller: controller.storyController,
                                     );
                                   }

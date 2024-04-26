@@ -10,7 +10,6 @@ class StoresWidget extends StatelessWidget {
   final String title;
   final Color primaryColor;
 
-
   const StoresWidget({
     super.key,
     this.onTap,
@@ -85,8 +84,8 @@ class StoresWidgetAfter extends StatelessWidget {
               decoration: BoxDecoration(shape: BoxShape.circle),
               child: CircleAvatar(
                 radius: 30,
-                child: Image.asset(
-                  photo,
+                child: CachedNetworkImage(
+                  imageUrl: photo,
                   width: Get.width,
                   fit: BoxFit.fill,
                 ),

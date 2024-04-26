@@ -22,8 +22,7 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   StoryController storyController = StoryController();
   TextEditingController textController = TextEditingController();
-  List<StoryModel> story = [];
-
+  List<HighlightsModel> story = [];
   int? currentIndex = 0;
 
   late StatusRequest statusRequest;
@@ -37,6 +36,7 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   String? categoriesColor;
   String? itemsName;
   String? image;
+  String? slug;
 
   @override
   initialData() {
@@ -49,8 +49,8 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   void onInit() {
     categoriesId = Get.arguments['categoriesId'];
     categoriesColor = Get.arguments['categoriesColor'];
-    adminId = Get.arguments['adminId'];
-    ticketId = Get.arguments['ticketId'];
+    slug = Get.arguments['slug'].toString();
+
     initialData();
     getData();
     statusRequest = StatusRequest.success;
@@ -61,35 +61,33 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   getData() async {
     story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.storyView(categoriesId!);
+    var response = await departmentViewData.getData(slug!);
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        List stores = response['story'];
-        story.addAll(stores.map((e) => StoryModel.fromJson(e)));
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      List stores = response['data']['daily_stories'];
+      story.addAll(stores.map((e) => HighlightsModel.fromJson(e)));
+    } else {
+      statusRequest = StatusRequest.failure;
     }
     update();
   }
 
   Future<bool?> addLike(id, index) async {
-    if (!story[index].userId!.contains(userId.toString())) {
-      var response = await departmentViewData.addLikeStory(id);
-      log("========================================================================$response");
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          story[index].count = (int.parse(story[index].count!) + 1).toString();
-          story[index].userId = "${userId}";
-          print(story[index].userId);
-          update();
-        }
-      }
-      update();
-    }
+    // if (!story[index].userId!.contains(userId.toString())) {
+    //   var response = await departmentViewData.addLikeStory(id);
+    //   log("========================================================================$response");
+    //   statusRequest = handlingData(response);
+    //   if (StatusRequest.success == statusRequest) {
+    //     if (response['status'] == "success") {
+    //       story[index].count = (int.parse(story[index].count!) + 1).toString();
+    //       story[index].userId = "${userId}";
+    //       print(story[index].userId);
+    //       update();
+    //     }
+    //   }
+    //   update();
+    // }
     return statusRequest == StatusRequest.success ? true : false;
   }
 

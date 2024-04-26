@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/department_data.dart';
+import 'package:ozcan/data/model/story.dart';
 import 'package:story_view/controller/story_controller.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
@@ -21,7 +22,7 @@ class StoriesTopControllerImp extends StoriesTopController {
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   StoryController storyController = StoryController();
   TextEditingController textController = TextEditingController();
-  List story = [];
+  List<HighlightsModel> story = [];
 
   int? currentIndex = 0;
 
@@ -37,6 +38,7 @@ class StoriesTopControllerImp extends StoriesTopController {
   String? categoriesColor;
   String? itemsName;
   String? image;
+  String? slug;
 
   @override
   initialData() {
@@ -47,13 +49,11 @@ class StoriesTopControllerImp extends StoriesTopController {
 
   @override
   void onInit() {
+    statusRequest = StatusRequest.loading;
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
-    departmentId = Get.arguments['departmentId'].toString();
-    adminId = Get.arguments['adminId'].toString();
-    ticketId = Get.arguments['ticketId'];
-
-    getData();
+    slug = Get.arguments['slug'].toString();
+    // getData();
     statusRequest = StatusRequest.success;
     super.onInit();
   }
@@ -62,32 +62,31 @@ class StoriesTopControllerImp extends StoriesTopController {
   getData() async {
     story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.storyTop(departmentId!);
+    var response = await departmentViewData.getData(slug!);
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        story.addAll(response['story']);
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      List stores = response['data']['highlights'];
+      story.addAll(stores.map((e) => HighlightsModel.fromJson(e)));
+    } else {
+      statusRequest = StatusRequest.failure;
     }
     update();
   }
 
-  addLikes() async {
-    story.clear();
-    statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.addLike(currentIndex.toString());
-    log("========================================================================$response");
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        update();
-      }
-    }
-    update();
-  }
+  // addLikes() async {
+  //   story.clear();
+  //   statusRequest = StatusRequest.loading;
+  //   var response = await departmentViewData.addLike(currentIndex.toString());
+  //   log("========================================================================$response");
+  //   statusRequest = handlingData(response);
+  //   if (StatusRequest.success == statusRequest) {
+  //     if (response['status'] == "success") {
+  //       update();
+  //     }
+  //   }
+  //   update();
+  // }
 
   @override
   goToItems(categories, selectedCat, catId) {

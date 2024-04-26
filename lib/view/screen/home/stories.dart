@@ -6,8 +6,6 @@ import 'package:like_button/like_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ozcan/controller/home/stories_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
-import 'package:ozcan/likeapi.dart';
-import 'package:story_view/controller/story_controller.dart';
 import 'package:story_view/widgets/story_view.dart';
 import '../../../core/constant/color.dart';
 import '../../../core/constant/imageassets.dart';
@@ -69,175 +67,152 @@ class StoriesDepartment extends StatelessWidget {
             children: [
               controller.story.isNotEmpty
                   ? Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        width: Get.width,
-                        child: Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: StoryView(
-                            storyItems: [
-                              ...List.generate(
-                                controller.story.length,
-                                (index) {
-                                  controller.currentIndex = index;
-                                  controller.itemsName =
-                                      controller.story[index].note;
-                                  controller.image =
-                                      "${AppLink.imageStory}/${controller.story[index].image}";
-                                  controller.update();
-                                  print(controller.currentIndex);
-                                  if (controller.story[index].video
-                                          .toString() ==
-                                      "0") {
-                                    return StoryItem.pageImage(
-                                      caption:
-                                          Text("${controller.story[index].note}"),
-                                      url:
-                                          "${AppLink.imageStory}/${controller.story[index].image}",
-                                      controller: StoryController(),
-                                    );
-                                  } else {
-                                    return StoryItem.pageVideo(
-                                      "${AppLink.imageStory}/${controller.story[index].image}",
-                                      caption:
-                                          Text("${controller.story[index].note}"),
-                                      controller: StoryController(),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                            controller: controller.storyController,
-                            inline: true,
-                            repeat: false,
-                            indicatorForegroundColor: primaryColor,
-                            onStoryShow:(storyItem, index) {
-
-                            },
-                            onComplete: () {
-                              Get.back();
-                            },
-                          ),
+                flex: 2,
+                child: SizedBox(
+                  width: Get.width,
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: StoryView(
+                      storyItems: [
+                        ...List.generate(
+                          controller.story.length,
+                              (index) {
+                            controller.currentIndex = index;
+                            controller.itemsName =
+                                controller.story[index].type;
+                            controller.image =
+                                controller.story[index].mediaPath;
+                            controller.update();
+                            print(controller.currentIndex);
+                            if (controller.story[index].mediaType
+                                .toString() ==
+                                "image") {
+                              return StoryItem.pageImage(
+                                caption: Text(
+                                    "${controller.story[index].type}"),
+                                url:
+                                "${controller.story[index].mediaPath}",
+                                controller: controller.storyController,
+                              );
+                            } else {
+                              return StoryItem.pageVideo(
+                                "${controller.story[index].mediaPath}",
+                                caption: Text(
+                                    "${controller.story[index].type}"),
+                                controller: controller.storyController,
+                              );
+                            }
+                          },
                         ),
-                      ),
-                    )
+                      ],
+                      controller: controller.storyController,
+                      inline: true,
+                      repeat: false,
+                      indicatorForegroundColor: primaryColor,
+                      onComplete: () {
+                        Get.back();
+                      },
+                    ),
+                  ),
+                ),
+              )
                   : Expanded(
-                      child: Lottie.asset(AppImageAssets.loading,
-                          width: 250, height: 250)),
+                  child: Lottie.asset(AppImageAssets.offline,
+                      width: 250, height: 250)),
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: [
                     Expanded(
                         child: SizedBox(
-                      height: 50,
-                      child: TextFormField(
-                        textAlign: TextAlign.start,
-                        controller: controller.textController,
-                        onTap: () {
-                          if (controller.myServices.sharedPreferences
+                          height: 50,
+                          child: TextFormField(
+                            textAlign: TextAlign.start,
+                            controller: controller.textController,
+                            onTap: () {
+                              if (controller.myServices.sharedPreferences
                                   .getString("username") !=
-                              null) {
-                            Get.toNamed(AppRoute.chatsDetailsScreen,
-                                arguments: {
-                                  "color": primaryColor,
-                                  "categoriesId": controller.categoriesId,
-                                  "adminId": controller.adminId,
-                                  "itemsName": controller.itemsName,
-                                  "itemsImage": controller.image,
-                                  "ticketId": controller.ticketId,
-                                });
-                          } else {
-                            Get.toNamed(AppRoute.login);
-                          }
+                                  null) {
+                                Get.toNamed(AppRoute.chatsDetailsScreen,
+                                    arguments: {
+                                      "color": primaryColor,
+                                      "categoriesId": controller.categoriesId,
+                                      "adminId": controller.adminId,
+                                      "itemsName": controller.itemsName,
+                                      "itemsImage": controller.image,
+                                      "ticketId": controller.ticketId,
+                                    });
+                              } else {
+                                Get.toNamed(AppRoute.login);
+                              }
 
-                          controller.storyController.pause();
-                        },
-                        onFieldSubmitted: (value) {
-                          controller.storyController.play();
-                        },
-                        keyboardType: TextInputType.emailAddress,
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold),
-                        toolbarOptions: ToolbarOptions(
-                            selectAll: true,
-                            copy: true,
-                            cut: true,
-                            paste: true),
-                        enabled: true,
-                        focusNode: FocusNode(canRequestFocus: true),
-                        cursorColor: primaryColor,
-                        decoration: InputDecoration(
+                              controller.storyController.pause();
+                            },
+                            onFieldSubmitted: (value) {
+                              controller.storyController.play();
+                            },
+                            keyboardType: TextInputType.emailAddress,
+                            style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
+                            toolbarOptions: ToolbarOptions(
+                                selectAll: true,
+                                copy: true,
+                                cut: true,
+                                paste: true),
                             enabled: true,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                width: 2,
-                                strokeAlign: 5,
-                                color: Color(0xffA659A9),
-                              ),
-                            ),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(10),
-                                borderSide: BorderSide(
+                            focusNode: FocusNode(canRequestFocus: true),
+                            cursorColor: primaryColor,
+                            decoration: InputDecoration(
+                                enabled: true,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
                                     width: 2,
                                     strokeAlign: 5,
-                                    color: Colors.black)),
-                            prefixIcon: IconButton(
-                                onPressed: () {
-                                  controller.textController.clear();
-                                },
-                                icon: Icon(FontAwesome5.telegram_plane)),
-                            focusColor: Color(0xfff7901e),
-                            hintText: ("تواصل الان معنا..."),
-                            hintStyle: TextStyle(
-                              color: Colors.black,
-                            )),
-                      ),
-                    )),
+                                    color: Color(0xffA659A9),
+                                  ),
+                                ),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                    borderSide: BorderSide(
+                                        width: 2,
+                                        strokeAlign: 5,
+                                        color: Colors.black)),
+                                prefixIcon: IconButton(
+                                    onPressed: () {
+                                      controller.textController.clear();
+                                    },
+                                    icon: Icon(FontAwesome5.telegram_plane)),
+                                focusColor: Color(0xfff7901e),
+                                hintText: ("تواصل الان معنا..."),
+                                hintStyle: TextStyle(
+                                  color: Colors.black,
+                                )),
+                          ),
+                        )),
                     SizedBox(
                       width: 15,
                     ),
-                    controller.story.isNotEmpty?
-                      LikeButton(
-                        isLiked: controller
-                            .story[controller.currentIndex ?? 0].userId
-                            ?.contains(controller.userId.toString()),
-                        likeCount: int.parse(controller.story[controller.currentIndex ?? 0].count!),
-                        countPostion: CountPostion.left,
-                        circleColor:
-                            CircleColor(start: Colors.white, end: primaryColor),
-                        onTap: (isLiked) {
-                          print("controller.currentIndex : ${controller.currentIndex}");
-                          print("controller.currentIndex : ${controller.story[controller.currentIndex ?? 0].storyId!}");
-                          if (controller.userId == "null") {
-                            Get.toNamed(AppRoute.login);
-                          }
-                          return controller.addLike(
-                              controller
-                                  .story[controller.currentIndex ?? 0].storyId,
-                              controller.currentIndex ?? 0);
-                        },
-                      ) :
-                    LikeButton(
-                      likeCount: 0,
-                      countPostion: CountPostion.left,
-                      circleColor:
-                      CircleColor(start: Colors.white, end: primaryColor),
-                      onTap: (isLiked) {
-                        print(
-                            "controller.currentIndex : ${controller.currentIndex}");
-                        if (controller.userId == "null") {
-                          Get.toNamed(AppRoute.login);
-                        }
-                        return controller.addLike(
-                            controller
-                                .story[controller.currentIndex ?? 0].storyId,
-                            controller.currentIndex ?? 0);
-                      },
-                    ),
+                    // LikeButton(
+                    //   size: 50,
+                    //   circleColor: CircleColor(
+                    //       start: Color(0xffA659A9), end: Color(0xffA659A9)),
+                    //   bubblesColor: BubblesColor(
+                    //     dotPrimaryColor: primaryColor,
+                    //     dotSecondaryColor: Colors.black,
+                    //   ),
+                    //   likeBuilder: (bool isLiked) {
+                    //     controller.update();
+                    //     return Icon(
+                    //       isLiked ? Icons.favorite : Icons.favorite_outline,
+                    //       color: isLiked ? Color(0xffA659A9) : Colors.black,
+                    //       size: 40,
+                    //     );
+                    //   },
+                    //   countPostion: CountPostion.right,
+                    // ),
                   ],
                 ),
               ),

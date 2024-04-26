@@ -118,30 +118,31 @@ class DepartmentView extends StatelessWidget {
                                   scrollDirection: Axis.horizontal,
                                   child: Row(
                                     children: [
-                                      StoresWidgetAfter(
-                                        photo: "assets/images/call.png",
-                                        primaryColor: primaryColor,
-                                        onTap: () {
-                                          if (controller.story.isNotEmpty)
-                                            Get.toNamed(
-                                                AppRoute.storiesDepartment,
-                                                arguments: {
-                                                  "categoriesId":
-                                                      controller.categoriesId,
-                                                  "categoriesColor": controller
-                                                      .categoriesColor,
-                                                  "adminId": controller.adminId,
-                                                  "categoriesName":
-                                                      controller.categoriesName,
-                                                  "ticketId":
-                                                      controller.ticketId,
-                                                });
-                                        },
-                                        show: controller.story.isNotEmpty,
-                                      ),
-                                      if (controller.departmentStory.isNotEmpty)
+                                      if (controller.story.isNotEmpty)
+                                        StoresWidgetAfter(
+                                          photo:
+                                              "${controller.story.first['media_path']}",
+                                          primaryColor: primaryColor,
+                                          onTap: () {
+                                            if (controller.story.isNotEmpty)
+                                              Get.toNamed(
+                                                  AppRoute.storiesDepartment,
+                                                  arguments: {
+                                                    "categoriesId":
+                                                        controller.categoriesId,
+                                                    "categoriesColor":
+                                                        controller
+                                                            .categoriesColor,
+                                                    "categoriesName": controller
+                                                        .categoriesName,
+                                                    "slug":controller.slug,
+                                                  });
+                                          },
+                                          show: controller.story.isNotEmpty,
+                                        ),
+                                      if (controller.storyTop.isNotEmpty)
                                         ...List.generate(
-                                          controller.departmentStory.length,
+                                          1,
                                           (index) => Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 8),
@@ -157,26 +158,21 @@ class DepartmentView extends StatelessWidget {
                                                         "categoriesColor":
                                                             controller
                                                                 .categoriesColor,
-                                                        "adminId":
-                                                            controller.adminId,
-                                                        "ticketId":
-                                                            controller.ticketId,
                                                         "categoriesName":
                                                             controller
                                                                 .categoriesName,
-                                                        "departmentId": controller
-                                                                .departmentStory[
-                                                            index]['department_id'],
+                                                        "slug": controller.slug,
                                                       });
                                                 },
                                                 primaryColor: primaryColor,
                                                 title:
-                                                    "${controller.departmentStory[index]['title']}",
+                                                    // "${controller.story.first['title']}",
+                                                    "",
                                                 photo:
-                                                    "${AppLink.imageStory}/${controller.departmentStory[index]['image']}"),
+                                                    "${controller.storyTop[index]['media_path']}"),
                                           ),
                                         ),
-                                      if (controller.departmentStory.isEmpty)
+                                      if (controller.storyTop.isEmpty)
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               right: 8, bottom: 20),
@@ -353,10 +349,11 @@ class DepartmentView extends StatelessWidget {
                                             tag:
                                                 "${controller.items[index].id}",
                                             child: CachedNetworkImage(
-                                              alignment: Alignment.center,
+                                                alignment: Alignment.center,
                                                 width: Get.width,
                                                 fit: BoxFit.fill,
-                                                imageUrl:'${controller.items[index].image}'),
+                                                imageUrl:
+                                                    '${controller.items[index].image}'),
                                           ),
                                         )),
                                     itemCount: controller.items.length,
