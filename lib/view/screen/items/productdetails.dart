@@ -8,9 +8,7 @@ import 'package:ozcan/controller/home/productdetalis_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
-import 'package:ozcan/view/widget/view/Projects_pages.dart';
 import '../../../Constants.dart';
-import '../../../likeapi.dart';
 
 class ProductDetails extends StatelessWidget {
   const ProductDetails({super.key});
@@ -259,8 +257,11 @@ class ProductDetails extends StatelessWidget {
                                             color: Colors.black),
                                       )
                                     ]),
-                                separatorBuilder: (context, index) => SizedBox(
-                                      width: 12,
+                                separatorBuilder: (context, index) => Container(
+                                      color: primaryColor,
+                                      width: 3,
+                                      margin: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 5),
                                     ),
                                 itemCount:
                                     controller.itemsModel.stock?.length ?? 0),

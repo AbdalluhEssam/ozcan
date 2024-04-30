@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
-import 'package:ozcan/likeapi.dart';
 import 'package:story_view/widgets/story_view.dart';
 import '../../../controller/home/storiestop_controller.dart';
 import '../../../core/constant/color.dart';
@@ -84,9 +82,7 @@ class StoriesTopDepartment extends StatelessWidget {
                                       controller.story[index].mediaPath;
                                   controller.update();
                                   print(controller.currentIndex);
-                                  if (controller.story[index].mediaType
-                                          .toString() ==
-                                      "image") {
+                                  if (controller.story[index].mediaType.toString() == "image") {
                                     return StoryItem.pageImage(
                                       caption: Text(
                                           "${controller.story[index].type}"),
@@ -195,24 +191,24 @@ class StoriesTopDepartment extends StatelessWidget {
                     SizedBox(
                       width: 15,
                     ),
-                    LikeButton(
-                      size: 50,
-                      circleColor: CircleColor(
-                          start: Color(0xffA659A9), end: Color(0xffA659A9)),
-                      bubblesColor: BubblesColor(
-                        dotPrimaryColor: primaryColor,
-                        dotSecondaryColor: Colors.black,
-                      ),
-                      likeBuilder: (bool isLiked) {
-                        controller.update();
-                        return Icon(
-                          isLiked ? Icons.favorite : Icons.favorite_outline,
-                          color: isLiked ? Color(0xffA659A9) : Colors.black,
-                          size: 40,
-                        );
-                      },
-                      countPostion: CountPostion.right,
-                    ),
+                    // LikeButton(
+                    //   size: 50,
+                    //   circleColor: CircleColor(
+                    //       start: Color(0xffA659A9), end: Color(0xffA659A9)),
+                    //   bubblesColor: BubblesColor(
+                    //     dotPrimaryColor: primaryColor,
+                    //     dotSecondaryColor: Colors.black,
+                    //   ),
+                    //   likeBuilder: (bool isLiked) {
+                    //     controller.update();
+                    //     return Icon(
+                    //       isLiked ? Icons.favorite : Icons.favorite_outline,
+                    //       color: isLiked ? Color(0xffA659A9) : Colors.black,
+                    //       size: 40,
+                    //     );
+                    //   },
+                    //   countPostion: CountPostion.right,
+                    // ),
                   ],
                 ),
               )

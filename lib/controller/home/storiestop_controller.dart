@@ -11,9 +11,7 @@ import 'home_controller.dart';
 
 abstract class StoriesTopController extends SearchMaxController {
   initialData();
-
   getData();
-
   goToItems(List categories, int selectedCat, String catId);
 }
 
@@ -32,6 +30,7 @@ class StoriesTopControllerImp extends StoriesTopController {
   String? email;
   String? id;
   String? categoriesId;
+  String? highlightsId;
   String? adminId;
   String? ticketId;
   String? departmentId;
@@ -49,12 +48,11 @@ class StoriesTopControllerImp extends StoriesTopController {
 
   @override
   void onInit() {
-    statusRequest = StatusRequest.loading;
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
+    highlightsId = Get.arguments['highlightsId'].toString();
     slug = Get.arguments['slug'].toString();
-    // getData();
-    statusRequest = StatusRequest.success;
+    getData();
     super.onInit();
   }
 
@@ -62,11 +60,11 @@ class StoriesTopControllerImp extends StoriesTopController {
   getData() async {
     story.clear();
     statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.getData(slug!);
+    var response = await departmentViewData.storyView(highlightsId!);
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      List stores = response['data']['highlights'];
+      List stores = response['data'];
       story.addAll(stores.map((e) => HighlightsModel.fromJson(e)));
     } else {
       statusRequest = StatusRequest.failure;

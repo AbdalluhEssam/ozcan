@@ -8,7 +8,6 @@ import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
 import '../../../core/class/handlingdataview.dart';
-import '../../../likeapi.dart';
 import '../../widget/home/department_widget.dart';
 import '../home/searchscreen.dart';
 
@@ -120,8 +119,7 @@ class DepartmentView extends StatelessWidget {
                                     children: [
                                       if (controller.story.isNotEmpty)
                                         StoresWidgetAfter(
-                                          photo:
-                                              "${controller.story.first['media_path']}",
+                                          photo:"${controller.story.first['media_path']}",
                                           primaryColor: primaryColor,
                                           onTap: () {
                                             if (controller.story.isNotEmpty)
@@ -136,40 +134,37 @@ class DepartmentView extends StatelessWidget {
                                                     "categoriesName": controller
                                                         .categoriesName,
                                                     "slug":controller.slug,
+
                                                   });
                                           },
                                           show: controller.story.isNotEmpty,
                                         ),
                                       if (controller.storyTop.isNotEmpty)
                                         ...List.generate(
-                                          1,
-                                          (index) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 8),
-                                            child: StoresWidget(
-                                                onTap: () {
-                                                  Get.toNamed(
-                                                      AppRoute
-                                                          .storiesTopDepartment,
-                                                      arguments: {
-                                                        "categoriesId":
-                                                            controller
-                                                                .categoriesId,
-                                                        "categoriesColor":
-                                                            controller
-                                                                .categoriesColor,
-                                                        "categoriesName":
-                                                            controller
-                                                                .categoriesName,
-                                                        "slug": controller.slug,
-                                                      });
-                                                },
-                                                primaryColor: primaryColor,
-                                                title:
-                                                    // "${controller.story.first['title']}",
-                                                    "",
-                                                photo:
-                                                    "${controller.storyTop[index]['media_path']}"),
+                                          controller.storyTop.length,
+                                          (index) => Visibility(
+                                            visible:controller.storyTop[index]['media_type'] != 'video' ,
+                                            child: Padding(
+                                              padding: const EdgeInsets.symmetric(
+                                                  horizontal: 8),
+                                              child: StoresWidget(
+                                                  onTap: () {
+                                                    Get.toNamed(
+                                                        AppRoute.storiesTopDepartment,
+                                                        arguments: {
+                                                          "categoriesId":controller.categoriesId,
+                                                          "categoriesColor":controller.categoriesColor,
+                                                          "categoriesName":controller.categoriesName,
+                                                          "slug": controller.slug,
+                                                          "highlightsId":controller.storyTop[index]['id'].toString(),
+                                                        });
+                                                  },
+                                                  primaryColor: primaryColor,
+                                                  title:
+                                                      // "${controller.story.first['title']}",
+                                                  "${controller.storyTop[index]['note']}",
+                                                  photo: "${controller.storyTop[index]['media_path']}"),
+                                            ),
                                           ),
                                         ),
                                       if (controller.storyTop.isEmpty)

@@ -47,6 +47,8 @@ class StoresWidget extends StatelessWidget {
         Text(
           title,
           style: Third_font_home,
+          overflow: TextOverflow.ellipsis,
+          maxLines: 1,
         ),
       ],
     );

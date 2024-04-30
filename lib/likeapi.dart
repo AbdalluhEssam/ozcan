@@ -56,7 +56,7 @@ class AppLink {
 //================================== OFFERS ===============================//
   static const String offers = "$serverLink/offers.php";
 //================================== story ===============================//
-  static const String story = "$serverLink/categories/story.php";
+  static const String story = "$serverLink/categories/highlights";
   static const String storyTop = "$serverLink/categories/storytop.php";
   static const String updateLike = "$serverLink/categories/updatalike.php";
 //================================== Chat ===============================//
