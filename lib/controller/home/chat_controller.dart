@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
@@ -18,16 +17,17 @@ import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 import 'package:record/record.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 abstract class ChatController extends GetxController {
   initialData();
-
-  viewChat();
 
   addMassage();
 }
 
 class ChatControllerImp extends ChatController {
+  IO.Socket socket = IO.io("https://sok.cp.ozcanbrand.com/");
+
   MyServices myServices = Get.find();
   ChatData chatData = ChatData(Get.find());
   RegExp urlRegExp = RegExp(r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
@@ -47,6 +47,7 @@ class ChatControllerImp extends ChatController {
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+
   bool containsLinkImage(String text) {
     return urlRegExpImage.hasMatch(text);
   }
@@ -55,10 +56,12 @@ class ChatControllerImp extends ChatController {
     RegExpMatch? match = urlRegExp.firstMatch(text);
     return match != null ? match.group(0)! : '';
   }
+
   String extractLinkAudio(String text) {
     RegExpMatch? match = urlRegExpAudio.firstMatch(text);
     return match != null ? match.group(0)! : '';
   }
+
   String extractLinkImage(String text) {
     RegExpMatch? match = urlRegExpImage.firstMatch(text);
     return match != null ? match.group(0)! : '';
@@ -85,10 +88,6 @@ class ChatControllerImp extends ChatController {
     return match != null ? match.group(1)! : '';
   }
 
-  List<Ticket> chat = [];
-  List<Ticket> chatNew = [];
-  late UserTicketsModel ticket;
-
   TextEditingController myControllerMassage = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -96,6 +95,7 @@ class ChatControllerImp extends ChatController {
   late String enteredText;
   late StatusRequest statusRequest;
   String? idUser;
+  String? token;
   String? username;
   String? email;
   String? categoriesId;
@@ -120,6 +120,7 @@ class ChatControllerImp extends ChatController {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
     idUser = myServices.sharedPreferences.getString("id");
+    token = myServices.sharedPreferences.getString("token");
   }
 
   Future<void> playRecording() async {
@@ -152,8 +153,6 @@ class ChatControllerImp extends ChatController {
     categoriesId = Get.arguments['categoriesId'];
     categoriesName = Get.arguments['categoriesName'];
     categoriesColor = Get.arguments['color'];
-    adminId = Get.arguments['adminId'];
-    ticketId = Get.arguments['ticketId'].toString();
     itemsName = Get.arguments['itemsName'];
     itemsImage = Get.arguments['itemsImage'];
     if (itemsImage != null) {
@@ -164,15 +163,9 @@ class ChatControllerImp extends ChatController {
         ? "\n\n $itemsImage\n${"اريد الاستفسار عن " + itemsName!}"
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
-    if (ticketId == "null") {
-      addFirst();
-    }
-    if (ticketId != "null") {
-      viewChat();
-    }
+    getConversationsData();
 
-    log("***********************************  $ticketId");
-    if (chat.isNotEmpty) {
+    if (messages.isNotEmpty) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         // Scroll to the end of the list
         if (scrollController != null && scrollController.hasClients) {
@@ -187,28 +180,20 @@ class ChatControllerImp extends ChatController {
   @override
   addMassage() async {
     if (formKey.currentState!.validate()) {
-      FirebaseFirestore.instance
-          .collection('messages')
-          .doc(ticketId)
-          .collection('messages')
-          .add({
-        "category": categoriesId.toString(),
-        "msg": myControllerMassage.text,
-        "reply": "", // Convert numbers to strings
-        "send": "Admin", // Convert numbers to strings
-        "status": "1", // Convert numbers to strings
-        "t": DateTime.now().toUtc().toString(),
-        "ticketId": ticketId.toString(),
-        "usr": username.toString(),
-      }).then((value) {
+      statusRequest = StatusRequest.loading;
+      messages.clear();
+      var response = await chatData.addMassage(token.toString(),
+          categoriesId.toString(), myControllerMassage.text, "text", "");
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
         myControllerMassage.clear();
-        hasLinkController = false;
-        hasLink = false;
-        update();
-      }).catchError((onError) {
-        print("Error Is $onError");
-        update();
-      });
+        getConversationsData();
+      } else {
+        statusRequest = StatusRequest.failure;
+      }
+
+      update();
     }
     update();
   }
@@ -280,105 +265,21 @@ class ChatControllerImp extends ChatController {
     log(ordersId.toString());
   }
 
-  addFirst() async {
-    var response = await chatData.addFirstAcc(
-      username.toString(),
-      email.toString(),
-      categoriesId.toString(),
-      1.toString(),
-      2.toString(),
-      "New Ticket".toString(),
-      "هل يمكننى التواصل مع احد ممثلى الخدمة".toString(),
-      idUser.toString(),
-    );
-
-    log("========================================================================$response");
-
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['message'] == "Already Ticket Found") {
-        getTicket();
-
-      } else {
-        getTicket();
-      }
-    }
-    update();
-  }
-
-  List<Ticket> messages = [];
+  List<ConversationsModel> messages = [];
   DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
-  @override
-  viewChat() async {
-    // if (ticketId != "null") {
-    //   dbRef.child("messages/$ticketId").onChildAdded.listen((event) {
-    //     var data = event.snapshot.value;
-    //     Ticket ticketData = Ticket.fromJson(Map<String, dynamic>.from(data as Map<String, dynamic>));
-    //     chat.add(ticketData);
-    //       log("ppppppppppppppppppppp : ${chat}");
-    //     if (chat.length != count) {
-    //       count += 1;
-    //       WidgetsBinding.instance.addPostFrameCallback((_) {
-    //         // Scroll to the end of the list
-    //         if (scrollController != null && scrollController.hasClients) {
-    //           scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    //         }
-    //       });
-    //     }
-    //
-    //     print("RealTime DB: $data");
-    //   }).onError((handleError){
-    //     log("pppERRRRRRRRRRRRRRRR : ${handleError}");
-    //
-    //   });
-    // }
-    if (ticketId != "null") {
-      FirebaseFirestore.instance
-          .collection('messages')
-          .doc(ticketId)
-          .collection('messages')
-          .orderBy('t')
-          .snapshots()
-          .listen((event) {
-        chat.clear();
-        for (var element in event.docs) {
-          chat.add(Ticket.fromJson(element.data()));
-          if (chat.length != count) {
-            count += 1;
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              // Scroll to the end of the list
-              if (scrollController != null && scrollController.hasClients) {
-                scrollController
-                    .jumpTo(scrollController.position.maxScrollExtent);
-              }
-            });
-          }
-        }
-        update();
-      });
-    }
-  }
-
-  getTicket() async {
-    chat.clear();
-    var response = await chatData.getTicketData(
-        idUser.toString(), categoriesId.toString());
+  getConversationsData() async {
+    statusRequest = StatusRequest.loading;
+    messages.clear();
+    var response = await chatData.getConversationsData(
+        token.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['message'] != "No Ticket Yet") {
-        ticket = UserTicketsModel.fromJson(response['User_Tickets']);
-        viewChat();
-      } else {
-        // ticket = UserTicketsModel();
-      }
-    }
-    log("message : ${ticket.id}");
-
-    if (ticket.id!.isNotEmpty) {
-      ticketId = ticket.id.toString();
-      viewChat();
+      List message = response['data'];
+      messages.addAll(message.map((e) => ConversationsModel.fromJson(e)));
+    } else {
+      statusRequest = StatusRequest.failure;
     }
 
     update();
@@ -387,15 +288,6 @@ class ChatControllerImp extends ChatController {
   AudioPlayer audioPlayer = AudioPlayer();
   String audioURL = "";
 
-  // Future<bool> checkPermission() async {
-  //   if (!await Permission.microphone.isGranted) {
-  //     PermissionStatus status = await Permission.microphone.request();
-  //     if (status != PermissionStatus.granted) {
-  //       return false;
-  //     }
-  //   }
-  //   return true;
-  // }
   bool recording = false;
 
   recordingChanged(value) {

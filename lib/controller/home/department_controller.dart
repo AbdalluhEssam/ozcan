@@ -21,7 +21,6 @@ class DepartmentControllerImp extends DepartmentController {
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
   ChatData chatData = ChatData(Get.find());
 
-  late UserTicketsModel ticket ;
   List banner = [];
   List departmentStory = [];
   List story = [];

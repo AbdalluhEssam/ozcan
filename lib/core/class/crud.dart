@@ -8,15 +8,13 @@ import 'package:path/path.dart';
 import '../functions/checkinterner.dart';
 
 class Crud {
-  Future<Either<StatusRequest, Map>> postData(String linkurl, Map data) async {
+  Future<Either<StatusRequest, Map>> postData(String linkurl, Map data,   {String? token}) async {
     try {
       if (await checkInternet()) {
-        var response = await http.post(Uri.parse(linkurl),
-            body: data,
-        //     headers: {
-        //   "Content-Type": "application/json",
-        //   "Accept": "application/json",
-        // }
+        var response = await http.post(
+          Uri.parse(linkurl),
+          body: data,
+            headers: {"Authorization": "Bearer $token"}
         );
         print(response.statusCode);
         if (response.statusCode == 200 || response.statusCode == 201) {
@@ -34,10 +32,12 @@ class Crud {
     }
   }
 
-  Future<Either<StatusRequest, Map>> getData(String linkurl, Map data) async {
+  Future<Either<StatusRequest, Map>> getData(String linkurl, Map data,
+      {String? token}) async {
     try {
       if (await checkInternet()) {
-        var response = await http.get(Uri.parse(linkurl));
+        var response = await http.get(Uri.parse(linkurl),
+            headers: {"Authorization": "Bearer $token"});
         print(response.statusCode);
         if (response.statusCode == 200 || response.statusCode == 201) {
           Map responsebody = jsonDecode(response.body);

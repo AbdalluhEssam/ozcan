@@ -30,20 +30,23 @@ class HomeControllerImp extends HomeController {
   String? username;
   String? email;
   String? id;
+  String? token;
 
   @override
   initialData() {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
     id = myServices.sharedPreferences.getString("id");
+    token = myServices.sharedPreferences.getString("token");
   }
 
   @override
   void onInit() {
     initialData();
+    log(token.toString());
     FirebaseMessaging.instance.getToken().then((value) {
       String? token = value;
-      log(token.toString());
+      // log(token.toString());
     });
     FirebaseMessaging.instance.subscribeToTopic("users");
     if (myServices.sharedPreferences.getString("id") != null) {

@@ -8,7 +8,6 @@ import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:ozcan/controller/home/chat_controller.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import '../../../data/model/massage_model.dart';
@@ -77,7 +76,7 @@ class ChatsDetailsScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Column(
               children: [
-                controller.chat.isNotEmpty
+                controller.messages.isNotEmpty
                     ? Expanded(
                         child: Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -86,21 +85,21 @@ class ChatsDetailsScreen extends StatelessWidget {
                             controller: controller.scrollController,
                             shrinkWrap: true,
                             itemBuilder: (context, index) {
-                              if (controller.chat[index].usr ==
+                              if (controller.messages[index].senderUsername ==
                                   "${controller.username}") {
-                                return buildMyMessage(controller.chat[index],
-                                    controller.categoriesColor!);
+                                return buildMyMessage(controller.messages[index],
+                                    controller.categoriesColor!, index);
                               }
                               return GetBuilder<ChatControllerImp>(
                                 builder: (controller) =>
-                                    buildMessage(controller.chat[index]),
+                                    buildMessage(controller.messages[index], index),
                               );
                             },
                             separatorBuilder: (context, index) =>
                                 const SizedBox(
                                   height: 8,
                                 ),
-                            itemCount: controller.chat.length),
+                            itemCount: controller.messages.length),
                       ))
                     : Expanded(
                         child: Center(
@@ -261,108 +260,58 @@ class ChatsDetailsScreen extends StatelessWidget {
     await launchUrlString("whatsapp://send?phone=+9647746423382");
   }
 
-  Widget buildMessage(Ticket model) {
+  Widget buildMessage(ConversationsModel model, index) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
-    if (model.msg!.contains("confirmBtn")) {
-      if (!controller.ordersId.any((element) => element.containsAll(
-          {int.parse(controller.extractConfirmationCode(model.msg!)), 0}))) {
-        if (!controller.ordersId.any((element) => element.containsAll(
-            {int.parse(controller.extractConfirmationCode(model.msg!)), 1}))) {
-          controller.orderId(controller.extractConfirmationCode(model.msg!));
-        }
-      }
-      log(controller.indexOrder.toString());
-    }
     return Align(
       alignment: AlignmentDirectional.centerEnd,
-      child: model.msg!.contains("mp3") == true ||
-              model.msg!.contains("ogg") == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                VoiceMessageView(
-                  circlesColor: controller.categoriesColor!,
-                  backgroundColor: Colors.grey[300]!,
-                  controller: VoiceController(
-                    audioSrc: '${controller.extractLinkAudio(model.msg!)}',
-                    maxDuration: const Duration(seconds: 10),
-                    isFile: false,
-                    onComplete: () {},
-                    onPause: () {},
-                    onPlaying: () {},
-                    onError: (err) {
-                      print('Error: $err');
-                    },
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      DateFormat.Hm('ar_EG')
-                          .format(DateTime.parse(model.t))
-                          .toString(),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                    Text("  -  "),
-                    Text(
-                      DateFormat.yMMMMd('ar_EG')
-                          .format(DateTime.parse(model.t))
-                          .toString(),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 10),
-                    ),
-
-
-                  ],
-                )
-              ],
-            )
-          : Container(
-              constraints: BoxConstraints(maxWidth: 300),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                      constraints: BoxConstraints(maxWidth: 300),
-                      clipBehavior: Clip.antiAliasWithSaveLayer,
-                      padding: controller.containsLinkImage(model.msg!)? EdgeInsets.zero:EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-
-                      decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: const BorderRadiusDirectional.only(
-                            bottomEnd: Radius.circular(10),
-                            bottomStart: Radius.circular(10),
-                            topStart: Radius.circular(10),
-                          )),
-                      child:controller.containsLinkImage(model.msg!)?
-                      Column(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 300),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+                constraints: BoxConstraints(maxWidth: 300),
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                padding:
+                    controller.containsLinkImage(model.content!)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: const BorderRadiusDirectional.only(
+                      bottomEnd: Radius.circular(10),
+                      bottomStart: Radius.circular(10),
+                      topStart: Radius.circular(10),
+                    )),
+                child: controller.containsLinkImage(model.content!)
+                    ? Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
-                          if (!controller.containsLinkImage(model.msg!))
+                          if (!controller
+                              .containsLinkImage(model.content!))
                             Flexible(
                                 child: RichText(
                                     text: TextSpan(
-                              text: controller.extractLink(model.msg!),
+                              text: controller
+                                  .extractLink(model.content!),
                               style: TextStyle(
                                   color: Colors.blue,
                                   decoration: TextDecoration.underline),
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () async {
-                                  await launchUrlString(
-                                      controller.extractLink(model.msg!));
+                                  await launchUrlString(controller.extractLink(
+                                      model.content!));
                                 },
                             ))),
-                          if (controller.containsLinkImage(model.msg!))
+                          if (controller
+                              .containsLinkImage(model.content!))
                             Flexible(
                                 child: GestureDetector(
                               onTap: () {
                                 controller.myControllerMassage.text =
-                                    "\n\n${controller.extractLink(model.msg!)}";
+                                    "\n\n${controller.extractLink(model.content!)}";
                                 controller.hasLinkController = true;
                                 controller.update();
                               },
@@ -371,11 +320,11 @@ class ChatsDetailsScreen extends StatelessWidget {
                                 children: [
                                   CachedNetworkImage(
                                     imageUrl:
-                                        '${controller.extractLinkImage(model.msg!)}',
+                                        '${controller.extractLinkImage(model.content!)}',
                                     maxHeightDiskCache: 200,
                                   ),
                                   Text(controller
-                                      .removeLinks(model.msg!)
+                                      .removeLinks(model.content!)
                                       .replaceAll('<p>', '')
                                       .replaceAll('</p>', '')
                                       .replaceAll('<pre>', '')
@@ -385,12 +334,132 @@ class ChatsDetailsScreen extends StatelessWidget {
                                       .replaceAll('confirmBtn|', '')
                                       .replaceAll('|', '')
                                       .replaceAll(
-                                          '${controller.extractConfirmationCode(model.msg!)}',
+                                          '${controller.extractConfirmationCode(model.content!)}',
+                                          '')),
+                                  if (model.content!
+                                      .contains("confirmBtn"))
+                                    OutlinedButton.icon(
+                                        style: ButtonStyle(
+                                            minimumSize:
+                                                MaterialStatePropertyAll(
+                                                    Size(Get.width, 40)),
+                                            alignment: Alignment.center,
+                                            backgroundColor:
+                                                MaterialStatePropertyAll(controller
+                                                        .ordersId
+                                                        .any((element) =>
+                                                            element.containsAll(
+                                                                {int.parse(controller.extractConfirmationCode(model.content!)), 1}))
+                                                    ? Colors.greenAccent
+                                                    : Colors.green)),
+                                        onPressed: () {
+                                          if (controller.ordersId.any(
+                                              (element) => element.containsAll({
+                                                    int.parse(controller
+                                                        .extractConfirmationCode(
+                                                            model
+                                                                .content!)),
+                                                    0
+                                                  }))) {
+                                            controller.editStatus(controller
+                                                .extractConfirmationCode(model
+                                                    .content!));
+                                          }
+                                        },
+                                        icon: Icon(
+                                            Icons.add_shopping_cart_outlined,
+                                            color: Colors.white),
+                                        label: Text(
+                                          controller.ordersId.any((element) =>
+                                                  element.containsAll({
+                                                    int.parse(controller
+                                                        .extractConfirmationCode(
+                                                            model
+                                                                .content!)),
+                                                    1
+                                                  }))
+                                              ? "تم التثبيت"
+                                              : "تثبيت",
+                                          style: TextStyle(color: Colors.white),
+                                        ))
+                                ],
+                              ),
+                            )),
+                          if (!controller.containsLinkImage(
+                                  model.content!) &&
+                              !controller
+                                  .containsLink(model.content!))
+                            Flexible(
+                                child: Text(model.content!
+                                    .replaceAll('<p>', '')
+                                    .replaceAll('</p>', '')
+                                    .replaceAll('<pre>', '')
+                                    .replaceAll('</pre>', ''))),
+                          Container(
+                            margin: const EdgeInsets.only(left: 8, bottom: 8),
+                            child: Text(
+                              model.created!.toString(),
+                              style: const TextStyle(fontSize: 10),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        children: [
+                          if (!controller
+                              .containsLinkImage(model.content!))
+                            Flexible(
+                                child: RichText(
+                                    text: TextSpan(
+                              text: controller
+                                  .extractLink(model.content!),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrlString(controller.extractLink(
+                                      model.content!));
+                                },
+                            ))),
+                          if (controller
+                              .containsLinkImage(model.content!))
+                            Flexible(
+                                child: GestureDetector(
+                              onTap: () {
+                                controller.myControllerMassage.text =
+                                    "\n\n${controller.extractLink(model.content!)}";
+                                controller.hasLinkController = true;
+                                controller.update();
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        '${controller.extractLinkImage(model.content!)}',
+                                    maxHeightDiskCache: 200,
+                                  ),
+                                  Text(controller
+                                      .removeLinks(model.content!)
+                                      .replaceAll('<p>', '')
+                                      .replaceAll('</p>', '')
+                                      .replaceAll('<pre>', '')
+                                      .replaceAll('</pre>', '')
+                                      .replaceAll('<br />', '')
+                                      .replaceAll('<br>', '')
+                                      .replaceAll('confirmBtn|', '')
+                                      .replaceAll('|', '')
+                                      .replaceAll(
+                                          '${controller.extractConfirmationCode(model.content!)}',
                                           '')),
                                   if (!controller.isDateTimeAfter48Hours(
-                                      DateTime.parse(model.t)
+                                      DateTime.parse(model.created!)
                                           .subtract(Duration(hours: 47))))
-                                    if (model.msg!.contains("confirmBtn"))
+                                    if (model.content!
+                                        .contains("confirmBtn"))
                                       OutlinedButton.icon(
                                           style: ButtonStyle(
                                               minimumSize:
@@ -399,10 +468,7 @@ class ChatsDetailsScreen extends StatelessWidget {
                                               alignment: Alignment.center,
                                               backgroundColor:
                                                   MaterialStatePropertyAll(
-                                                      controller.ordersId.any(
-                                                              (element) => element
-                                                                  .containsAll(
-                                                                      {int.parse(controller.extractConfirmationCode(model.msg!)), 1}))
+                                                      controller.ordersId.any((element) => element.containsAll({int.parse(controller.extractConfirmationCode(model.content!)), 1}))
                                                           ? Colors.greenAccent
                                                           : Colors.green)),
                                           onPressed: () {
@@ -411,21 +477,25 @@ class ChatsDetailsScreen extends StatelessWidget {
                                                         .containsAll({
                                                       int.parse(controller
                                                           .extractConfirmationCode(
-                                                              model.msg!)),
+                                                              model
+                                                                  .content!)),
                                                       0
                                                     }))) {
                                               controller.editStatus(controller
-                                                  .extractConfirmationCode(
-                                                      model.msg!));
+                                                  .extractConfirmationCode(model
+                                                      .content!));
                                             }
                                           },
-                                          icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.white),
+                                          icon: Icon(
+                                              Icons.add_shopping_cart_outlined,
+                                              color: Colors.white),
                                           label: Text(
                                             controller.ordersId.any((element) =>
                                                     element.containsAll({
                                                       int.parse(controller
                                                           .extractConfirmationCode(
-                                                              model.msg!)),
+                                                              model
+                                                                  .content!)),
                                                       1
                                                     }))
                                                 ? "تم التثبيت"
@@ -436,127 +506,12 @@ class ChatsDetailsScreen extends StatelessWidget {
                                 ],
                               ),
                             )),
-                          if (!controller.containsLinkImage(model.msg!) &&
-                              !controller.containsLink(model.msg!))
+                          if (!controller.containsLinkImage(
+                                  model.content!) &&
+                              !controller
+                                  .containsLink(model.content!))
                             Flexible(
-                                child: Text(model.msg!
-                                    .replaceAll('<p>', '')
-                                    .replaceAll('</p>', '')
-                                    .replaceAll('<pre>', '')
-                                    .replaceAll('</pre>', ''))),
-
-                          Container(
-                            margin:  const EdgeInsets.only(left: 8,bottom: 8),
-                            child: Text(
-                              DateFormat.jm('ar_EG')
-                                  .format(DateTime.parse(model.t))
-                                  .toString(),
-                              style: const TextStyle(fontSize: 10),
-                            ),
-                          ),
-                        ],
-                      ) :
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          if (!controller.containsLinkImage(model.msg!))
-                            Flexible(
-                                child: RichText(
-                                    text: TextSpan(
-                                      text: controller.extractLink(model.msg!),
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          await launchUrlString(
-                                              controller.extractLink(model.msg!));
-                                        },
-                                    ))),
-                          if (controller.containsLinkImage(model.msg!))
-                            Flexible(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    controller.myControllerMassage.text =
-                                    "\n\n${controller.extractLink(model.msg!)}";
-                                    controller.hasLinkController = true;
-                                    controller.update();
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                        '${controller.extractLinkImage(model.msg!)}',
-                                        maxHeightDiskCache: 200,
-                                      ),
-                                      Text(controller
-                                          .removeLinks(model.msg!)
-                                          .replaceAll('<p>', '')
-                                          .replaceAll('</p>', '')
-                                          .replaceAll('<pre>', '')
-                                          .replaceAll('</pre>', '')
-                                          .replaceAll('<br />', '')
-                                          .replaceAll('<br>', '')
-                                          .replaceAll('confirmBtn|', '')
-                                          .replaceAll('|', '')
-                                          .replaceAll(
-                                          '${controller.extractConfirmationCode(model.msg!)}',
-                                          '')),
-                                      if (!controller.isDateTimeAfter48Hours(
-                                          DateTime.parse(model.t)
-                                              .subtract(Duration(hours: 47))))
-                                        if (model.msg!.contains("confirmBtn"))
-                                          OutlinedButton.icon(
-                                              style: ButtonStyle(
-                                                  minimumSize:
-                                                  MaterialStatePropertyAll(
-                                                      Size(Get.width, 40)),
-                                                  alignment: Alignment.center,
-                                                  backgroundColor:
-                                                  MaterialStatePropertyAll(
-                                                      controller.ordersId.any(
-                                                              (element) => element
-                                                              .containsAll(
-                                                              {int.parse(controller.extractConfirmationCode(model.msg!)), 1}))
-                                                          ? Colors.greenAccent
-                                                          : Colors.green)),
-                                              onPressed: () {
-                                                if (controller.ordersId.any(
-                                                        (element) => element
-                                                        .containsAll({
-                                                      int.parse(controller
-                                                          .extractConfirmationCode(
-                                                          model.msg!)),
-                                                      0
-                                                    }))) {
-                                                  controller.editStatus(controller
-                                                      .extractConfirmationCode(
-                                                      model.msg!));
-                                                }
-                                              },
-                                              icon: Icon(Icons.add_shopping_cart_outlined, color: Colors.white),
-                                              label: Text(
-                                                controller.ordersId.any((element) =>
-                                                    element.containsAll({
-                                                      int.parse(controller
-                                                          .extractConfirmationCode(
-                                                          model.msg!)),
-                                                      1
-                                                    }))
-                                                    ? "تم التثبيت"
-                                                    : "تثبيت",
-                                                style:
-                                                TextStyle(color: Colors.white),
-                                              ))
-                                    ],
-                                  ),
-                                )),
-                          if (!controller.containsLinkImage(model.msg!) &&
-                              !controller.containsLink(model.msg!))
-                            Flexible(
-                                child: Text(model.msg!
+                                child: Text(model.content!
                                     .replaceAll('<p>', '')
                                     .replaceAll('</p>', '')
                                     .replaceAll('<pre>', '')
@@ -565,230 +520,234 @@ class ChatsDetailsScreen extends StatelessWidget {
                             width: 5,
                           ),
                           Text(
-                            DateFormat.jm('ar_EG')
-                                .format(DateTime.parse(model.t))
-                                .toString(),
+                            model.created!.toString(),
                             textAlign: TextAlign.right,
                             style: const TextStyle(fontSize: 10),
                           ),
                         ],
                       )),
-                  Text(
-                    DateFormat.yMMMMd('ar_EG')
-                        .format(DateTime.parse(model.t))
-                        .toString(),
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
+            Text(
+              model.created!.toString(),
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 10),
             ),
+          ],
+        ),
+      ),
     );
   }
 
-  Widget buildMyMessage(Ticket model, Color color) {
+  Widget buildMyMessage(ConversationsModel model, Color color, index) {
     ChatControllerImp controller = Get.put(ChatControllerImp());
     return Align(
       alignment: AlignmentDirectional.centerStart,
-      child: model.msg!.contains("mp3") == true ||
-              model.msg!.contains("ogg") == true
-          ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                VoiceMessageView(
-                  circlesColor: controller.categoriesColor!,
-                  backgroundColor: controller.categoriesColor!.withOpacity(0.2),
-                  controller: VoiceController(
-                    audioSrc: '${controller.extractLink(model.msg!)}',
-                    maxDuration: const Duration(seconds: 10),
-                    isFile: false,
-                    onComplete: () {},
-                    onPause: () {},
-                    onPlaying: () {},
-                    onError: (err) {
-                      print('Error: $err');
-                    },
-                  ),
-                ),
-                Row(
-                  children: [
-                    Text(
-                      DateFormat.Hm('ar_EG')
-                          .format(DateTime.parse(model.t))
-                          .toString(),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 10),
-                    ),
-                    Text("  -  "),
-                    Text(
-                      DateFormat.yMMMMd('ar_EG')
-                          .format(DateTime.parse(model.t))
-                          .toString(),
-                      textAlign: TextAlign.right,
-                      style: const TextStyle(fontSize: 10),
-                    ),
-
-
-                  ],
-                )
-              ],
-            )
-          : Container(
-              constraints: BoxConstraints(maxWidth: 300),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                     clipBehavior: Clip.antiAliasWithSaveLayer,
-                      padding: controller.containsLinkImage(model.msg!)? EdgeInsets.zero:EdgeInsets.symmetric(horizontal: 10,vertical: 5),
-                      decoration: BoxDecoration(
-                          color: color.withOpacity(0.4),
-                          borderRadius: const BorderRadiusDirectional.only(
-                            bottomEnd: Radius.circular(10),
-                            bottomStart: Radius.circular(10),
-                            topEnd: Radius.circular(10),
-                          )),
-                      child:  controller.containsLinkImage(model.msg!)?
-                      Column(
+      child: Container(
+        constraints: BoxConstraints(maxWidth: 300),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+                clipBehavior: Clip.antiAliasWithSaveLayer,
+                padding:
+                    controller.containsLinkImage(model.content!)
+                        ? EdgeInsets.zero
+                        : EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                    color: color.withOpacity(0.4),
+                    borderRadius: const BorderRadiusDirectional.only(
+                      bottomEnd: Radius.circular(10),
+                      bottomStart: Radius.circular(10),
+                      topEnd: Radius.circular(10),
+                    )),
+                child: controller.containsLinkImage(model.content!)
+                    ? Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-
-                          if (!controller.containsLinkImage(model.msg!))
+                          if (!controller
+                              .containsLinkImage(model.content!))
                             Flexible(
                                 child: RichText(
                                     text: TextSpan(
-                                      text: controller.extractLink(model.msg!),
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          await launchUrlString(
-                                              controller.extractLink(model.msg!));
-                                        },
-                                    ))),
-                          if (controller.containsLinkImage(model.msg!))
+                              text: controller
+                                  .extractLink(model.content!),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrlString(controller.extractLink(
+                                      model.content!));
+                                },
+                            ))),
+                          Flexible(
+                              child: GestureDetector(
+                            onTap: () {
+                              controller.myControllerMassage.text =
+                                  "\n\n${controller.extractLink(model.content!)}";
+                              controller.hasLinkController = true;
+                              controller.update();
+                            },
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                CachedNetworkImage(
+                                  imageUrl:
+                                      '${controller.extractLinkImage(model.content!)}',
+                                  maxHeightDiskCache: 200,
+                                ),
+                                Text(controller
+                                    .removeLinks(model.content!)
+                                    .replaceAll('<p>', '')
+                                    .replaceAll('</p>', '')
+                                    .replaceAll('<pre>', '')
+                                    .replaceAll('</pre>', '')),
+                              ],
+                            ),
+                          )),
+                          if (!controller.containsLinkImage(
+                                  model.content!) &&
+                              !controller
+                                  .containsLink(model.content!))
                             Flexible(
-                                child: GestureDetector(
-                                  onTap: () {
-                                    controller.myControllerMassage.text =
-                                    "\n\n${controller.extractLink(model.msg!)}";
-                                    controller.hasLinkController = true;
-                                    controller.update();
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                        '${controller.extractLinkImage(model.msg!)}',
-                                        maxHeightDiskCache: 200,
-                                      ),
-                                      Text(controller
-                                          .removeLinks(model.msg!)
-                                          .replaceAll('<p>', '')
-                                          .replaceAll('</p>', '')
-                                          .replaceAll('<pre>', '')
-                                          .replaceAll('</pre>', '')),
-                                    ],
-                                  ),
-                                )),
-                          if (!controller.containsLinkImage(model.msg!) &&
-                              !controller.containsLink(model.msg!))
-                            Flexible(
-                                child: Text(model.msg!
+                                child: Text(model.content!
                                     .replaceAll('<p>', '')
                                     .replaceAll('</p>', '')
                                     .replaceAll('<pre>', '')
                                     .replaceAll('</pre>', ''))),
                           Container(
-                            margin:  const EdgeInsets.only(right: 8,bottom: 8),
+                            margin: const EdgeInsets.only(right: 8, bottom: 8),
                             child: Text(
                               DateFormat.jm('ar_EG')
-                                  .format(DateTime.parse(model.t))
+                                  .format(DateTime.parse(
+                                      model.created!))
                                   .toString(),
                               textAlign: TextAlign.right,
                               style: const TextStyle(fontSize: 10),
                             ),
                           ),
                         ],
-                      ) : Row(
+                      )
+                    : Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            DateFormat.jm('ar_EG')
-                                .format(DateTime.parse(model.t))
-                                .toString(),
+                            model.created.toString(),
                             textAlign: TextAlign.right,
                             style: const TextStyle(fontSize: 10),
                           ),
                           SizedBox(
                             width: 5,
                           ),
-                          if (!controller.containsLinkImage(model.msg!))
+                          if (!controller
+                              .containsLinkImage(model.content!))
                             Flexible(
                                 child: RichText(
                                     text: TextSpan(
-                                      text: controller.extractLink(model.msg!),
-                                      style: TextStyle(
-                                          color: Colors.blue,
-                                          decoration: TextDecoration.underline),
-                                      recognizer: TapGestureRecognizer()
-                                        ..onTap = () async {
-                                          await launchUrlString(
-                                              controller.extractLink(model.msg!));
-                                        },
-                                    ))),
-                          if (controller.containsLinkImage(model.msg!))
+                              text: controller
+                                  .extractLink(model.content!),
+                              style: TextStyle(
+                                  color: Colors.blue,
+                                  decoration: TextDecoration.underline),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () async {
+                                  await launchUrlString(controller.extractLink(
+                                      model.content!));
+                                },
+                            ))),
+                          if (controller
+                              .containsLinkImage(model.content!))
                             Flexible(
                                 child: GestureDetector(
-                                  onTap: () {
-                                    controller.myControllerMassage.text =
-                                    "\n\n${controller.extractLink(model.msg!)}";
-                                    controller.hasLinkController = true;
-                                    controller.update();
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      CachedNetworkImage(
-                                        imageUrl:
-                                        '${controller.extractLinkImage(model.msg!)}',
-                                        maxHeightDiskCache: 200,
-                                      ),
-                                      Text(controller
-                                          .removeLinks(model.msg!)
-                                          .replaceAll('<p>', '')
-                                          .replaceAll('</p>', '')
-                                          .replaceAll('<pre>', '')
-                                          .replaceAll('</pre>', '')),
-                                    ],
+                              onTap: () {
+                                controller.myControllerMassage.text =
+                                    "\n\n${controller.extractLink(model.content!)}";
+                                controller.hasLinkController = true;
+                                controller.update();
+                              },
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  CachedNetworkImage(
+                                    imageUrl:
+                                        '${controller.extractLinkImage(model.content!)}',
+                                    maxHeightDiskCache: 200,
                                   ),
-                                )),
-                          if (!controller.containsLinkImage(model.msg!) &&
-                              !controller.containsLink(model.msg!))
+                                  Text(controller
+                                      .removeLinks(model.content!)
+                                      .replaceAll('<p>', '')
+                                      .replaceAll('</p>', '')
+                                      .replaceAll('<pre>', '')
+                                      .replaceAll('</pre>', '')),
+                                ],
+                              ),
+                            )),
+                          if (!controller.containsLinkImage(
+                                  model.content!) &&
+                              !controller
+                                  .containsLink(model.content!))
                             Flexible(
-                                child: Text(model.msg!
+                                child: Text(model.content!
                                     .replaceAll('<p>', '')
                                     .replaceAll('</p>', '')
                                     .replaceAll('<pre>', '')
                                     .replaceAll('</pre>', ''))),
                         ],
-                      )
-                      ),
-                  Text(
-                    DateFormat.yMMMMd('ar_EG')
-                        .format(DateTime.parse(model.t))
-                        .toString(),
-                    textAlign: TextAlign.right,
-                    style: const TextStyle(fontSize: 10),
-                  ),
-                ],
-              ),
-            ),
+                      )),
+            Text(
+              model.created!,
+              textAlign: TextAlign.right,
+              style: const TextStyle(fontSize: 10),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
+
+// Column(
+// crossAxisAlignment: CrossAxisAlignment.end,
+// children: [
+// VoiceMessageView(
+// circlesColor: controller.categoriesColor!,
+// backgroundColor: Colors.grey[300]!,
+// controller: VoiceController(
+// audioSrc: '${controller.extractLinkAudio(model.msg!)}',
+// maxDuration: const Duration(seconds: 10),
+// isFile: false,
+// onComplete: () {},
+// onPause: () {},
+// onPlaying: () {},
+// onError: (err) {
+// print('Error: $err');
+// },
+// ),
+// ),
+// Row(
+// mainAxisSize: MainAxisSize.min,
+// crossAxisAlignment: CrossAxisAlignment.start,
+// children: [
+// Text(
+// DateFormat.Hm('ar_EG')
+//     .format(DateTime.parse(model.t))
+//     .toString(),
+// textAlign: TextAlign.right,
+// style: const TextStyle(fontSize: 10),
+// ),
+// Text("  -  "),
+// Text(
+// DateFormat.yMMMMd('ar_EG')
+//     .format(DateTime.parse(model.t))
+//     .toString(),
+// textAlign: TextAlign.right,
+// style: const TextStyle(fontSize: 10),
+// ),
+//
+//
+// ],
+// )
+// ],
+// )

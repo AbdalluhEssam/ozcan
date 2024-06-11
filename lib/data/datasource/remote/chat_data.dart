@@ -37,10 +37,10 @@ class ChatData {
   //   });
   //   return response.fold((l) => l, (r) => r);
   // }
-  getTicketData(String usersId, String category) async {
+  getConversationsData(String token, String category) async {
     var response = await crud.getData(
-        "https://ozcan.almirsystem.com/chatapi/api/tikc/tick.php?crtby=$usersId&category=$category",
-        {});
+        "${AppLink.serverLink}/messages/${category}/conversations", {},
+        token: token);
     return response.fold((l) => l, (r) => r);
   }
 
@@ -66,16 +66,20 @@ class ChatData {
     return response.fold((l) => l, (r) => r);
   }
 
-  addMassage(String ticketId, String text) async {
-    var response = await crud.postData(AppLink.addMassageBot, {
-      "ticket_id": ticketId,
-      "description": text,
-      "attachments": "",
-    });
+  addMassage(
+      String token, String category, String text, String type, file) async {
+    var response = await crud.postData(
+        "${AppLink.serverLink}/messages/$category",
+        {
+          "content": text,
+          "type": type,
+          "file": file,
+        },
+        token: token);
     return response.fold((l) => l, (r) => r);
   }
 
-  editStatus(String orderId,userId) async {
+  editStatus(String orderId, userId) async {
     var response = await crud.postData(AppLink.editStatus, {
       "order_id": orderId,
       "orders_status": "1",
@@ -86,7 +90,7 @@ class ChatData {
 
   orderId(order_id) async {
     var response = await crud.postData(AppLink.orderId, {
-      "order_id" : order_id,
+      "order_id": order_id,
     });
     return response.fold((l) => l, (r) => r);
   }
@@ -102,6 +106,7 @@ class ChatData {
         await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
     return response;
   }
+
   Future addAudio(File myFlie) async {
     var response =
         await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
