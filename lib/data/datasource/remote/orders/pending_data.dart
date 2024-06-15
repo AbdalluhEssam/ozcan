@@ -6,19 +6,25 @@ class OrdersData {
 
   OrdersData(this.crud);
 
-  Future getOrderDate(String userId, String categoriesId) async {
-    var response = await crud.postData(AppLink.orderView, {
-      "user_id": userId,
-      "categories_id": categoriesId,
-    });
+  Future getOrderDate(token) async {
+    var response = await crud.getData(
+        "${AppLink.serverLink}/orders",
+        {
+          // "user_id": userId,
+          // "categories_id": categoriesId,
+        },
+        token: token);
     return response.fold((l) => l, (r) => r);
   }
 
-  Future archiveOrders(String userId, String categoriesId) async {
-    var response = await crud.postData(AppLink.archiveOrders, {
-      "user_id": userId,
-      "categories_id": categoriesId,
-    });
+  Future archiveOrders(token) async {
+    var response = await crud.getData(
+        "${AppLink.serverLink}/orders",
+        {
+          // "user_id": userId,
+          // "categories_id": categoriesId,
+        },
+        token: token);
     return response.fold((l) => l, (r) => r);
   }
 

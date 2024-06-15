@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/controller/orders/pending_controller.dart';
 import 'package:ozcan/view/screen/home/categories.dart';
 import 'package:ozcan/view/screen/home/homePage.dart';
 import '../../core/class/statusrequest.dart';
@@ -44,6 +45,10 @@ class HomeScreenControllerImp extends HomeScreenController {
   @override
   changePage(currentPage) {
     i = currentPage;
+    if (currentPage == 2) {
+      OrdersPendingController controller = Get.put(OrdersPendingController());
+      controller.getData();
+    }
     update();
   }
 

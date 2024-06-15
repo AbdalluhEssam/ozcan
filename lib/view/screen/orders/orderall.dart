@@ -1,13 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:ozcan/controller/orders/archive_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/constant/color.dart';
 import '../../../data/model/orders_model.dart';
-import '../../../likeapi.dart';
 
 class OrdersAll extends StatelessWidget {
   const OrdersAll({Key? key}) : super(key: key);
@@ -48,6 +46,7 @@ class OrdersAll extends StatelessWidget {
     );
   }
 }
+
 class CardListOrders extends GetView<OrdersAllController> {
   final OrdersModel ordersModel;
 
@@ -56,7 +55,7 @@ class CardListOrders extends GetView<OrdersAllController> {
   @override
   Widget build(BuildContext context) {
     OrdersAllController controller = Get.put(OrdersAllController());
-    Color primaryColor = Color(int.parse("0xff" + controller.categoriesColor!));
+    Color primaryColor = AppColor.primaryColor;
     return Card(
       elevation: 5,
       clipBehavior: Clip.antiAliasWithSaveLayer,
@@ -69,13 +68,12 @@ class CardListOrders extends GetView<OrdersAllController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${"idorder".tr} : #${ordersModel.ordersId}",
+                  "${"idorder".tr} : #${ordersModel.id}",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  DateFormat.yMEd()
-                      .format(DateTime.parse(ordersModel.ordersTime!)),
+                  ordersModel.createdAt.toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: primaryColor),
                 ),
@@ -90,51 +88,65 @@ class CardListOrders extends GetView<OrdersAllController> {
                   children: [
                     Row(
                       children: [
-                        const Text("حالة الطلب : "),
+                        const Text(
+                          "حالة الطلب : ",
+                          style: const TextStyle(fontSize: 16),
+                        ),
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: 2),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: double.parse(ordersModel.ordersStatus!) ==
-                                  0
-                                  ? Colors.cyan
-                                  : double.parse(ordersModel.ordersStatus!) == 1
+                              color: ordersModel.status! == "pending"
+                                  ? Colors.green
+                                  : ordersModel.status! == "confirmed"
                                   ? Colors.greenAccent
-                                  : double.parse(
-                                  ordersModel.ordersStatus!) ==
-                                  2
-                                  ? Colors.grey
-                                  : double.parse(ordersModel
-                                  .ordersStatus!) ==
-                                  3
-                                  ? AppColor.bg.withOpacity(0.5)
-                                  : double.parse(ordersModel
-                                  .ordersStatus!) ==
-                                  4
+                                  : ordersModel.status! == "confirmed"
                                   ? AppColor.green
                                   : Colors.red),
                           child: Text(
-                            controller
-                                .printOrderStatus(ordersModel.ordersStatus!),
-                            style: const TextStyle(fontSize: 12),
+                            ordersModel.status!.toString(),
+                            style: const TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
                     ),
                     Text(
-                      "المنتج  : ${ordersModel.itemsName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      "المنتج  : ${ordersModel.name}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "اللون  : ${ordersModel.color}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "الحجم  : ${ordersModel.size}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "الكمية  : ${ordersModel.quantity}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "السعر  : ${ordersModel.price}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "تابع لقسم  : ${ordersModel.categoryName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
                 ),
                 CachedNetworkImage(
-                  imageUrl:controller.containsLink(ordersModel.itemsImage!) ?
-
-                  ordersModel.itemsImage!:
-                  '${AppLink.imageItems}/${ordersModel.itemsImage}' "${AppLink.imageItems}/${ordersModel.itemsImage}",
+                  imageUrl: ordersModel.helperLink!,
                   height: Get.width * 0.25,
                   width: Get.width * 0.25,
                 )
@@ -145,7 +157,7 @@ class CardListOrders extends GetView<OrdersAllController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "اجمالى المبلغ  : ${ordersModel.ordersTotalprice} \$",
+                  "اجمالى المبلغ  : ${ordersModel.totalPrice} \$",
                   style: TextStyle(
                       color: primaryColor,
                       fontSize: 18,

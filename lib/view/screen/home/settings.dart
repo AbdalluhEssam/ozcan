@@ -121,7 +121,7 @@ class Settings extends StatelessWidget {
                               const TextStyle(color: AppColor.backgroundColor),
                         ),
                         onTap: () {
-                          Get.toNamed(AppRoute.departmentOrderAllView);
+                          Get.toNamed(AppRoute.ordersAll);
                         },
                         trailing: const Icon(
                           Icons.shopping_cart_outlined,

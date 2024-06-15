@@ -14,54 +14,38 @@ class OrdersAllController extends GetxController {
   OrdersData pendingData = OrdersData(Get.find());
   String? categoriesId;
   String? categoriesColor;
+  String? token;
   RegExp urlRegExp = RegExp(
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
   );
+
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+
   @override
   void onInit() {
-    categoriesId = Get.arguments['categoriesId'].toString();
-    categoriesColor = Get.arguments['categoriesColor'];
+    // categoriesId = Get.arguments['categoriesId'].toString();
+    // categoriesColor = Get.arguments['categoriesColor'];
+    token = myServices.sharedPreferences.getString("token");
+
     getData();
     super.onInit();
-  }
-
-  String printOrderStatus(String val) {
-    if (val == "0") {
-      return "فى الانتظار";
-    } else if (val == "1") {
-      return "تم الموافقة على طلبك";
-    } else if (val == "2") {
-      return "جارى الشحن";
-    } else if (val == "3") {
-      return "فى الطريق";
-    } else if (val == "5") {
-      return "تم الغاء الطلب";
-    } else {
-      return "تم استلام طلبك";
-    }
   }
 
   getData() async {
     pendingOrders.clear();
     statusRequest = StatusRequest.loading;
     update();
-    pendingData
-        .archiveOrders(myServices.sharedPreferences.getString("id").toString(),
-            categoriesId.toString())
-        .then((value) {
+    pendingData.archiveOrders(token).then((value) {
       log("$value");
       statusRequest = handlingData(value);
       if (StatusRequest.success == statusRequest) {
-        if (value['status'] == "success") {
-          List pending = value['orders'];
-          pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
-        } else {
-          statusRequest = StatusRequest.failure;
-        }
+        List pending = value['data'];
+        pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
+      } else {
+        statusRequest = StatusRequest.failure;
       }
 
       update();

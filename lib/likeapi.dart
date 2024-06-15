@@ -52,7 +52,7 @@ class AppLink {
   static const String addRatingOrders = "$serverLink/orders/rating.php";
   static const String detailsOrders = "$serverLink/orders/details.php";
 //================================== NOTIFICATION ===============================//
-  static const String notification = "$serverLink/notification.php";
+  static const String notification = "$serverLink/notifications";
 //================================== OFFERS ===============================//
   static const String offers = "$serverLink/offers.php";
 //================================== story ===============================//

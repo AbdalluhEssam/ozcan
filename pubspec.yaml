@@ -84,6 +84,7 @@ dependencies:
   audioplayers: ^5.2.1
   voice_message_package: ^2.1.4
   socket_io_client: ^2.0.3+1
+  flutter_widget_from_html: ^0.15.1
 
 dev_dependencies:
   flutter_test:

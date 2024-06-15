@@ -3,15 +3,16 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:intl/intl.dart';
 import 'package:jiffy/jiffy.dart';
 import 'package:ozcan/data/datasource/remote/chat_data.dart';
 import 'package:ozcan/data/model/massage_model.dart';
-import 'package:ozcan/likeapi.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -26,7 +27,142 @@ abstract class ChatController extends GetxController {
 }
 
 class ChatControllerImp extends ChatController {
-  IO.Socket socket = IO.io("https://sok.cp.ozcanbrand.com/");
+  StreamSocket streamSocket = StreamSocket();
+  IO.Socket socket = IO.io('https://sok.cp.ozcanbrand.com', <String, dynamic>{
+    'transports': ['websocket'],
+    'autoConnect': true,
+  });
+
+  void handleMessage(dynamic data) {
+    final currentUser = idUser; // Replace with your current user ID
+    final message = ConversationsModel.fromJson(data);
+
+    // Check if the message is from the current user
+    if (message.senderId == currentUser) {
+      // Handle typing text clearing, if necessary
+      print('Received message from self, clearing typing text.');
+    }
+    // Process and add the message to the list
+    message.senderUsername = username;
+    message.created = message.created.toString();
+    messages.add(message);
+    print('Received message: $message');
+  }
+
+  void sendMessage() {
+    socket.emit("message", {
+      'sender_id': int.parse(idUser.toString()),
+      'sender_username': username.toString(),
+      'receiver_id': int.parse(conversation.currentAdminId.toString()),
+      'conversation_id': int.parse(conversationId.toString()),
+      'content': myControllerMassage.text,
+      'type': 'text',
+      'file': null,
+      'id': null,
+      'created': '${DateFormat('h:mm a',"en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    });
+    // addMassage();
+    messages.add(ConversationsModel.fromJson({
+      'id': null,
+      'sender_id': idUser.toString(),
+      'sender_username': username.toString(),
+      'conversation_id': conversationId.toString(),
+      'content': myControllerMassage.text,
+      'type': 'text',
+      'file': null,
+      'created': '${DateFormat('h:mm a',"en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    }));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+    update();
+    addMassage();
+    myControllerMassage.clear();
+  }
+
+  void connectAndListen() async {
+    // Initialize the socket connection
+
+    // Open the socket connection
+
+    // Handle socket connection
+    socket.onConnect((_) {
+      print('connect');
+      socket.emit('newUser', {
+        "user_id": int.parse(idUser.toString())
+        // 'socket_id': socket.id,
+      });
+      log(idUser.toString());
+      log(socket.id.toString());
+    });
+
+    // When an event is received from the server, data is added to the stream
+    // socket.on('users', (data) {
+    //   messages.addAll(data.map((e) => ConversationsModel.fromJson(e)));
+    //   // streamSocket.addResponse(
+    //   //     data); // Assuming streamSocket.addResponse(data) is a valid method
+    //   log(messages.toString());
+    // });
+
+    socket.on('recevied_message', (data) {
+      // log(data.toString());
+      // streamSocket.addResponse(data); // Assuming streamSocket.addResponse(data) is a valid method
+      handleMessageReceived(data);
+      // log(data.toString());
+    });
+
+    // Handle socket disconnection
+    socket.onDisconnect((_) => print('disconnect'));
+
+    // Handle socket errors
+    socket.onError((data) => print("Error --> $data"));
+    socket.onConnecting((data) => print("Connecting --> $data"));
+    socket.onConnectError((data) => print("Connect Error  --> $data"));
+
+    // Optionally, handle reconnection events
+    socket.onReconnect((data) => print("Reconnect --> $data"));
+    socket.onReconnectAttempt((data) => print("Reconnect Attempt --> $data"));
+    socket.onReconnecting((data) => print("Reconnecting --> $data"));
+  }
+
+  void handleMessageReceived(dynamic data) {
+    log(data.toString());
+    final message = ConversationsModel.fromJson(data);
+    log(message.conversation_id.toString());
+    log(conversationId.toString());
+    if (message.conversation_id == conversationId) {
+      // Clear typing text if necessary
+      print('Received message: ${message.content}');
+      message.senderUsername = message.senderUsername;
+      message.created = message.created.toString();
+      if (data is Map) {
+        messages.add(message);
+
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.position.maxScrollExtent,
+              duration: Duration(seconds: 1),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+
+        update();
+        // isDone.toggle();
+      }
+    }
+  }
 
   MyServices myServices = Get.find();
   ChatData chatData = ChatData(Get.find());
@@ -38,8 +174,6 @@ class ChatControllerImp extends ChatController {
     caseSensitive: false,
     multiLine: true,
   );
-
-  final RegExp urlRegExpAudio = RegExp(r'https?://\S+');
 
   bool hasLink = false;
   bool hasLinkController = false;
@@ -57,11 +191,6 @@ class ChatControllerImp extends ChatController {
     return match != null ? match.group(0)! : '';
   }
 
-  String extractLinkAudio(String text) {
-    RegExpMatch? match = urlRegExpAudio.firstMatch(text);
-    return match != null ? match.group(0)! : '';
-  }
-
   String extractLinkImage(String text) {
     RegExpMatch? match = urlRegExpImage.firstMatch(text);
     return match != null ? match.group(0)! : '';
@@ -72,21 +201,6 @@ class ChatControllerImp extends ChatController {
   }
 
   final ScrollController scrollController = ScrollController();
-  DateTime createdAt = DateTime.now()
-      .subtract(Duration(hours: 47)); // Replace this with your model.createdAt
-
-  bool isDateTimeAfter48Hours(DateTime dateTime) {
-    DateTime now = DateTime.now();
-    DateTime after48Hours = now.add(Duration(hours: 48));
-    log(dateTime.isAfter(after48Hours).toString());
-    return dateTime.isAfter(after48Hours);
-  }
-
-  String extractConfirmationCode(String text) {
-    RegExp regex = RegExp(r'confirmBtn\|(\d+)');
-    Match? match = regex.firstMatch(text);
-    return match != null ? match.group(1)! : '';
-  }
 
   TextEditingController myControllerMassage = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -99,6 +213,7 @@ class ChatControllerImp extends ChatController {
   String? username;
   String? email;
   String? categoriesId;
+  String? conversationId;
   String? categoriesName;
   String? adminId;
   String? ticketId;
@@ -114,6 +229,7 @@ class ChatControllerImp extends ChatController {
 
   late String recordFilePath;
   final record = AudioRecorder();
+  late Conversation conversation;
 
   @override
   initialData() {
@@ -136,13 +252,34 @@ class ChatControllerImp extends ChatController {
 
   @override
   void dispose() {
+    // timer.cancel();
+    // timer =  null;
+    socket.onDisconnect((_) => print('disconnect'));
     audioPlayer.dispose();
     record.dispose();
+    scrollController.dispose();
+    myControllerMassage.dispose();
     super.dispose();
   }
 
   @override
+  void onClose() {
+    // timer.cancel();
+    // timer = null;
+    socket.onDisconnect((_) => print('disconnect'));
+
+    audioPlayer.dispose();
+    record.dispose();
+    scrollController.dispose();
+    myControllerMassage.dispose();
+    super.onClose();
+  }
+
+  late Timer timer;
+
+  @override
   void onInit() async {
+    conversation = Conversation();
     // audioPlayer = AudioPlayer();
     // audioRecord = AudioRecorder();
     // initializeDateFormatting("ar");
@@ -164,49 +301,56 @@ class ChatControllerImp extends ChatController {
         : "";
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     getConversationsData();
-
-    if (messages.isNotEmpty) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        // Scroll to the end of the list
-        if (scrollController != null && scrollController.hasClients) {
-          scrollController.jumpTo(scrollController.position.extentTotal);
-        }
-      });
-    }
-    // _timer = Timer.periodic(Duration(seconds: 2), (timer) => viewChat());
+    connectAndListen();
+    // timer = Timer.periodic(Duration(seconds: 5), (timer) => getConversationsData());
     super.onInit();
   }
 
   @override
   addMassage() async {
     if (formKey.currentState!.validate()) {
-      statusRequest = StatusRequest.loading;
-      messages.clear();
+      // statusRequest = StatusRequest.loading;
+      // messages.clear();
       var response = await chatData.addMassage(token.toString(),
-          categoriesId.toString(), myControllerMassage.text, "text", "");
+          conversationId.toString(), myControllerMassage.text, "text", "");
       log("========================================================================$response");
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        myControllerMassage.clear();
-        getConversationsData();
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
+      // statusRequest = handlingData(response);
 
+      // update();
+    }
+    // update();
+  }
+
+  imgGlr() async {
+    final XFile? image =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+    debugPrint('path: ${image?.path}');
+
+    if (image != null) {
+      File? img = File(image.path);
+      myFlie = img;
+      addImage();
       update();
+    } else {
+      print("No Image Selected");
     }
     update();
   }
 
   addImage() async {
-    var response = await chatData.addImage(myFlie!);
+    var response = await chatData.addImage(
+      token.toString(),
+      conversationId.toString(),
+      myControllerMassage.text,
+      "image",
+      myFlie!,
+    );
     log("========================================================================$response");
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      myControllerMassage.text =
-          "${AppLink.imageItems}/${response['image_name']}";
-      addMassage();
+      getConversationsData();
+      // addMassage();
       myControllerMassage.clear();
       hasLink = false;
       hasLinkController = false;
@@ -216,17 +360,36 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
-  editStatus(id) async {
-    ordersId.clear();
-    var response = await chatData.editStatus(id.toString(), idUser.toString());
+  addAudio(audio) async {
+    var response = await chatData.addImage(
+      token.toString(),
+      conversationId.toString(),
+      myControllerMassage.text,
+      "audio",
+      audio!,
+    );
+    log("========================================================================$response");
+
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      getConversationsData();
+      myControllerMassage.clear();
+      hasLink = false;
+      hasLinkController = false;
+      myFlie = null;
+    }
+    update();
+  }
+
+  orderId(orderId) async {
+    var response = await chatData.orderId(orderId, token);
     if (kDebugMode) {
       print(
           "========================================================================$response");
     }
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      myControllerMassage.clear();
-      hasLink = false;
+      getConversationsData();
       Get.snackbar("${myServices.sharedPreferences.getString("username")} ",
           "تم تثبيت طلبك بنجاح".tr,
           icon: const Icon(Icons.add_shopping_cart),
@@ -237,47 +400,38 @@ class ChatControllerImp extends ChatController {
           duration: const Duration(seconds: 3),
           colorText: AppColor.white,
           borderRadius: 0);
-      orderId(id);
-      // viewChat();
-    }
-  }
-
-  orderId(orderId) async {
-    var response = await chatData.orderId(orderId);
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        if (!ordersId
-            .any((element) => element.containsAll({int.parse(orderId), 0}))) {
-          if (!ordersId
-              .any((element) => element.containsAll({int.parse(orderId), 1}))) {
-            ordersId.add({response["orders_id"], response["orders_status"]});
-            update();
-          }
-        }
-      }
     }
 
     log(ordersId.toString());
   }
 
   List<ConversationsModel> messages = [];
-  DatabaseReference dbRef = FirebaseDatabase.instance.ref();
 
   getConversationsData() async {
     statusRequest = StatusRequest.loading;
-    messages.clear();
     var response = await chatData.getConversationsData(
         token.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      List message = response['data'];
+      messages.clear();
+      List message = response['data']['messages'];
+
       messages.addAll(message.map((e) => ConversationsModel.fromJson(e)));
+      conversation = Conversation.fromJson(response['data']['conversation']);
+      conversationId = conversation.id.toString();
+
+      if (messages.isNotEmpty) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (scrollController.hasClients) {
+            scrollController.animateTo(
+              scrollController.position.maxScrollExtent,
+              duration: Duration(seconds: 1),
+              curve: Curves.easeOut,
+            );
+          }
+        });
+      }
     } else {
       statusRequest = StatusRequest.failure;
     }
@@ -297,6 +451,7 @@ class ChatControllerImp extends ChatController {
 
   Future<File> getTempFile(String fileName) async {
     final dir = await getTemporaryDirectory();
+
     return File('${dir.path}/$fileName');
   }
 
@@ -331,16 +486,8 @@ class ChatControllerImp extends ChatController {
     bool isRecording = await record.isRecording();
     if (isRecording == true) {
       await record.stop();
-      var response = await chatData.addAudio(File(recordFilePath));
-      log("========================================================================$response");
-
-      statusRequest = handlingData(response);
-      if (StatusRequest.success == statusRequest) {
-        myControllerMassage.text =
-            "${AppLink.imageItems}/${response['image_name']}";
-      }
+      addAudio(File(recordFilePath));
       if (recordFilePath != 'null') {
-        addMassage();
         myControllerMassage.clear();
 
         recordFilePath = '';
@@ -363,20 +510,18 @@ class ChatControllerImp extends ChatController {
 
     return filePath;
   }
-// uploadAudio() async {
-//   var response = await chatData.addAudio(File(recordFilePath));
-//   log("========================================================================$response");
-//
-//   statusRequest = handlingData(response);
-//   if (StatusRequest.success == statusRequest) {
-//     myControllerMassage.text ="${AppLink.imageItems}/${response['image_name']}";
-//     addMassage();
-//     myControllerMassage.clear();
-//     hasLink = false;
-//     hasLinkController = false;
-//     myFlie = null;
-//     // viewChat();
-//   }
-//   update();
-// }
 }
+
+class StreamSocket {
+  final _socketResponse = StreamController<dynamic>();
+
+  void Function(dynamic) get addResponse => _socketResponse.sink.add;
+
+  Stream<dynamic> get getResponse => _socketResponse.stream;
+
+  void dispose() {
+    _socketResponse.close();
+  }
+}
+
+final streamSocket = StreamSocket();

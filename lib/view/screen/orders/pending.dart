@@ -65,13 +65,12 @@ class CardListPOrders extends GetView<OrdersPendingController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "${"idorder".tr} : #${ordersModel.ordersId}",
+                  "${"idorder".tr} : #${ordersModel.id}",
                   style: const TextStyle(
                       fontSize: 18, fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  DateFormat.yMEd()
-                      .format(DateTime.parse(ordersModel.ordersTime!)),
+                  ordersModel.createdAt.toString(),
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: primaryColor),
                 ),
@@ -86,50 +85,65 @@ class CardListPOrders extends GetView<OrdersPendingController> {
                   children: [
                     Row(
                       children: [
-                        const Text("حالة الطلب : "),
+                        const Text(
+                          "حالة الطلب : ",
+                          style: const TextStyle(fontSize: 16),
+                        ),
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 5, vertical: 2),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
-                              color: double.parse(ordersModel.ordersStatus!) ==
-                                      0
-                                  ? Colors.cyan
-                                  : double.parse(ordersModel.ordersStatus!) == 1
+                              color: ordersModel.status! == "pending"
+                                  ? Colors.green
+                                  : ordersModel.status! == "confirmed"
                                       ? Colors.greenAccent
-                                      : double.parse(
-                                                  ordersModel.ordersStatus!) ==
-                                              2
-                                          ? Colors.grey
-                                          : double.parse(ordersModel
-                                                      .ordersStatus!) ==
-                                                  3
-                                              ? AppColor.bg.withOpacity(0.5)
-                                              : double.parse(ordersModel
-                                                          .ordersStatus!) ==
-                                                      4
-                                                  ? AppColor.green
-                                                  : Colors.red),
+                                      : ordersModel.status! == "confirmed"
+                                          ? AppColor.green
+                                          : Colors.red),
                           child: Text(
-                            controller
-                                .printOrderStatus(ordersModel.ordersStatus!),
-                            style: const TextStyle(fontSize: 12),
+                            ordersModel.status!.toString(),
+                            style: const TextStyle(fontSize: 16),
                             textAlign: TextAlign.center,
                           ),
                         ),
                       ],
                     ),
                     Text(
-                      "المنتج  : ${ordersModel.itemsName}",
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      "المنتج  : ${ordersModel.name}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "اللون  : ${ordersModel.color}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "الحجم  : ${ordersModel.size}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "الكمية  : ${ordersModel.quantity}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "السعر  : ${ordersModel.price}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
+                    ),
+                    Text(
+                      "تابع لقسم  : ${ordersModel.categoryName}",
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16),
                     ),
                   ],
                 ),
                 CachedNetworkImage(
-                  imageUrl: controller.containsLink(ordersModel.itemsImage!)
-                      ? ordersModel.itemsImage!
-                      : '${AppLink.imageItems}/${ordersModel.itemsImage}',
+                  imageUrl: ordersModel.helperLink!,
                   height: Get.width * 0.25,
                   width: Get.width * 0.25,
                 )
@@ -140,7 +154,7 @@ class CardListPOrders extends GetView<OrdersPendingController> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "اجمالى المبلغ  : ${ordersModel.ordersTotalprice} \$",
+                  "اجمالى المبلغ  : ${ordersModel.totalPrice} \$",
                   style: TextStyle(
                       color: primaryColor,
                       fontSize: 18,

@@ -1,136 +1,96 @@
 class OrdersModel {
-  String? ordersId;
-  String? ordersUsersid;
-  String? itemsId;
-  String? link;
-  String? ordersTotalprice;
-  String? color;
+  String? id;
+  String? adminId;
+  String? userId;
+  String? categoryId;
+  String? categoryName;
+  String? name;
   String? size;
-  String? qty;
-  String? address;
-  String? ordersStatus;
-  String? categoriesId;
-  String? ordersTime;
+  String? price;
+  String? color;
+  String? quantity;
+  String? totalPrice;
+  String? adminName;
+  String? userName;
+  String? userPhone;
+  String? userEmail;
+  String? paid;
+  String? status;
+  String? link;
   String? helperLink;
-  String? itemsName;
-  String? itemsDesc;
-  String? itemsImage;
-  String? itemsActive;
-  String? itemsPrice;
-  String? itemsDescount;
-  String? itemsDate;
-  String? itemsCat;
-  String? days;
-  String? usersId;
-  String? usersName;
-  String? usersEmail;
-  String? usersPassword;
-  String? usersPhone;
-  String? usersVerfiycode;
-  String? usersApprove;
-  String? usersCreate;
-  String? items_ordered_times;
+  String? shippingAddress;
+  String? createdAt;
 
   OrdersModel(
-      {this.ordersId,
-        this.ordersUsersid,
-        this.itemsId,
-        this.link,
-        this.ordersTotalprice,
-        this.color,
+      {this.id,
+        this.adminId,
+        this.userId,
+        this.categoryId,
+        this.categoryName,
+        this.name,
         this.size,
-        this.qty,
-        this.address,
-        this.ordersStatus,
-        this.categoriesId,
-        this.ordersTime,
+        this.price,
+        this.color,
+        this.quantity,
+        this.totalPrice,
+        this.adminName,
+        this.userName,
+        this.userPhone,
+        this.userEmail,
+        this.paid,
+        this.status,
+        this.link,
         this.helperLink,
-        this.itemsName,
-        this.itemsDesc,
-        this.itemsImage,
-        this.itemsActive,
-        this.itemsPrice,
-        this.itemsDescount,
-        this.itemsDate,
-        this.itemsCat,
-        this.days,
-        this.usersId,
-        this.usersName,
-        this.usersEmail,
-        this.usersPassword,
-        this.usersPhone,
-        this.usersVerfiycode,
-        this.items_ordered_times,
-        this.usersApprove,
-        this.usersCreate});
+        this.shippingAddress,
+        this.createdAt});
 
   OrdersModel.fromJson(Map<String, dynamic> json) {
-    ordersId = json['orders_id'].toString();
-    ordersUsersid = json['orders_usersid'].toString();
-    itemsId = json['items_id'].toString();
-    link = json['link'].toString();
-    ordersTotalprice = json['orders_totalprice'].toString();
-    color = json['color'].toString();
+    id = json['id'].toString();
+    adminId = json['admin_id'].toString();
+    userId = json['user_id'].toString();
+    categoryId = json['category_id'].toString();
+    categoryName = json['category_name'].toString();
+    name = json['name'].toString();
     size = json['size'].toString();
-    qty = json['qty'].toString();
-    address = json['Address'].toString();
-    ordersStatus = json['orders_status'].toString();
-    categoriesId = json['categories_id'].toString();
-    ordersTime = json['orders_time'].toString();
+    price = json['price'].toString();
+    color = json['color'].toString();
+    quantity = json['quantity'].toString();
+    totalPrice = json['total_price'].toString();
+    adminName = json['admin_name'].toString();
+    userName = json['user_name'].toString();
+    userPhone = json['user_phone'].toString();
+    userEmail = json['user_email'].toString();
+    paid = json['paid'].toString();
+    status = json['status'].toString();
+    link = json['link'].toString();
     helperLink = json['helper_link'].toString();
-    itemsName = json['items_name'].toString();
-    itemsDesc = json['items_desc'].toString();
-    itemsImage = json['items_image'].toString();
-    itemsActive = json['items_active'].toString();
-    itemsPrice = json['items_price'].toString();
-    itemsDescount = json['items_descount'].toString();
-    itemsDate = json['items_date'].toString();
-    itemsCat = json['items_cat'].toString();
-    days = json['days'].toString();
-    usersId = json['users_id'].toString();
-    usersName = json['users_name'].toString();
-    usersEmail = json['users_email'].toString();
-    usersPassword = json['users_password'].toString();
-    usersPhone = json['users_phone'].toString();
-    usersVerfiycode = json['users_verfiycode'].toString();
-    usersApprove = json['users_approve'].toString();
-    usersCreate = json['users_create'].toString();
-    items_ordered_times = json['items_ordered_times'].toString();
+    shippingAddress = json['shipping_address'].toString();
+    createdAt = json['created_at'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['orders_id'] = this.ordersId;
-    data['orders_usersid'] = this.ordersUsersid;
-    data['items_id'] = this.itemsId;
-    data['link'] = this.link;
-    data['orders_totalprice'] = this.ordersTotalprice;
-    data['color'] = this.color;
+    data['id'] = this.id;
+    data['admin_id'] = this.adminId;
+    data['user_id'] = this.userId;
+    data['category_id'] = this.categoryId;
+    data['category_name'] = this.categoryName;
+    data['name'] = this.name;
     data['size'] = this.size;
-    data['qty'] = this.qty;
-    data['Address'] = this.address;
-    data['orders_status'] = this.ordersStatus;
-    data['categories_id'] = this.categoriesId;
-    data['orders_time'] = this.ordersTime;
+    data['price'] = this.price;
+    data['color'] = this.color;
+    data['quantity'] = this.quantity;
+    data['total_price'] = this.totalPrice;
+    data['admin_name'] = this.adminName;
+    data['user_name'] = this.userName;
+    data['user_phone'] = this.userPhone;
+    data['user_email'] = this.userEmail;
+    data['paid'] = this.paid;
+    data['status'] = this.status;
+    data['link'] = this.link;
     data['helper_link'] = this.helperLink;
-    data['items_name'] = this.itemsName;
-    data['items_desc'] = this.itemsDesc;
-    data['items_image'] = this.itemsImage;
-    data['items_active'] = this.itemsActive;
-    data['items_price'] = this.itemsPrice;
-    data['items_descount'] = this.itemsDescount;
-    data['items_date'] = this.itemsDate;
-    data['items_cat'] = this.itemsCat;
-    data['days'] = this.days;
-    data['users_id'] = this.usersId;
-    data['users_name'] = this.usersName;
-    data['users_email'] = this.usersEmail;
-    data['users_password'] = this.usersPassword;
-    data['users_phone'] = this.usersPhone;
-    data['users_verfiycode'] = this.usersVerfiycode;
-    data['users_approve'] = this.usersApprove;
-    data['users_create'] = this.usersCreate;
-    data['items_ordered_times'] = this.items_ordered_times;
+    data['shipping_address'] = this.shippingAddress;
+    data['created_at'] = this.createdAt;
     return data;
   }
 }

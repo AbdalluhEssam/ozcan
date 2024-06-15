@@ -31,12 +31,14 @@ class NotificationControllerImp extends NotificationController {
   String? categoriesName;
   String? adminId;
   String? categoriesColor;
+  String? token;
 
   @override
   initialData() {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
     id = myServices.sharedPreferences.getString("id");
+    token = myServices.sharedPreferences.getString("token");
   }
 
   @override
@@ -60,18 +62,17 @@ class NotificationControllerImp extends NotificationController {
     notification.clear();
     statusRequest = StatusRequest.loading;
     update();
-    homeData.getNotificationData(id.toString()).then((value) {
+    homeData.getNotificationData(token.toString()).then((value) {
       log("========================================================================$value");
       statusRequest = handlingData(value);
       if (StatusRequest.success == statusRequest) {
-        if (value['status'] == "success") {
-          List notifications = value['notification'];
-          notification.addAll(notifications.map((e) => NotificationModel.fromJson(e)));
-          update();
-        } else {
-          statusRequest = StatusRequest.failure;
-          update();
-        }
+        List notifications = value['notification'];
+        notification
+            .addAll(notifications.map((e) => NotificationModel.fromJson(e)));
+        update();
+      } else {
+        statusRequest = StatusRequest.failure;
+        update();
       }
     }).catchError((onError) {
       log("Error=== : ===$onError");

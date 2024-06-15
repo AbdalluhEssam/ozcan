@@ -330,20 +330,27 @@ class ProductDetails extends StatelessWidget {
                                         arguments: {
                                           "categoriesId":
                                               controller.categoriesId,
-                                          "adminId": controller.adminId,
+
                                           "categoriesName":
                                               controller.categoriesName,
                                           "color": primaryColor,
                                           "itemsName":
                                               controller.itemsModel.name,
-                                          "ticketId": controller.ticketId,
                                           "itemsImage": controller.containsLink(
                                                   controller.itemsModel.image!)
                                               ? controller.itemsModel.image!
                                               : '${controller.itemsModel.image}'
                                         });
+                                    SystemChrome.setEnabledSystemUIMode(
+                                        SystemUiMode.manual,
+                                        overlays: SystemUiOverlay
+                                            .values); // to
                                   } else {
                                     Get.toNamed(AppRoute.login);
+                                    SystemChrome.setEnabledSystemUIMode(
+                                        SystemUiMode.manual,
+                                        overlays: SystemUiOverlay
+                                            .values); // to
                                   }
                                 },
                                 child: Text(

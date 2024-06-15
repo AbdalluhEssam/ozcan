@@ -88,10 +88,13 @@ class ChatData {
     return response.fold((l) => l, (r) => r);
   }
 
-  orderId(order_id) async {
-    var response = await crud.postData(AppLink.orderId, {
-      "order_id": order_id,
-    });
+  orderId(orderId, token) async {
+    var response = await crud.postData(
+        "${AppLink.serverLink}/orders/$orderId",
+        {
+          "status": "confirmed",
+        },
+        token: token);
     return response.fold((l) => l, (r) => r);
   }
 
@@ -101,15 +104,31 @@ class ChatData {
     return response.fold((l) => l, (r) => r);
   }
 
-  Future addImage(File myFlie) async {
-    var response =
-        await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
+  Future addImage(String token, String category, String text, String type,
+      File myFile) async {
+    var response = await crud.postRequestWithFiles(
+        "${AppLink.serverLink}/messages/$category",
+        {
+          // "content": text,
+          "type": type,
+        },
+        myFile,
+        "file",
+        token: token);
     return response;
   }
 
-  Future addAudio(File myFlie) async {
-    var response =
-        await crud.postRequestWithFiles(AppLink.image, {}, myFlie, "image");
+  Future addAudio(String token, String category, String text, String type,
+      File myFile) async {
+    var response = await crud.postRequestWithFiles(
+        "${AppLink.serverLink}/messages/$category",
+        {
+          // "content": text,
+          "type": type,
+        },
+        myFile,
+        "file",
+        token: token);
     return response;
   }
 }

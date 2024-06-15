@@ -14,17 +14,21 @@ class OrdersPendingController extends GetxController {
   OrdersData pendingData = OrdersData(Get.find());
   String? categoriesId;
   String? categoriesColor;
+  String? token;
   RegExp urlRegExp = RegExp(
     r"http(s)?://([\w-]+\.)+[\w-]+(/[\w- ;,./?%&=]*)?",
     caseSensitive: false,
   );
+
   bool containsLink(String text) {
     return urlRegExp.hasMatch(text);
   }
+
   @override
   void onInit() {
     // categoriesId = Get.arguments['categoriesId'].toString();
     // categoriesColor = Get.arguments['categoriesColor'];
+    token = myServices.sharedPreferences.getString("token");
     getData();
     super.onInit();
   }
@@ -49,17 +53,14 @@ class OrdersPendingController extends GetxController {
     pendingOrders.clear();
     statusRequest = StatusRequest.loading;
     update();
-    pendingData.getOrderDate(myServices.sharedPreferences.getString("id").toString(),categoriesId.toString())
-        .then((value) {
+    pendingData.getOrderDate(token).then((value) {
       log("$value");
       statusRequest = handlingData(value);
       if (StatusRequest.success == statusRequest) {
-        if (value['status'] == "success") {
-          List pending = value['orders'];
-          pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
-        } else {
-          statusRequest = StatusRequest.failure;
-        }
+        List pending = value['data'];
+        pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
+      } else {
+        statusRequest = StatusRequest.failure;
       }
 
       update();
