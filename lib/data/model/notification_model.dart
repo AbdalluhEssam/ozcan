@@ -1,36 +1,52 @@
 class NotificationModel {
-  String? notificationId;
-  String? notificationTitle;
-  String? notificationBody;
+  String? id;
+  String? userName;
+  String? userImage;
   String? topic;
-  String? pagename;
-  String? createAt;
+  String? topicId;
+  String? url;
+  String? title;
+  String? body;
+  String? read;
+  String? created;
 
   NotificationModel(
-      {this.notificationId,
-        this.notificationTitle,
-        this.notificationBody,
+      {this.id,
+        this.userName,
+        this.userImage,
         this.topic,
-        this.pagename,
-        this.createAt});
+        this.topicId,
+        this.url,
+        this.title,
+        this.body,
+        this.read,
+        this.created});
 
   NotificationModel.fromJson(Map<String, dynamic> json) {
-    notificationId = json['notification_id'].toString();
-    notificationTitle = json['notification_title'].toString();
-    notificationBody = json['notification_body'].toString();
+    id = json['id'].toString();
+    userName = json['user_name'].toString();
+    userImage = json['user_image'].toString();
     topic = json['topic'].toString();
-    pagename = json['pagename'].toString();
-    createAt = json['createAt'].toString();
+    topicId = json['topic_id'].toString();
+    url = json['url'].toString();
+    title = json['title'].toString();
+    body = json['body'].toString();
+    read = json['read'].toString();
+    created = json['created'].toString();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['notification_id'] = this.notificationId;
-    data['notification_title'] = this.notificationTitle;
-    data['notification_body'] = this.notificationBody;
+    data['id'] = this.id;
+    data['user_name'] = this.userName;
+    data['user_image'] = this.userImage;
     data['topic'] = this.topic;
-    data['pagename'] = this.pagename;
-    data['createAt'] = this.createAt;
+    data['topic_id'] = this.topicId;
+    data['url'] = this.url;
+    data['title'] = this.title;
+    data['body'] = this.body;
+    data['read'] = this.read;
+    data['created'] = this.created;
     return data;
   }
 }

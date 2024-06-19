@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:ozcan/controller/orders/archive_controller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'package:firebase_core/firebase_core.dart'
@@ -14,7 +15,9 @@ import 'package:firebase_core/firebase_core.dart'
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'controller/notification_controller.dart';
 import 'core/constant/color.dart';
+
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
 /// Example:
@@ -95,7 +98,6 @@ class DefaultFirebaseOptions {
   );
 }
 
-
 class Utils {
   static formatPrice(double price) => '\$ ${price.toStringAsFixed(2)}';
 
@@ -103,7 +105,7 @@ class Utils {
 }
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-FlutterLocalNotificationsPlugin();
+    FlutterLocalNotificationsPlugin();
 
 Future<void> initFcm() async {
   await Firebase.initializeApp();
@@ -132,23 +134,22 @@ Future<void> initFcm() async {
     sound: true,
   );
   var initializationSettingsAndroid =
-  const AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
+      InitializationSettings(android: initializationSettingsAndroid);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   refreshPageNotification(data) {
-    // if (Get.currentRoute == "/OrdersAll" &&
-    //     data['pagename'] == "OrdersAll") {
-    //   OrdersPendingController controller = Get.find();
-    //   controller.refreshOrder();
-    // }
-    //
-    // if (data['pagename'] == "OrdersAll") {
-    //   NotificationControllerImp controllerImp = Get.find();
-    //   controllerImp.getData();
-    // }
+    if (Get.currentRoute == "/OrdersAll" && data['pagename'] == "OrdersAll") {
+      OrdersAllController controller = Get.find();
+      controller.refreshOrder();
+    }
+
+    if (Get.currentRoute == "/NotificationScreen" && data['pagename'] == "NotificationScreen") {
+      NotificationControllerImp controllerImp = Get.find();
+      controllerImp.getData();
+    }
   }
   Future<String> _downloadAndSaveFile(String url, String fileName) async {
     final Directory? directory = await getExternalStorageDirectory();
@@ -160,36 +161,46 @@ Future<void> initFcm() async {
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage? message) async {
-    refreshPageNotification(message?.data);
-    Get.snackbar(
-      "${message?.notification?.title}",
-      "${message?.notification?.body}",
-      icon: const Icon(Icons.notifications_active, color: AppColor.white),
-      barBlur: 2,
-      margin: const EdgeInsets.symmetric(horizontal: 0),
-      padding: const EdgeInsets.all(15),
-      backgroundColor: AppColor.primaryColor.withOpacity(0.4),
-      isDismissible: true,
-      duration: const Duration(seconds: 2),
-      colorText: AppColor.white,
-    );
+    if (message == null) return;
 
-    RemoteNotification? notification = message?.notification;
-    AndroidNotification? android = message?.notification?.android;
-    if (notification != null && android != null) {
-      final String largeIconPath = await _downloadAndSaveFile(
-        '${message?.data['image']}',
-        'largeIcon',
+    if (Get.currentRoute == "/ChatsDetailsScreen" && message.data['pagename'] == "ChatsDetailsScreen") {
+      // If the current route is ChatsDetailsScreen and the message is intended for ChatsDetailsScreen, do nothing.
+      return;
+    } else {
+      // Call refreshPageNotification with the message data.
+      refreshPageNotification(message.data);
+
+      // Show a snackbar notification.
+      Get.snackbar(
+        "${message.notification?.title}",
+        "${message.notification?.body}",
+        icon: const Icon(Icons.notifications_active, color: AppColor.white),
+        barBlur: 2,
+        margin: const EdgeInsets.symmetric(horizontal: 0),
+        padding: const EdgeInsets.all(15),
+        backgroundColor: AppColor.primaryColor.withOpacity(0.4),
+        isDismissible: true,
+        duration: const Duration(seconds: 2),
+        colorText: AppColor.white,
       );
-      final String bigPicturePath = await _downloadAndSaveFile(
-        message?.data['image'],
-        'bigPicture',
-      );
-      await flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        NotificationDetails(
+
+      RemoteNotification? notification = message.notification;
+      AndroidNotification? android = message.notification?.android;
+      if (notification != null && android != null) {
+        final String largeIconPath = await _downloadAndSaveFile(
+          '${message.data['image']}',
+          'largeIcon',
+        );
+        final String bigPicturePath = await _downloadAndSaveFile(
+          message.data['image'],
+          'bigPicture',
+        );
+
+        await flutterLocalNotificationsPlugin.show(
+          notification.hashCode,
+          notification.title,
+          notification.body,
+          NotificationDetails(
             android: AndroidNotificationDetails(
               'channel.id',
               'channel.name',
@@ -198,22 +209,23 @@ Future<void> initFcm() async {
               importance: Importance.max,
               priority: Priority.high,
               largeIcon: FilePathAndroidBitmap(largeIconPath),
-              styleInformation: message?.data['image'] != null
+              styleInformation: message.data['image'] != null
                   ? BigPictureStyleInformation(
                 FilePathAndroidBitmap(bigPicturePath),
-                // Replace with your app's launcher icon
-                largeIcon: FilePathAndroidBitmap(bigPicturePath),
+                largeIcon: FilePathAndroidBitmap(largeIconPath),
                 hideExpandedLargeIcon: false,
-
-                contentTitle: message?.notification?.title,
-                summaryText: message?.notification?.body,
+                contentTitle: notification.title,
+                summaryText: notification.body,
                 htmlFormatContent: true,
                 htmlFormatSummaryText: true,
               )
                   : DefaultStyleInformation(true, true),
-            )),
-        payload: json.encode(message?.data),
-      );
+            ),
+          ),
+          payload: json.encode(message.data),
+        );
+      }
     }
   });
+
 }

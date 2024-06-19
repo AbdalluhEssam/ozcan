@@ -53,13 +53,13 @@ class ChatControllerImp extends ChatController {
     socket.emit("message", {
       'sender_id': int.parse(idUser.toString()),
       'sender_username': username.toString(),
-      'receiver_id': int.parse(conversation.currentAdminId.toString()),
+      'receiver_id': conversation.currentAdminId.toString() == "null" ? null :int.parse(conversation.currentAdminId.toString()),
       'conversation_id': int.parse(conversationId.toString()),
       'content': myControllerMassage.text,
       'type': 'text',
       'file': null,
       'id': null,
-      'created': '${DateFormat('h:mm a',"en").format(DateTime.now())}',
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
       'order_id': null,
       'order_status': null,
     });
@@ -72,7 +72,7 @@ class ChatControllerImp extends ChatController {
       'content': myControllerMassage.text,
       'type': 'text',
       'file': null,
-      'created': '${DateFormat('h:mm a',"en").format(DateTime.now())}',
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
       'order_id': null,
       'order_status': null,
     }));
@@ -145,6 +145,15 @@ class ChatControllerImp extends ChatController {
       print('Received message: ${message.content}');
       message.senderUsername = message.senderUsername;
       message.created = message.created.toString();
+      if (message.senderId.toString() != idUser.toString()) {
+        if(conversation.currentAdminId.toString() == "null"){
+
+          getConversationsData();
+          Get.appUpdate();
+          update();
+        }
+
+      }
       if (data is Map) {
         messages.add(message);
 
@@ -254,6 +263,8 @@ class ChatControllerImp extends ChatController {
   void dispose() {
     // timer.cancel();
     // timer =  null;
+    streamSocket.dispose();
+    socket.dispose();
     socket.onDisconnect((_) => print('disconnect'));
     audioPlayer.dispose();
     record.dispose();
@@ -266,8 +277,9 @@ class ChatControllerImp extends ChatController {
   void onClose() {
     // timer.cancel();
     // timer = null;
+    streamSocket.dispose();
     socket.onDisconnect((_) => print('disconnect'));
-
+    socket.dispose();
     audioPlayer.dispose();
     record.dispose();
     scrollController.dispose();
@@ -314,8 +326,12 @@ class ChatControllerImp extends ChatController {
       var response = await chatData.addMassage(token.toString(),
           conversationId.toString(), myControllerMassage.text, "text", "");
       log("========================================================================$response");
-      // statusRequest = handlingData(response);
-
+      // if (conversation.currentAdminId == null) {
+      //   statusRequest = handlingData(response);
+      //   if (statusRequest == StatusRequest.success) {
+      //     getConversationsData();
+      //   }
+      // }
       // update();
     }
     // update();
@@ -337,6 +353,46 @@ class ChatControllerImp extends ChatController {
     update();
   }
 
+  sendImage(String link) {
+    socket.emit("message", {
+      'sender_id': int.parse(idUser.toString()),
+      'sender_username': username.toString(),
+      'receiver_id': int.parse(conversation.currentAdminId.toString()),
+      'conversation_id': int.parse(conversationId.toString()),
+      'content': myControllerMassage.text,
+      'type': 'image',
+      'file': "$link",
+      'id': null,
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    });
+    // addMassage();
+    messages.add(ConversationsModel.fromJson({
+      'id': null,
+      'sender_id': idUser.toString(),
+      'sender_username': username.toString(),
+      'conversation_id': conversationId.toString(),
+      'content': myControllerMassage.text,
+      'type': 'image',
+      'file': "$link",
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    }));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+    update();
+    myControllerMassage.clear();
+  }
+
   addImage() async {
     var response = await chatData.addImage(
       token.toString(),
@@ -349,7 +405,7 @@ class ChatControllerImp extends ChatController {
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      getConversationsData();
+      sendImage(response['data']['file'].toString());
       // addMassage();
       myControllerMassage.clear();
       hasLink = false;
@@ -358,6 +414,46 @@ class ChatControllerImp extends ChatController {
       // viewChat();
     }
     update();
+  }
+
+  sendAudio(String link) {
+    socket.emit("message", {
+      'sender_id': int.parse(idUser.toString()),
+      'sender_username': username.toString(),
+      'receiver_id': int.parse(conversation.currentAdminId.toString()),
+      'conversation_id': int.parse(conversationId.toString()),
+      'content': myControllerMassage.text,
+      'type': 'audio',
+      'file': "$link",
+      'id': null,
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    });
+    // addMassage();
+    messages.add(ConversationsModel.fromJson({
+      'id': null,
+      'sender_id': idUser.toString(),
+      'sender_username': username.toString(),
+      'conversation_id': conversationId.toString(),
+      'content': myControllerMassage.text,
+      'type': 'audio',
+      'file': "$link",
+      'created': '${DateFormat('h:mm a', "en").format(DateTime.now())}',
+      'order_id': null,
+      'order_status': null,
+    }));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (scrollController.hasClients) {
+        scrollController.animateTo(
+          scrollController.position.maxScrollExtent,
+          duration: Duration(seconds: 1),
+          curve: Curves.easeOut,
+        );
+      }
+    });
+    update();
+    myControllerMassage.clear();
   }
 
   addAudio(audio) async {
@@ -372,8 +468,8 @@ class ChatControllerImp extends ChatController {
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      getConversationsData();
       myControllerMassage.clear();
+      sendAudio(response['data']['file'].toString());
       hasLink = false;
       hasLinkController = false;
       myFlie = null;
@@ -408,18 +504,19 @@ class ChatControllerImp extends ChatController {
   List<ConversationsModel> messages = [];
 
   getConversationsData() async {
+    messages.clear();
     statusRequest = StatusRequest.loading;
     var response = await chatData.getConversationsData(
         token.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      messages.clear();
-      List message = response['data']['messages'];
-
-      messages.addAll(message.map((e) => ConversationsModel.fromJson(e)));
       conversation = Conversation.fromJson(response['data']['conversation']);
       conversationId = conversation.id.toString();
+
+      List message = response['data']['messages'];
+      messages.addAll(message.map((e) => ConversationsModel.fromJson(e)));
+      update();
 
       if (messages.isNotEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -456,7 +553,7 @@ class ChatControllerImp extends ChatController {
   }
 
   getRecordingFile() async {
-    final file = await getTempFile('$username.mp3');
+    final file = await getTempFile('$username.webm');
     return file.path;
   }
 
@@ -502,7 +599,7 @@ class ChatControllerImp extends ChatController {
 
   Future<String> getFilePath() async {
     Directory storageDirectory = await getApplicationDocumentsDirectory();
-    String fileName = "test_${DateTime.now().microsecondsSinceEpoch}_$i.mp3";
+    String fileName = "test_${DateTime.now().microsecondsSinceEpoch}_$i.webm";
     String filePath = "${storageDirectory.path}/$fileName";
     log(filePath);
 
@@ -523,5 +620,3 @@ class StreamSocket {
     _socketResponse.close();
   }
 }
-
-final streamSocket = StreamSocket();

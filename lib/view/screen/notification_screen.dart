@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:jiffy/jiffy.dart' show Jiffy;
 import '../../../../core/class/handlingdataview.dart';
 import '../../../core/constant/color.dart';
 import '../../controller/notification_controller.dart';
@@ -40,13 +39,13 @@ class NotificationScreen extends GetView<NotificationControllerImp> {
                           ]),
                       child: GestureDetector(
                         onTap: () {
-                          Get.toNamed("${controller.notification[index].pagename}",arguments: {
-                            "adminId": controller.adminId,
-                            "categoriesName": controller.categoriesName,
-                            "categoriesId": controller.categoriesId,
-                            "categoriesColor": controller.categoriesColor,
-
-                          });
+                          // Get.toNamed("${controller.notification[index].pagename}",arguments: {
+                          //   "adminId": controller.adminId,
+                          //   "categoriesName": controller.categoriesName,
+                          //   "categoriesId": controller.categoriesId,
+                          //   "categoriesColor": controller.categoriesColor,
+                          //
+                          // });
                         },
                         child: Card(
                             child: Padding(
@@ -60,7 +59,7 @@ class NotificationScreen extends GetView<NotificationControllerImp> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                        "${controller.notification[index].notificationTitle}",
+                                        "${controller.notification[index].title}",
                                         style: const TextStyle(
                                             fontSize: 16,
                                             color: Colors.black,
@@ -69,15 +68,14 @@ class NotificationScreen extends GetView<NotificationControllerImp> {
                                       height: 10,
                                     ),
                                     Text(
-                                        "${controller.notification[index].notificationBody}",
+                                        "${controller.notification[index].body}",
                                         style: const TextStyle(
                                             fontSize: 12, color: AppColor.black)),
                                   ],
                                 ),
                               ),
                               Text(
-                                  Jiffy.parse("${DateTime.parse(controller.notification[index].createAt!)}")
-                                      .fromNow(),
+                                  controller.notification[index].created!,
                                   style: const TextStyle(fontSize: 10, color: AppColor.gray))
                             ],
                           ),

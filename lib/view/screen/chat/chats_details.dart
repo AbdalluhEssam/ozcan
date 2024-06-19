@@ -17,10 +17,9 @@ class ChatsDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Get.put(ChatControllerImp());
-    return Builder(builder: (context) {
-      return GetBuilder<ChatControllerImp>(
-        init: Get.put(ChatControllerImp()),
-        builder: (controller) => Scaffold(
+    return GetBuilder<ChatControllerImp>(
+      init: Get.put(ChatControllerImp()),
+      builder: (controller) => Scaffold(
           appBar: AppBar(
             backgroundColor: Colors.white,
             titleSpacing: 0,
@@ -54,12 +53,6 @@ class ChatsDetailsScreen extends StatelessWidget {
                 )
               ],
             ),
-            // bottom: Tab(
-            //   height: 30,
-            //   iconMargin: EdgeInsets.zero,
-            //   text:
-            //       "${controller.chat.isNotEmpty ? Jiffy.parse(controller.chat.last.t).EEEE : "محادثة جديدة"}",
-            // ),
             foregroundColor: controller.categoriesColor,
             elevation: 5,
             actions: [
@@ -77,7 +70,7 @@ class ChatsDetailsScreen extends StatelessWidget {
               children: [
                 controller.messages.isNotEmpty
                     ? StreamBuilder(
-                        stream: streamSocket.getResponse,
+                        stream: StreamSocket().getResponse,
                         builder: (context, snapshot) {
                           return Expanded(
                               child: Padding(
@@ -87,7 +80,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                                 controller: controller.scrollController,
                                 shrinkWrap: true,
                                 itemBuilder: (context, index) {
-                                  if (controller.messages[index].senderUsername ==
+                                  if (controller
+                                          .messages[index].senderUsername ==
                                       "${controller.username}") {
                                     return buildMyMessage(
                                         controller.messages[index],
@@ -287,10 +281,8 @@ class ChatsDetailsScreen extends StatelessWidget {
                     ))
               ],
             ),
-          ),
-        ),
-      );
-    });
+          )),
+    );
   }
 
   whatsapp() async {
@@ -386,7 +378,6 @@ class ChatsDetailsScreen extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-
                     ],
                   )),
               Text(
@@ -482,7 +473,9 @@ class ChatsDetailsScreen extends StatelessWidget {
                     size: 30,
                   ),
                   label: Text(
-                    model.orderStatus == "pending" ? "موافقة" : "تم تاكيد طلبك",
+                    model.orderStatus == "pending"
+                        ? "تثبيت"
+                        : "تم التثبيت طلبك",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                 ),
@@ -661,7 +654,6 @@ class ChatsDetailsScreen extends StatelessWidget {
                       SizedBox(
                         width: 5,
                       ),
-
                     ],
                   )),
               Text(

@@ -59,6 +59,10 @@ class OrdersPendingController extends GetxController {
       if (StatusRequest.success == statusRequest) {
         List pending = value['data'];
         pendingOrders.addAll(pending.map((e) => OrdersModel.fromJson(e)));
+        if( pending.isEmpty){
+          statusRequest = StatusRequest.failure;
+          update();
+        }
       } else {
         statusRequest = StatusRequest.failure;
       }

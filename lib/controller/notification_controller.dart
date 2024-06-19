@@ -66,9 +66,12 @@ class NotificationControllerImp extends NotificationController {
       log("========================================================================$value");
       statusRequest = handlingData(value);
       if (StatusRequest.success == statusRequest) {
-        List notifications = value['notification'];
-        notification
-            .addAll(notifications.map((e) => NotificationModel.fromJson(e)));
+        List notifications = value['data'];
+        notification.addAll(notifications.map((e) => NotificationModel.fromJson(e)));
+        if(notifications.isEmpty){
+          statusRequest = StatusRequest.failure;
+          update();
+        }
         update();
       } else {
         statusRequest = StatusRequest.failure;
