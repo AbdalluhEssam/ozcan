@@ -151,10 +151,10 @@ class ProductDetails extends StatelessWidget {
                                 )
                               ],
                             ),
+
                             LikeButton(
-                              isLiked: controller.itemsModel.image
-                                  ?.contains(controller.userId.toString()),
-                              likeCount: controller.itemsModel.categoryId,
+                              isLiked: controller.itemsModel.likes ?.contains(controller.userId.toString()),
+                              likeCount: controller.itemsModel.likes_count,
                               countPostion: CountPostion.left,
                               circleColor: CircleColor(
                                   start: Colors.white, end: primaryColor),
@@ -163,7 +163,7 @@ class ProductDetails extends StatelessWidget {
                                   Get.toNamed(AppRoute.login);
                                 }
                                 return controller.addLike(
-                                  controller.itemsModel.id,
+                                  controller.itemsModel.id.toString(),
                                 );
                               },
                             ),
@@ -189,23 +189,20 @@ class ProductDetails extends StatelessWidget {
                           ],
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 15, right: 15),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            Text(
-                              controller.itemsModel.description!.replaceAll(
-                                RegExp(r'<[^>]*>'),
-                                '',
-                              ),
-                              style: Second_font,
-                              textAlign: TextAlign.start,
-                            )
-                          ],
-                        ),
-                      ),
+                     Padding(
+                           padding: const EdgeInsets.only(left: 15, right: 15),
+                           child: Column(
+                             mainAxisAlignment: MainAxisAlignment.end,
+                             crossAxisAlignment: CrossAxisAlignment.end,
+                             children: [
+                               Text(
+                                 "${controller.itemsModel.description.toString()}",
+                                 style: Second_font,
+                                 textAlign: TextAlign.start,
+                               ),
+                             ],
+                           ),
+                         ),
                       Padding(
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Row(
@@ -225,7 +222,7 @@ class ProductDetails extends StatelessWidget {
                           thickness: 1.5,
                         ),
                       ),
-                      if (controller.itemsModel.stock!.isNotEmpty)
+                      if (controller.itemsModel.stock?.isNotEmpty == true)
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 15),
                           child: SizedBox(
@@ -330,7 +327,6 @@ class ProductDetails extends StatelessWidget {
                                         arguments: {
                                           "categoriesId":
                                               controller.categoriesId,
-
                                           "categoriesName":
                                               controller.categoriesName,
                                           "color": primaryColor,
@@ -343,14 +339,12 @@ class ProductDetails extends StatelessWidget {
                                         });
                                     SystemChrome.setEnabledSystemUIMode(
                                         SystemUiMode.manual,
-                                        overlays: SystemUiOverlay
-                                            .values); // to
+                                        overlays: SystemUiOverlay.values); // to
                                   } else {
                                     Get.toNamed(AppRoute.login);
                                     SystemChrome.setEnabledSystemUIMode(
                                         SystemUiMode.manual,
-                                        overlays: SystemUiOverlay
-                                            .values); // to
+                                        overlays: SystemUiOverlay.values); // to
                                   }
                                 },
                                 child: Text(

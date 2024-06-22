@@ -49,8 +49,9 @@ class SearchData {
 
   SearchData(this.crud);
 
-  getData() async {
-    var response = await crud.postData(AppLink.searchPage, {});
+  getData(productName) async {
+    var response = await crud
+        .getData("${AppLink.searchPage}?product_name=$productName", {});
     return response.fold((l) => l, (r) => r);
   }
 }

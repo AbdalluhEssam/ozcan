@@ -25,7 +25,7 @@ class AppLink {
   static const String categories = "$serverLink/categories";
   static const String aboutUs = "$serverLink/pages";
   static const String infoPage = "$serverLink/social-accounts";
-  static const String searchPage = "$serverLink/search.php";
+  static const String searchPage = "$serverLink/products/all";
   static const String senp = "$serverLink/s.php";
   static const String search  = "$serverLink/items/search.php";
   static const String items = "$serverLink/products";
@@ -33,7 +33,7 @@ class AppLink {
   static const String departmentView = "$serverLink/categories";
   static const String glusSerPage = "$serverLink/categories/glusservies.php";
 //================================== Like ===============================//
-  static const String addLike           = "$serverLink/categories/likes/add.php";
+  static const String addLike           = "$serverLink/products/likes";
   static const String deleteLikes    = "$serverLink/categories/likes/delete.php";
 //================================== LikeStory ===============================//
   static const String addLikeStory           = "$serverLink/categories/likesstory/add.php";

@@ -20,13 +20,11 @@ class SearchScreen extends SearchDelegate {
   late StatusRequest statusRequest;
 
   Future getItemsData() async {
-    var response =
-        await http.post(Uri.parse(AppLink.senp), body: {"query": query});
-    if (response.statusCode == 200) {
+    var response = await http.get(Uri.parse("${AppLink.searchPage}?product_name=${query}"));
+    if (response.statusCode == 200 || response.statusCode == 201 ||response.statusCode == 202) {
       var itemData = jsonDecode(response.body);
       if (kDebugMode) {
-        print(
-            "========================================================================$itemData");
+        print("========================================================================$itemData");
       }
       return itemData;
     }
@@ -34,7 +32,7 @@ class SearchScreen extends SearchDelegate {
 
   @override
   List<Widget>? buildActions(BuildContext context) {
-    getItemsData();
+    controller.getData(query);
     return [
       IconButton(
           onPressed: () {
@@ -56,17 +54,20 @@ class SearchScreen extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     return FutureBuilder<dynamic>(
-        future: getItemsData(),
+        future: controller.getData(query),
         builder: (context, snapshot) {
           if (!snapshot.hasData) {
             return const Center(
               child: Text("لا يوجد"),
             );
-          } else if (snapshot.hasError) {
+          }
+          else if (snapshot.hasError) {
             return const Center(
               child: CircularProgressIndicator(),
             );
-          } else {
+          }
+          else {
+            if(snapshot.data!.length == 0) return Text("data");
             return ListView.separated(
               padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
               shrinkWrap: true,
@@ -76,7 +77,8 @@ class SearchScreen extends SearchDelegate {
               itemBuilder: (context, i) => InkWell(
                 onTap: () {
                   Get.toNamed(AppRoute.productDetails, arguments: {
-                    "itemsModel": ItemsModel.fromJson(snapshot.data[i]),
+                    // "itemsModel": ItemsModel.fromJson(snapshot.data[i]),
+                    "slug" : snapshot.data[i]['slug']
                   });
                 },
                 child: Card(
@@ -97,7 +99,7 @@ class SearchScreen extends SearchDelegate {
                           child: Image(
                             width: 120,
                             height: 100,
-                            image: CachedNetworkImageProvider("${AppLink.imageItems}/${snapshot.data[i]['items_image']}",),
+                            image: CachedNetworkImageProvider("${snapshot.data[i]?['image']}",),
                             fit: BoxFit.contain,
                           ),
                         ),
@@ -111,28 +113,17 @@ class SearchScreen extends SearchDelegate {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "${snapshot.data[i]['items_name']}",
+                              "${snapshot.data[i]?['name']}",
                               style: Theme.of(context).textTheme.bodyLarge,
                             ),
                             Text(
-                              " السعر : ${snapshot.data[i]['items_price']}",
+                              " السعر : ${snapshot.data[i]?['price']}",
                               style: const TextStyle(
                                   color: AppColor.primaryColor, fontSize: 15),
                             ),
                           ],
                         ),
                       ),
-                      Expanded(
-                          child: snapshot.data[i]['items_count'] == "0"
-                              ? Text("notavailable".tr,
-                                  style: const TextStyle(
-                                      color: AppColor.red, fontSize: 10))
-                              : IconButton(
-                                  onPressed: () {
-                                    // controller.addCart(
-                                    //     "${snapshot.data[i]['items_id']}");
-                                  },
-                                  icon: const Icon(Icons.add_shopping_cart)))
                     ],
                   ),
                 ),
@@ -148,20 +139,30 @@ class SearchScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    var search = query.isEmpty
+    // Filter the search list based on the query
+    var searchResults = query.isEmpty
         ? controller.search
         : controller.search.where((element) =>
-            element["items_name"].toString().toLowerCase().contains(query));
+        element["name"].toString().toLowerCase().contains(query.toLowerCase())).toList();
+
+    // Check if searchResults is not null and has elements
+    if (searchResults == null || searchResults.isEmpty) {
+      return Center(
+        child: Text('No results found'),
+      );
+    }
+
     return ListView.builder(
-        // padding: const EdgeInsets.symmetric(horizontal: 20),
-        itemCount: search.length,
-        itemBuilder: (context, index) => ListTile(
-              onTap: () {
-                query = search.toList()[index]['items_name'];
-                showResults(context);
-              },
-              leading: const Icon(Icons.search),
-              title: Text("${search.toList()[index]['items_name']}"),
-            ));
+      itemCount: searchResults.length,
+      itemBuilder: (context, index) => ListTile(
+        onTap: () {
+          query = searchResults[index]['name'];
+          showResults(context);
+        },
+        leading: const Icon(Icons.search),
+        title: Text("${searchResults[index]['name']}"),
+      ),
+    );
   }
+
 }

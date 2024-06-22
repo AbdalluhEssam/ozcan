@@ -46,11 +46,10 @@ class DepartmentViewData {
     return response.fold((l) => l, (r) => r);
   }
 
-  addLike(String id) async {
+  addLike(String id,token) async {
     var response = await crud.postData(AppLink.addLike, {
-      "user_id": myServices.sharedPreferences.getString("id"),
-      "item_id": id,
-    });
+      "product_id": id.toString(),
+    },token: token);
     return response.fold((l) => l, (r) => r);
   }
 

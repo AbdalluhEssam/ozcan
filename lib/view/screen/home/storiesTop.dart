@@ -76,16 +76,16 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
-                                  controller.itemsName =
-                                      controller.story[index].type;
-                                  controller.image =
-                                      controller.story[index].mediaPath;
+                                  controller.itemsName =controller.story[index].note;
+                                  controller.image =controller.story[index].mediaPath;
                                   controller.update();
                                   print(controller.currentIndex);
                                   if (controller.story[index].mediaType.toString() == "image") {
                                     return StoryItem.pageImage(
                                       caption: Text(
-                                          "${controller.story[index].type}"),
+                                        "${controller.story[index].note}",
+                                        style:
+                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
                                       url:
                                           "${controller.story[index].mediaPath}",
                                       controller: controller.storyController,
@@ -94,7 +94,9 @@ class StoriesTopDepartment extends StatelessWidget {
                                     return StoryItem.pageVideo(
                                       "${controller.story[index].mediaPath}",
                                       caption: Text(
-                                          "${controller.story[index].type}"),
+                                        "${controller.story[index].note}",
+                                        style:
+                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
                                       controller: controller.storyController,
                                     );
                                   }
@@ -127,17 +129,13 @@ class StoriesTopDepartment extends StatelessWidget {
                         textAlign: TextAlign.start,
                         controller: controller.textController,
                         onTap: () {
-                          if (controller.myServices.sharedPreferences
-                                  .getString("username") !=
-                              null) {
+                          if (controller.myServices.sharedPreferences.getString("username") != null) {
                             Get.toNamed(AppRoute.chatsDetailsScreen,
                                 arguments: {
                                   "color": primaryColor,
                                   "categoriesId": controller.categoriesId,
-                                  "adminId": controller.adminId,
                                   "itemsName": controller.itemsName,
                                   "itemsImage": controller.image,
-                                  "ticketId": controller.ticketId,
                                 });
                           } else {
                             Get.toNamed(AppRoute.login);

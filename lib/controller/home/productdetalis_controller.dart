@@ -10,6 +10,7 @@ import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/cart/cart_data.dart';
 import '../../data/datasource/remote/department_data.dart';
+import '../items/items_controller.dart';
 
 abstract class ProductDetailsController extends GetxController {
   initialData();
@@ -28,16 +29,18 @@ class ProductDetailsControllerImp extends ProductDetailsController {
   late String? ticketId;
   late String? userId;
   late String? slug;
+  late String? token;
   String? categoriesColor;
   late ItemsDetailsModel itemsModel;
   CartData cartData = CartData(Get.find());
   DepartmentViewData departmentViewData = DepartmentViewData(Get.find());
 
-  // List<ImagesProduct> images = [];
+  List<int> likes = [];
 
   @override
   initialData() async {
     userId = myServices.sharedPreferences.getString('id');
+    token = myServices.sharedPreferences.getString('token');
   }
 
   RegExp urlRegExp = RegExp(
@@ -57,33 +60,32 @@ class ProductDetailsControllerImp extends ProductDetailsController {
 
   @override
   void onInit() {
+    initialData();
     itemsModel = ItemsDetailsModel();
     slug = Get.arguments['slug'];
-    categoriesColor = Get.arguments['color'];
-    categoriesId = Get.arguments['categoriesId'];
-    categoriesName = Get.arguments['categoriesName'];
-    initialData();
+    if(Get.arguments['color'] != null){
+      categoriesColor = Get.arguments['color'];
+      categoriesId = Get.arguments['categoriesId'];
+      categoriesName = Get.arguments['categoriesName'];
+    }
+
     getData();
     super.onInit();
   }
 
   Future<bool?> addLike(id) async {
-    // if (!itemsModel.usersId!.contains(userId.toString())) {
-    //   var response = await departmentViewData.addLike(id);
-    //   log("========================================================================$response");
-    //   statusRequest = handlingData(response);
-    //   if (StatusRequest.success == statusRequest) {
-    //     if (response['status'] == "success") {
-    //       itemsModel.count = (int.parse(itemsModel.count!) + 1).toString();
-    //       itemsModel.usersId =  "${userId}";
-    //       print(itemsModel.usersId );
-    //       update();
-    //       ItemsControllerImp controllerImp = Get.put(ItemsControllerImp());
-    //       controllerImp.getData();
-    //     }
-    //   }
-    //   update();
-    // }
+    if (!itemsModel.likes!.contains(userId.toString())) {
+      var response = await departmentViewData.addLike(id.toString(), token);
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+        getData();
+        ItemsControllerImp controllerImp = Get.put(ItemsControllerImp());
+        controllerImp.getData();
+        update();
+      }
+      update();
+    }
     return statusRequest == StatusRequest.success ? true : false;
   }
 

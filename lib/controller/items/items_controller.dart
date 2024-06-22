@@ -37,6 +37,18 @@ class ItemsControllerImp extends ItemsController {
     return urlRegExp.hasMatch(text);
   }
 
+  // void scrollToIndex(int index) {
+  //   double position = index * 60.0; // Adjust item height based on your design
+  //
+  //   scrollController.addListener(() {
+  //     scrollController.animateTo(
+  //       position,
+  //       duration: Duration(seconds: 1),
+  //       curve: Curves.easeInOut,
+  //     );
+  //   });
+  // }
+
   late StatusRequest statusRequest;
 
   String? username;
@@ -47,33 +59,30 @@ class ItemsControllerImp extends ItemsController {
   String? categoriesColor;
   String? adminId;
   int? itemId;
+  var index = 0.obs;
   String? ticketId;
   String? slug;
+  String? token;
 
   @override
   initialData() {
     username = myServices.sharedPreferences.getString("username");
     email = myServices.sharedPreferences.getString("email");
     userId = myServices.sharedPreferences.getString("id");
+    token = myServices.sharedPreferences.getString('token');
   }
 
-  scrollToIndex() {
-    if (itemId != null) {
-      // Your logic to determine the index based on itemId
-      int index = itemId ?? 0;
-
-      // Scroll to the calculated offset
-      double offset =
-          index * Get.height * 0.68; // Replace 100.0 with your item height
-      scrollController.jumpTo(offset);
+  void scrollToIndex() {
+    int? indexValue = index.value; // Get the current index value
+    if (indexValue != null && scrollController.hasClients) {
+      // Calculate the offset based on item height
+      double offset = indexValue * (Get.width * 0.97); // Adjust this as per your item height
       scrollController.animateTo(
         offset,
         duration: Duration(milliseconds: 400),
         curve: Curves.linear,
       );
     }
-    // double offset = index * Get.height * 0.45; // Replace 100.0 with your item height
-    // scrollController.jumpTo(offset);
   }
 
   @override
@@ -82,14 +91,39 @@ class ItemsControllerImp extends ItemsController {
     categoriesId = Get.arguments['categoriesId'].toString();
     categoriesName = Get.arguments['categoriesName'].toString();
     categoriesColor = Get.arguments['categoriesColor'].toString();
+    index.value = Get.arguments['index'];
+    itemId = Get.arguments['itemId'];
     log(itemId.toString());
+    log((Get.width * 0.978).toString());
     initialData();
     getData();
+
+
+
+    super.onInit();
+  }
+
+  @override
+  getData() async {
+    items.clear();
+    statusRequest = StatusRequest.loading;
+    var response = await departmentViewData.getItemsData(slug!);
+    if (kDebugMode) {
+      print(
+          "========================================================================$response");
+    }
+    statusRequest = handlingData(response);
+    if (StatusRequest.success == statusRequest) {
+      List item = response['data'];
+      items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+    } else {
+      statusRequest = StatusRequest.failure;
+    }
     if (items.isNotEmpty) {
-      Timer(Duration(milliseconds: 500), () {
+      Timer(Duration(milliseconds: 300), () {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           // Scroll to the end of the list
-          if (scrollController != null && scrollController.hasClients) {
+          if (scrollController.hasClients) {
             scrollController.addListener(() {
               scrollToIndex();
               update();
@@ -104,43 +138,19 @@ class ItemsControllerImp extends ItemsController {
         update();
       });
     }
-
-    super.onInit();
-  }
-
-  @override
-  getData() async {
-    statusRequest = StatusRequest.loading;
-    var response = await departmentViewData.getItemsData(slug!);
-    if (kDebugMode) {
-      print(
-          "========================================================================$response");
-    }
-    statusRequest = handlingData(response);
-    if (StatusRequest.success == statusRequest) {
-      List item = response['data'];
-      items.addAll(item.map((e) => ItemsModel.fromJson(e)));
-    } else {
-      statusRequest = StatusRequest.failure;
-    }
     update();
   }
 
   Future<bool?> addLike(id, index) async {
-    // if (!items[index].usersId!.contains(userId.toString())) {
-    //   var response = await departmentViewData.addLike(id);
-    //   log("========================================================================$response");
-    //   statusRequest = handlingData(response);
-    //   if (StatusRequest.success == statusRequest) {
-    //     if (response['status'] == "success") {
-    //       items[index].count = (int.parse(items[index].count!) + 1).toString();
-    //       items[index].usersId = "${userId}";
-    //       print(items[index].usersId);
-    //       update();
-    //     }
-    //   }
-    //   update();
-    // }
+    if (!items[index].likes.toString().contains(userId.toString())) {
+      var response = await departmentViewData.addLike(id.toString(),token);
+      log("========================================================================$response");
+      statusRequest = handlingData(response);
+      if (StatusRequest.success == statusRequest) {
+      getData();
+      }
+      update();
+    }
     return statusRequest == StatusRequest.success ? true : false;
   }
 

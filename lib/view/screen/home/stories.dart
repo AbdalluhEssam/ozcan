@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
-import 'package:like_button/like_button.dart';
 import 'package:lottie/lottie.dart';
 import 'package:ozcan/controller/home/stories_controller.dart';
 import 'package:ozcan/core/class/handlingdataview.dart';
@@ -67,131 +66,133 @@ class StoriesDepartment extends StatelessWidget {
             children: [
               controller.story.isNotEmpty
                   ? Expanded(
-                flex: 2,
-                child: SizedBox(
-                  width: Get.width,
-                  child: Directionality(
-                    textDirection: TextDirection.ltr,
-                    child: StoryView(
-                      storyItems: [
-                        ...List.generate(
-                          controller.story.length,
-                              (index) {
-                            controller.currentIndex = index;
-                            controller.itemsName =
-                                controller.story[index].type;
-                            controller.image =
-                                controller.story[index].mediaPath;
-                            controller.update();
-                            print(controller.currentIndex);
-                            if (controller.story[index].mediaType
-                                .toString() ==
-                                "image") {
-                              return StoryItem.pageImage(
-                                caption: Text(
-                                    "${controller.story[index].type}"),
-                                url:
-                                "${controller.story[index].mediaPath}",
-                                controller: controller.storyController,
-                              );
-                            } else {
-                              return StoryItem.pageVideo(
-                                "${controller.story[index].mediaPath}",
-                                caption: Text(
-                                    "${controller.story[index].type}"),
-                                controller: controller.storyController,
-                              );
-                            }
-                          },
+                      flex: 2,
+                      child: SizedBox(
+                        width: Get.width,
+                        child: Directionality(
+                          textDirection: TextDirection.ltr,
+                          child: StoryView(
+                            storyItems: [
+                              ...List.generate(
+                                controller.story.length,
+                                (index) {
+                                  controller.currentIndex = index;
+                                  controller.itemsName =
+                                      controller.story[index].note;
+                                  controller.image =
+                                      controller.story[index].mediaPath;
+                                  controller.update();
+                                  print(controller.currentIndex);
+                                  if (controller.story[index].mediaType
+                                          .toString() ==
+                                      "image") {
+                                    return StoryItem.pageImage(
+                                      caption: Text(
+                                          "${controller.story[index].note}",
+                                          style:
+                                              TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
+                                      url:
+                                          "${controller.story[index].mediaPath}",
+                                      controller: controller.storyController,
+                                    );
+                                  } else {
+                                    return StoryItem.pageVideo(
+                                      "${controller.story[index].mediaPath}",
+                                      caption: Text(
+                                        "${controller.story[index].note}",
+                                        style:
+                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
+                                      controller: controller.storyController,
+                                    );
+                                  }
+                                },
+                              ),
+                            ],
+                            controller: controller.storyController,
+                            inline: true,
+                            repeat: false,
+                            indicatorForegroundColor: primaryColor,
+                            onComplete: () {
+                              Get.back();
+                            },
+                          ),
                         ),
-                      ],
-                      controller: controller.storyController,
-                      inline: true,
-                      repeat: false,
-                      indicatorForegroundColor: primaryColor,
-                      onComplete: () {
-                        Get.back();
-                      },
-                    ),
-                  ),
-                ),
-              )
+                      ),
+                    )
                   : Expanded(
-                  child: Lottie.asset(AppImageAssets.offline,
-                      width: 250, height: 250)),
+                      child: Lottie.asset(AppImageAssets.offline,
+                          width: 250, height: 250)),
               Padding(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                    const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                 child: Row(
                   children: [
                     Expanded(
                         child: SizedBox(
-                          height: 50,
-                          child: TextFormField(
-                            textAlign: TextAlign.start,
-                            controller: controller.textController,
-                            onTap: () {
-                              if (controller.myServices.sharedPreferences
+                      height: 50,
+                      child: TextFormField(
+                        textAlign: TextAlign.start,
+                        controller: controller.textController,
+                        onTap: () {
+                          if (controller.myServices.sharedPreferences
                                   .getString("username") !=
-                                  null) {
-                                Get.toNamed(AppRoute.chatsDetailsScreen,
-                                    arguments: {
-                                      "color": primaryColor,
-                                      "categoriesId": controller.categoriesId,
-                                      "adminId": controller.adminId,
-                                      "itemsName": controller.itemsName,
-                                      "itemsImage": controller.image,
-                                      "ticketId": controller.ticketId,
-                                    });
-                              } else {
-                                Get.toNamed(AppRoute.login);
-                              }
+                              null) {
+                            Get.toNamed(AppRoute.chatsDetailsScreen,
+                                arguments: {
+                                  "color": primaryColor,
+                                  "categoriesId": controller.categoriesId,
+                                  "itemsName": controller.itemsName,
+                                  "itemsImage": controller.image,
+                                });
+                          } else {
+                            Get.toNamed(AppRoute.login);
+                          }
 
-                              controller.storyController.pause();
-                            },
-                            onFieldSubmitted: (value) {
-                              controller.storyController.play();
-                            },
-                            keyboardType: TextInputType.emailAddress,
-                            style: TextStyle(
-                                fontSize: 14,
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold),
-                            toolbarOptions: ToolbarOptions(
-                                selectAll: true,
-                                copy: true,
-                                cut: true,
-                                paste: true),
+                          controller.storyController.pause();
+                        },
+                        onFieldSubmitted: (value) {
+                          controller.storyController.play();
+                        },
+                        keyboardType: TextInputType.emailAddress,
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold),
+                        toolbarOptions: ToolbarOptions(
+                            selectAll: true,
+                            copy: true,
+                            cut: true,
+                            paste: true),
+                        enabled: true,
+                        focusNode: FocusNode(canRequestFocus: true),
+                        cursorColor: primaryColor,
+                        decoration: InputDecoration(
                             enabled: true,
-                            focusNode: FocusNode(canRequestFocus: true),
-                            cursorColor: primaryColor,
-                            decoration: InputDecoration(
-                                enabled: true,
-                                focusedBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                width: 2,
+                                strokeAlign: 5,
+                                color: Color(0xffA659A9),
+                              ),
+                            ),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(10),
+                                borderSide: BorderSide(
                                     width: 2,
                                     strokeAlign: 5,
-                                    color: Color(0xffA659A9),
-                                  ),
-                                ),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                    borderSide: BorderSide(
-                                        width: 2,
-                                        strokeAlign: 5,
-                                        color: Colors.black)),
-                                prefixIcon: IconButton(
-                                    onPressed: () {
-                                      controller.textController.clear();
-                                    },
-                                    icon: Icon(FontAwesome5.telegram_plane)),
-                                focusColor: Color(0xfff7901e),
-                                hintText: ("تواصل الان معنا..."),
-                                hintStyle: TextStyle(
-                                  color: Colors.black,
-                                )),
-                          ),
-                        )),
+                                    color: Colors.black)),
+                            prefixIcon: IconButton(
+                                onPressed: () {
+                                  controller.textController.clear();
+                                },
+                                icon: Icon(FontAwesome5.telegram_plane)),
+                            focusColor: Color(0xfff7901e),
+                            hintText: ("تواصل الان معنا..."),
+                            hintStyle: TextStyle(
+                              color: Colors.black,
+                            )),
+                      ),
+                    )),
                     SizedBox(
                       width: 15,
                     ),

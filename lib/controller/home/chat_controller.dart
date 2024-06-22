@@ -53,7 +53,9 @@ class ChatControllerImp extends ChatController {
     socket.emit("message", {
       'sender_id': int.parse(idUser.toString()),
       'sender_username': username.toString(),
-      'receiver_id': conversation.currentAdminId.toString() == "null" ? null :int.parse(conversation.currentAdminId.toString()),
+      'receiver_id': conversation.currentAdminId.toString() == "null"
+          ? null
+          : int.parse(conversation.currentAdminId.toString()),
       'conversation_id': int.parse(conversationId.toString()),
       'content': myControllerMassage.text,
       'type': 'text',
@@ -146,13 +148,11 @@ class ChatControllerImp extends ChatController {
       message.senderUsername = message.senderUsername;
       message.created = message.created.toString();
       if (message.senderId.toString() != idUser.toString()) {
-        if(conversation.currentAdminId.toString() == "null"){
-
+        if (conversation.currentAdminId.toString() == "null") {
           getConversationsData();
           Get.appUpdate();
           update();
         }
-
       }
       if (data is Map) {
         messages.add(message);
@@ -264,8 +264,7 @@ class ChatControllerImp extends ChatController {
     // timer.cancel();
     // timer =  null;
     streamSocket.dispose();
-    socket.dispose();
-    socket.onDisconnect((_) => print('disconnect'));
+    // socket.dispose();
     audioPlayer.dispose();
     record.dispose();
     scrollController.dispose();
@@ -273,19 +272,18 @@ class ChatControllerImp extends ChatController {
     super.dispose();
   }
 
-  @override
-  void onClose() {
-    // timer.cancel();
-    // timer = null;
-    streamSocket.dispose();
-    socket.onDisconnect((_) => print('disconnect'));
-    socket.dispose();
-    audioPlayer.dispose();
-    record.dispose();
-    scrollController.dispose();
-    myControllerMassage.dispose();
-    super.onClose();
-  }
+  // @override
+  // void onClose() {
+  //   // timer.cancel();
+  //   // timer = null;
+  //   streamSocket.dispose();
+  //   socket.dispose();
+  //   audioPlayer.dispose();
+  //   record.dispose();
+  //   scrollController.dispose();
+  //   myControllerMassage.dispose();
+  //   super.onClose();
+  // }
 
   late Timer timer;
 
@@ -311,6 +309,7 @@ class ChatControllerImp extends ChatController {
     itemsName = itemsName != null
         ? "\n\n $itemsImage\n${"اريد الاستفسار عن " + itemsName!}"
         : "";
+    log(itemsName.toString());
     myControllerMassage = TextEditingController(text: itemsName ?? "");
     getConversationsData();
     connectAndListen();
@@ -405,7 +404,12 @@ class ChatControllerImp extends ChatController {
 
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      sendImage(response['data']['file'].toString());
+      if (conversation.currentAdminId.toString() != "null") {
+        sendImage(response['data']['file'].toString());
+      } else {
+        getConversationsData();
+      }
+
       // addMassage();
       myControllerMassage.clear();
       hasLink = false;
@@ -469,7 +473,12 @@ class ChatControllerImp extends ChatController {
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
       myControllerMassage.clear();
-      sendAudio(response['data']['file'].toString());
+      if (conversation.currentAdminId.toString() != "null") {
+        sendAudio(response['data']['file'].toString());
+      } else {
+        getConversationsData();
+      }
+
       hasLink = false;
       hasLinkController = false;
       myFlie = null;
@@ -504,13 +513,13 @@ class ChatControllerImp extends ChatController {
   List<ConversationsModel> messages = [];
 
   getConversationsData() async {
-    messages.clear();
     statusRequest = StatusRequest.loading;
     var response = await chatData.getConversationsData(
         token.toString(), categoriesId.toString());
     log("========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
+      messages.clear();
       conversation = Conversation.fromJson(response['data']['conversation']);
       conversationId = conversation.id.toString();
 
@@ -578,22 +587,56 @@ class ChatControllerImp extends ChatController {
     }
   }
 
+// Your existing function
+
+// Your existing function
   void stopRecord() async {
     // Get the state of the recorder
     bool isRecording = await record.isRecording();
     if (isRecording == true) {
       await record.stop();
-      addAudio(File(recordFilePath));
-      if (recordFilePath != 'null') {
-        myControllerMassage.clear();
 
-        recordFilePath = '';
-      }
+      // Show a confirmation dialog
+       await Get.defaultDialog<bool>(
+        title: 'Send Recording',
+        middleText: 'هل تريد ارسال التسجيل الصوتى ؟',
+        textCancel: 'لا',
+        textConfirm: 'نعم',
+        onCancel: () => false,
+        onConfirm: () {
+          Get.back();
+          addAudio(File(recordFilePath));
+          if (recordFilePath != 'null') {
+            myControllerMassage.clear();
+            recordFilePath = '';
+          }
+        },
+        barrierDismissible: false,
+      );
+
+
       // Stop recording
       await record.stop();
     }
-    //39397
   }
+
+  // void stopRecord() async {
+  //   // Get the state of the recorder
+  //   bool isRecording = await record.isRecording();
+  //   if (isRecording == true) {
+  //     await record.stop();
+  //
+  //     addAudio(File(recordFilePath));
+  //     if (recordFilePath != 'null') {
+  //       myControllerMassage.clear();
+  //
+  //       recordFilePath = '';
+  //     }
+  //     // Stop recording
+  //     await record.stop();
+  //   }
+  //   //39397
+  // }
 
   int i = 0;
 
@@ -619,4 +662,5 @@ class StreamSocket {
   void dispose() {
     _socketResponse.close();
   }
+
 }

@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'controller/notification_controller.dart';
-import 'core/constant/color.dart';
 
 /// Default [FirebaseOptions] for use with your Firebase apps.
 ///
@@ -107,6 +106,7 @@ class Utils {
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
 
+
 Future<void> initFcm() async {
   await Firebase.initializeApp();
   FirebaseMessaging messaging = FirebaseMessaging.instance;
@@ -128,18 +128,19 @@ Future<void> initFcm() async {
   } else {
     log('User declined or has not accepted permission');
   }
+
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,
     badge: true,
     sound: true,
   );
+
   var initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+  const AndroidInitializationSettings('@mipmap/ic_launcher');
   var initializationSettings =
-      InitializationSettings(android: initializationSettingsAndroid);
+  InitializationSettings(android: initializationSettingsAndroid);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
-  await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   refreshPageNotification(data) {
     if (Get.currentRoute == "/OrdersAll" && data['pagename'] == "OrdersAll") {
       OrdersAllController controller = Get.find();
@@ -151,6 +152,7 @@ Future<void> initFcm() async {
       controllerImp.getData();
     }
   }
+
   Future<String> _downloadAndSaveFile(String url, String fileName) async {
     final Directory? directory = await getExternalStorageDirectory();
     final String filePath = '${directory!.path}/$fileName.png';
@@ -174,14 +176,14 @@ Future<void> initFcm() async {
       Get.snackbar(
         "${message.notification?.title}",
         "${message.notification?.body}",
-        icon: const Icon(Icons.notifications_active, color: AppColor.white),
+        icon: const Icon(Icons.notifications_active, color: Colors.white),
         barBlur: 2,
         margin: const EdgeInsets.symmetric(horizontal: 0),
         padding: const EdgeInsets.all(15),
-        backgroundColor: AppColor.primaryColor.withOpacity(0.4),
+        backgroundColor: Colors.blue.withOpacity(0.4), // Use your app's primary color
         isDismissible: true,
         duration: const Duration(seconds: 2),
-        colorText: AppColor.white,
+        colorText: Colors.white,
       );
 
       RemoteNotification? notification = message.notification;
@@ -227,5 +229,5 @@ Future<void> initFcm() async {
       }
     }
   });
-
 }
+

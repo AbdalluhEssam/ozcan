@@ -13,8 +13,6 @@ abstract class StoriesDepartmentController extends SearchMaxController {
   initialData();
 
   getData();
-
-  goToItems(List categories, int selectedCat, String catId);
 }
 
 class StoriesDepartmentControllerImp extends StoriesDepartmentController {
@@ -91,13 +89,4 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
     return statusRequest == StatusRequest.success ? true : false;
   }
 
-  @override
-  goToItems(categories, selectedCat, catId) {
-    // Get.toNamed(AppRoute.itemsView,arguments: {
-    //   "categories" :  categories ,
-    //   "selectedCat" :  selectedCat ,
-    //   "catId" :  catId ,
-    //
-    // });
-  }
 }

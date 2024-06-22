@@ -49,9 +49,10 @@ class StoryModel {
 
 
 class HighlightsModel {
-  String? id;
-  String? categoryId;
+  int? id;
+  int? categoryId;
   String? type;
+  String? note;
   String? mediaType;
   String? mediaPath;
   String? created;
@@ -60,14 +61,16 @@ class HighlightsModel {
       {this.id,
         this.categoryId,
         this.type,
+        this.note,
         this.mediaType,
         this.mediaPath,
         this.created});
 
   HighlightsModel.fromJson(Map<String, dynamic> json) {
-    id = json['id'].toString();
-    categoryId = json['category_id'].toString();
+    id = json['id'];
+    categoryId = json['category_id'];
     type = json['type'];
+    note = json['note'];
     mediaType = json['media_type'];
     mediaPath = json['media_path'];
     created = json['created'];
@@ -78,6 +81,7 @@ class HighlightsModel {
     data['id'] = this.id;
     data['category_id'] = this.categoryId;
     data['type'] = this.type;
+    data['note'] = this.note;
     data['media_type'] = this.mediaType;
     data['media_path'] = this.mediaPath;
     data['created'] = this.created;

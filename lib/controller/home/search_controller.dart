@@ -4,10 +4,10 @@ import '../../core/functions/handlingdatacontroller.dart';
 import '../../core/services/services.dart';
 import '../../data/datasource/remote/homedata.dart';
 
-
 abstract class SearchController extends GetxController {
   initialData();
-  getData();
+
+  getData(query);
 }
 
 class SearchControllerImp extends SearchController {
@@ -17,14 +17,11 @@ class SearchControllerImp extends SearchController {
   List search = [];
   List snap = [];
 
-
-
   late StatusRequest statusRequest;
 
   String? username;
   String? email;
   String? id;
-  String? query;
 
   @override
   initialData() {
@@ -35,32 +32,27 @@ class SearchControllerImp extends SearchController {
 
   @override
   void onInit() {
-    getData();
-    // suggestion(query!);
     initialData();
     super.onInit();
   }
 
-
   @override
-  getData() async {
+  Future getData(query) async {
+    search.clear();
     statusRequest = StatusRequest.loading;
-    var response = await searchData.getData();
+    var response = await searchData.getData(query);
     // print(
     //     "========================================================================$response");
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        search.addAll(response['0']);
+      search.addAll(response['data']);
 
-      } else {
-        statusRequest = StatusRequest.failure;
-      }
-          print("search ============================================ ${search.length} =======================");
-
-      }
+      print(
+          "search ============================================ ${search.length} =======================");
+    } else {
+      statusRequest = StatusRequest.failure;
+    }
     update();
+    return search;
   }
-
-
 }

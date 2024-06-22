@@ -106,7 +106,7 @@ class ItemsView extends StatelessWidget {
                           height: 1,
                         ),
                         Container(
-                          constraints: BoxConstraints(maxHeight: Get.width * 0.65),
+                          constraints:BoxConstraints(maxHeight: Get.width * 0.65),
                           child: Hero(
                               tag: "${controller.items[index].id}",
                               child: CachedNetworkImage(
@@ -154,14 +154,12 @@ class ItemsView extends StatelessWidget {
                                             "categoriesName":
                                                 controller.categoriesName,
                                             "ticketId": controller.ticketId,
-                                            "itemsName": controller
-                                                .items[index].name,
+                                            "itemsName":
+                                                controller.items[index].name,
                                             "itemsImage": controller
                                                     .containsLink(controller
-                                                        .items[index]
-                                                        .image!)
-                                                ? controller
-                                                    .items[index].image!
+                                                        .items[index].image!)
+                                                ? controller.items[index].image!
                                                 : '${controller.items[index].image}'
                                           });
                                     } else {
@@ -210,19 +208,21 @@ class ItemsView extends StatelessWidget {
                                   ),
                                   Spacer(),
                                   Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal:10),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
                                     child: LikeButton(
-                                      likeCount: 50,
+                                      isLiked: controller.items[index].likes.toString()?.contains(controller.userId.toString()),
+                                      likeCount: controller.items[index].likes_count,
                                       countPostion: CountPostion.left,
                                       circleColor: CircleColor(
-                                          start: Colors.white, end: primaryColor),
+                                          start: Colors.white,
+                                          end: primaryColor),
                                       onTap: (isLiked) {
                                         if (controller.userId == "null") {
                                           Get.toNamed(AppRoute.login);
                                         }
                                         return controller.addLike(
-                                            controller.items[index].id,
-                                            index);
+                                            controller.items[index].id.toString(), index);
                                       },
                                     ),
                                   )

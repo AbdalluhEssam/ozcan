@@ -7,7 +7,6 @@ import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../data/datasource/remote/chat_data.dart';
-import '../../data/model/massage_model.dart';
 import 'home_controller.dart';
 
 abstract class DepartmentController extends SearchMaxController {
@@ -85,6 +84,7 @@ class DepartmentControllerImp extends DepartmentController {
         storyTop.addAll(response['data']['highlights']);
           List item = response['data']['products'];
           items.addAll(item.map((e) => ItemsModel.fromJson(e)));
+
 
         // if (response['banner'] != '{"status":"failure"}') {
         //   banner.addAll(response['banner']);

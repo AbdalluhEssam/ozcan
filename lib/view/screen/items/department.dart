@@ -160,9 +160,7 @@ class DepartmentView extends StatelessWidget {
                                                         });
                                                   },
                                                   primaryColor: primaryColor,
-                                                  title:
-                                                      // "${controller.story.first['title']}",
-                                                  "${controller.storyTop[index]['note']}",
+                                                  title:  "${controller.storyTop[index]['note']}",
                                                   photo: "${controller.storyTop[index]['media_path']}"),
                                             ),
                                           ),
@@ -327,6 +325,7 @@ class DepartmentView extends StatelessWidget {
                                                     controller.categoriesName,
                                                 "slug": controller.slug,
                                                 "itemId": index.toInt(),
+                                                "index": index.toInt(),
                                               });
                                         },
                                         child: Container(
