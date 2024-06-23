@@ -1,8 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/routes.dart';
-
 import '../../core/functions/handlingdatacontroller.dart';
 import '../../data/datasource/remote/forgetpassword/resetpassword.dart';
 
@@ -18,25 +19,26 @@ class ResetPasswordControllerImp extends ResetPasswordController {
   late TextEditingController repassword;
 
   String? email;
+  String? otp;
 
   @override
   goToSuccessResetPassword() async {
+    log(otp.toString());
     if (password.text != repassword.text) {
-      return Get.defaultDialog(
-          title: "Waring", middleText: "Password Not Match");
+      return Get.defaultDialog(title: "Waring", middleText: "Password Not Match");
     }
     if (formstate.currentState!.validate()) {
       statusRequest = StatusRequest.loading;
       update();
-      var response = await resetPasswordData.postData(email!, password.text);
+      var response = await resetPasswordData.postData(
+          otp.toString(), email.toString(), password.text, repassword.text);
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          Get.offNamed(AppRoute.successResetPassword);
-        } else {
-          Get.defaultDialog(title: "Warning", middleText: " Try Again");
-          statusRequest = StatusRequest.failure;
-        }
+        Get.offNamed(AppRoute.successResetPassword);
+      } else {
+        Get.defaultDialog(title: "Warning", middleText: " Try Again");
+        statusRequest = StatusRequest.none;
+
       }
       update();
     } else {
@@ -46,6 +48,7 @@ class ResetPasswordControllerImp extends ResetPasswordController {
 
   @override
   void onInit() {
+    otp = Get.arguments['otp'];
     email = Get.arguments['email'];
     password = TextEditingController();
     repassword = TextEditingController();

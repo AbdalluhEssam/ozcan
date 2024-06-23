@@ -7,7 +7,7 @@ class VerfiyCodeForgetPasswordData {
   postData(String email, String verfiyCode) async {
     var response = await crud.postData(AppLink.verfiyCodeForgetPass, {
       "email": email,
-      "verfiycode": verfiyCode,
+      "otp": verfiyCode,
     });
     return response.fold((l) => l, (r) => r);
   }

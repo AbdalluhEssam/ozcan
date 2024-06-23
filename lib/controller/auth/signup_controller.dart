@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../core/constant/routes.dart';
-
 import '../../core/class/statusrequest.dart';
 import '../../core/constant/color.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -10,7 +9,6 @@ import '../../data/datasource/remote/auth/signup.dart';
 
 abstract class SignUpController extends GetxController {
   signUp();
-
   goToSignIn();
 }
 
@@ -42,7 +40,6 @@ class SignUpControllerImp extends SignUpController {
           selectedGender.name);
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        if (response['status'] == 200) {
           Get.offNamed(AppRoute.successSignUp, arguments: {
             "email": email.text.trimLeft().trimRight(),
           });
@@ -55,14 +52,13 @@ class SignUpControllerImp extends SignUpController {
               duration: const Duration(seconds: 3),
               colorText: AppColor.black,
               borderRadius: 80);
-          myServices.sharedPreferences
-              .setString("emailup", email.text.toString());
-        } else if(response['status'] == 422){
-          Get.defaultDialog(
-              title: "Warning",
-              middleText: "Phone Number Or Email Already Exists");
-          statusRequest = StatusRequest.failure;
-        }
+          myServices.sharedPreferences.setString("emailup", email.text.toString());
+      }else{
+        Get.defaultDialog(
+            title: "Warning",
+            middleText: "Phone Number Or Email Already Exists");
+        statusRequest = StatusRequest.none;
+        // statusRequest = StatusRequest.failure;
       }
       update();
     } else {}

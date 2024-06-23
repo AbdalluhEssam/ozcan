@@ -17,9 +17,9 @@ class AppLink {
   static const String reSend = "$serverLink/auth/resend.php";
   static const String login = "$serverLink/login";
 //================================== Forget Password ===============================//
-  static const String checkEmail = "$serverLink/forgetpassword/checkemail.php";
-  static const String verfiyCodeForgetPass ="$serverLink/forgetpassword/verfiycode.php";
-  static const String resetPassword ="$serverLink/forgetpassword/resetpassword.php";
+  static const String checkEmail = "$serverLink/generate-password-otp";
+  static const String verfiyCodeForgetPass ="$serverLink/validate-password-otp";
+  static const String resetPassword ="$serverLink/reset-password";
 //================================== Home ===============================//
   static const String homePage = "$serverLink/home/images";
   static const String categories = "$serverLink/categories";

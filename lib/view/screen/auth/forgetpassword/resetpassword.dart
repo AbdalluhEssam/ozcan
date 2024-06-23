@@ -17,7 +17,6 @@ class ResetPassword extends StatelessWidget {
     Get.put(ResetPasswordControllerImp());
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.backgroundColor,
           title: Text(
             "reset".tr,
             style: Theme.of(context)
@@ -61,6 +60,13 @@ class ResetPassword extends StatelessWidget {
                             label: "password".tr,
                             hinttext: "hintpass".tr,
                             iconData: Icons.lock_outline,
+                            onChanged: (val) {
+                              controller.formstate.currentState!
+                                  .validate();
+                              return null;
+
+                              // return  EmailValidator.validate(controller.email.text);
+                            },
                             // mycontroller: ,
                           ),
                           CustomFormAuth(
@@ -73,6 +79,13 @@ class ResetPassword extends StatelessWidget {
                             label: "repassword".tr,
                             hinttext: "rehintpass".tr,
                             iconData: Icons.lock_outline,
+                            onChanged: (val) {
+                              controller.formstate.currentState!
+                                  .validate();
+                              return null;
+
+                              // return  EmailValidator.validate(controller.email.text);
+                            },
                             // mycontroller: ,
                           ),
                           const SizedBox(

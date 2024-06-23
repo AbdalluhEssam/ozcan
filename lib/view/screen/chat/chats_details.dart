@@ -2,11 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttericon/font_awesome5_icons.dart';
 import 'package:get/get.dart';
 import 'package:ozcan/controller/home/chat_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
+import 'package:ozcan/view/image_zoom.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import '../../../data/model/massage_model.dart';
@@ -174,7 +176,6 @@ class ChatsDetailsScreen extends StatelessWidget {
                       )),
                 Container(
                     margin: EdgeInsets.only(bottom: 20),
-                    height: 50,
                     clipBehavior: Clip.antiAliasWithSaveLayer,
                     decoration: BoxDecoration(
                         border: Border.all(
@@ -191,9 +192,9 @@ class ChatsDetailsScreen extends StatelessWidget {
                       key: controller.formKey,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           Container(
-                              height: 55,
                               color: controller.categoriesColor,
                               child: MaterialButton(
                                 minWidth: 1,
@@ -206,11 +207,31 @@ class ChatsDetailsScreen extends StatelessWidget {
                                   color: Colors.white,
                                 ),
                               )),
+                          Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(40),
+                                color: Colors.white),
+                            child: IconButton(
+                              onPressed: () async {
+                                controller.imgGlr();
+                              },
+                              color: controller.myFlie == null
+                                  ? controller.categoriesColor
+                                  : Colors.green,
+                              icon: controller.myFlie == null
+                                  ? const Icon(
+                                      FontAwesome5.images,
+                                    )
+                                  : const Icon(
+                                      Icons.done,
+                                    ),
+                            ),
+                          ),
                           Expanded(
                               child: TextFormField(
                             controller: controller.myControllerMassage,
                             minLines: 1,
-                            maxLines: 3,
+                            maxLines: 20,
                             validator: (value) {
                               if (value!.isEmpty) {
                                 return 'not message';
@@ -218,57 +239,6 @@ class ChatsDetailsScreen extends StatelessWidget {
                               return null;
                             },
                             decoration: InputDecoration(
-                                prefixIcon: Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(40),
-                                      color: Colors.white),
-                                  child: IconButton(
-                                    onPressed: () async {
-                                      controller.imgGlr();
-                                    },
-                                    color: controller.myFlie == null
-                                        ? controller.categoriesColor
-                                        : Colors.green,
-                                    icon: controller.myFlie == null
-                                        ? const Icon(
-                                            FontAwesome5.images,
-                                          )
-                                        : const Icon(
-                                            Icons.done,
-                                          ),
-                                  ),
-                                ),
-                                suffixIcon: Container(
-                                    height: 40,
-                                    margin:
-                                        const EdgeInsets.fromLTRB(5, 5, 10, 5),
-                                    decoration: BoxDecoration(
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color:
-                                                  controller.recording == true
-                                                      ? Colors.white
-                                                      : Colors.black12,
-                                              spreadRadius: 4)
-                                        ],
-                                        color: controller.recording == true
-                                            ? Colors.red
-                                            : controller.categoriesColor,
-                                        shape: BoxShape.circle),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        controller.startStopRecord();
-                                      },
-                                      child: Container(
-                                          padding: const EdgeInsets.all(4),
-                                          child: Icon(
-                                            controller.recording == true
-                                                ? Icons.stop
-                                                : Icons.mic,
-                                            color: Colors.white,
-                                            size: 30,
-                                          )),
-                                    )),
                                 contentPadding: EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 10),
                                 hintText: controller.recording == true
@@ -276,6 +246,35 @@ class ChatsDetailsScreen extends StatelessWidget {
                                     : 'تفصل بسؤالك ...',
                                 border: InputBorder.none),
                           )),
+                          Container(
+                              height: 40,
+                              margin: const EdgeInsets.fromLTRB(5, 5, 10, 5),
+                              decoration: BoxDecoration(
+                                  boxShadow: [
+                                    BoxShadow(
+                                        color: controller.recording == true
+                                            ? Colors.white
+                                            : Colors.black12,
+                                        spreadRadius: 4)
+                                  ],
+                                  color: controller.recording == true
+                                      ? Colors.red
+                                      : controller.categoriesColor,
+                                  shape: BoxShape.circle),
+                              child: GestureDetector(
+                                onTap: () {
+                                  controller.startStopRecord();
+                                },
+                                child: Container(
+                                    padding: const EdgeInsets.all(4),
+                                    child: Icon(
+                                      controller.recording == true
+                                          ? Icons.stop
+                                          : Icons.mic,
+                                      color: Colors.white,
+                                      size: 30,
+                                    )),
+                              )),
                         ],
                       ),
                     ))
@@ -332,58 +331,70 @@ class ChatsDetailsScreen extends StatelessWidget {
         alignment: AlignmentDirectional.centerEnd,
         child: Container(
           constraints: BoxConstraints(maxWidth: 300),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: [
-              Container(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  padding: controller.containsLinkImage(model.content!)
-                      ? EdgeInsets.zero
-                      : EdgeInsets.only(bottom: 5),
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withOpacity(0.4),
-                      borderRadius: const BorderRadiusDirectional.only(
-                        bottomEnd: Radius.circular(10),
-                        bottomStart: Radius.circular(10),
-                        topEnd: Radius.circular(10),
-                      )),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Flexible(
-                          child: GestureDetector(
-                        onTap: () {
-                          controller.myControllerMassage.text =
-                              "\n\n${controller.extractLink(model.file!)}";
-                          controller.enteredText =
-                              "${controller.extractLink(model.file!)}";
-                          controller.hasLinkController = true;
-                          controller.update();
-                        },
-                        child: CachedNetworkImage(
-                          imageUrl: '${model.file!}',
-                          maxHeightDiskCache: 200,
-                        ),
-                      )),
-                      if (model.content.toString() != "null")
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
-                          child: Text(
-                            model.content.toString(),
-                            textAlign: TextAlign.right,
+              IconButton(
+                  onPressed: () {
+                    Get.to(ZoomImage(
+                      image: '${model.file!}',
+                    ));
+                  },
+                  icon: Icon(Icons.zoom_in)),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      padding: controller.containsLinkImage(model.content!)
+                          ? EdgeInsets.zero
+                          : EdgeInsets.only(bottom: 5),
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.4),
+                          borderRadius: const BorderRadiusDirectional.only(
+                            bottomEnd: Radius.circular(10),
+                            bottomStart: Radius.circular(10),
+                            topEnd: Radius.circular(10),
+                          )),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                              child: GestureDetector(
+                            onTap: () {
+                              controller.myControllerMassage.text =
+                                  "\n\n${controller.extractLink(model.file!)}";
+                              controller.enteredText =
+                                  "${controller.extractLink(model.file!)}";
+                              controller.hasLinkController = true;
+                              controller.update();
+                            },
+                            child: CachedNetworkImage(
+                              imageUrl: '${model.file!}',
+                              maxHeightDiskCache: 200,
+                              maxWidthDiskCache: 250,
+                            ),
+                          )),
+                          if (model.content.toString() != "null")
+                            Padding(
+                              padding:const EdgeInsets.symmetric(horizontal: 10),
+                              child: Text(
+                                model.content.toString(),
+                                textAlign: TextAlign.right,
+                              ),
+                            ),
+                          SizedBox(
+                            width: 5,
                           ),
-                        ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                    ],
-                  )),
-              Text(
-                model.created.toString(),
-                textAlign: TextAlign.left,
-                style: const TextStyle(fontSize: 10),
+                        ],
+                      )),
+                  Text(
+                    model.created.toString(),
+                    textAlign: TextAlign.left,
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ],
               ),
             ],
           ),
@@ -410,42 +421,61 @@ class ChatsDetailsScreen extends StatelessWidget {
                 )),
             child: Column(
               children: [
-                HtmlWidget(
-                  """
+                Stack(
+                  alignment: AlignmentDirectional.topEnd,
+                  children: [
+
+                    HtmlWidget(
+                      """
                 ${model.file}
-                """,
-                  customStylesBuilder: (element) {
-                    if (element.localName == 'div') {
-                      return {
-                        'display': 'flex',
-                        'flex-direction': 'column',
-                        'gap': '8px',
-                      };
-                    }
-                    if (element.localName == 'img') {
-                      return {
-                        'max-width': '350px',
-                        'max-height': '400px',
-                        'object-fit': 'cover',
-                        'border-radius': '10px',
-                        'cursor': 'pointer',
-                      };
-                    }
-                    if (element.localName == 'p') {
-                      return {
-                        'padding-left': '8px',
-                        'text-align': 'left',
-                        'line-height': '0.2',
-                        // Reducing line height to reduce space between lines
-                      };
-                    }
-                    return null;
-                  },
-                  textStyle: TextStyle(
-                    fontSize: 16,
-                    height:
-                        0.6, // Adjust the height to control the space between lines
-                  ),
+                    """,
+                      customStylesBuilder: (element) {
+                        if (element.localName == 'div') {
+                          return {
+                            'display': 'flex',
+                            'flex-direction': 'column',
+                            'gap': '8px',
+                          };
+                        }
+                        if (element.localName == 'img') {
+                          return {
+                            'max-width': '350px',
+                            'max-height': '400px',
+                            'object-fit': 'cover',
+                            'border-radius': '10px',
+                            'cursor': 'pointer',
+                          };
+                        }
+                        if (element.localName == 'p') {
+                          return {
+                            'padding-left': '8px',
+                            'text-align': 'left',
+                            'line-height': '0.2',
+                            // Reducing line height to reduce space between lines
+                          };
+                        }
+                        return null;
+                      },
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        height:
+                            0.6, // Adjust the height to control the space between lines
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: CircleAvatar(
+                        child: IconButton(
+                            onPressed: () {
+                              Get.to(ZoomImage(
+                                image:
+                                '${controller.extractLinkImage(model.file!)}',
+                              ));
+                            },
+                            icon: Icon(Icons.zoom_in)),
+                      ),
+                    ),
+                  ],
                 ),
                 OutlinedButton.icon(
                   style: ButtonStyle(
@@ -597,70 +627,82 @@ class ChatsDetailsScreen extends StatelessWidget {
         alignment: AlignmentDirectional.centerStart,
         child: Container(
           constraints: BoxConstraints(maxWidth: 300),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
+          child: Row(
             children: [
-              Container(
-                  clipBehavior: Clip.antiAliasWithSaveLayer,
-                  padding: controller.containsLinkImage(model.content!)
-                      ? EdgeInsets.zero
-                      : EdgeInsets.only(bottom: 0),
-                  decoration: BoxDecoration(
-                      color: color.withOpacity(0.4),
-                      borderRadius: const BorderRadiusDirectional.only(
-                        bottomEnd: Radius.circular(10),
-                        bottomStart: Radius.circular(10),
-                        topEnd: Radius.circular(10),
-                      )),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      // Flexible(
-                      //     child: RichText(
-                      //         text: TextSpan(
-                      //   text: controller.extractLink(model.content!),
-                      //   style: TextStyle(
-                      //       color: Colors.blue,
-                      //       decoration: TextDecoration.underline),
-                      //   recognizer: TapGestureRecognizer()
-                      //     ..onTap = () async {
-                      //       await launchUrlString(controller
-                      //           .extractLink(model.content!));
-                      //     },
-                      // ))),
-                      Flexible(
-                          child: GestureDetector(
-                        onTap: () {
-                          controller.myControllerMassage.text =
-                              "\n\n${controller.extractLink(model.file!)}";
-                          controller.enteredText =
-                              "${controller.extractLink(model.file!)}";
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                      clipBehavior: Clip.antiAliasWithSaveLayer,
+                      padding: controller.containsLinkImage(model.content!)
+                          ? EdgeInsets.zero
+                          : EdgeInsets.only(bottom: 0),
+                      decoration: BoxDecoration(
+                          color: color.withOpacity(0.4),
+                          borderRadius: const BorderRadiusDirectional.only(
+                            bottomEnd: Radius.circular(10),
+                            bottomStart: Radius.circular(10),
+                            topEnd: Radius.circular(10),
+                          )),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          // Flexible(
+                          //     child: RichText(
+                          //         text: TextSpan(
+                          //   text: controller.extractLink(model.content!),
+                          //   style: TextStyle(
+                          //       color: Colors.blue,
+                          //       decoration: TextDecoration.underline),
+                          //   recognizer: TapGestureRecognizer()
+                          //     ..onTap = () async {
+                          //       await launchUrlString(controller
+                          //           .extractLink(model.content!));
+                          //     },
+                          // ))),
+                          Flexible(
+                              child: GestureDetector(
+                            onTap: () {
+                              controller.myControllerMassage.text =
+                                  "\n\n${controller.extractLink(model.file!)}";
+                              controller.enteredText =
+                                  "${controller.extractLink(model.file!)}";
 
-                          controller.hasLinkController = true;
-                          controller.update();
-                        },
-                        child: CachedNetworkImage(
-                          imageUrl: '${model.file!}',
-                          maxHeightDiskCache: 200,
-                        ),
+                              controller.hasLinkController = true;
+                              controller.update();
+                            },
+                            child: CachedNetworkImage(
+                              imageUrl: '${model.file!}',
+                              maxHeightDiskCache: 200,
+                              maxWidthDiskCache: 250,
+                            ),
+                          )),
+                          if (model.content.toString() != "null")
+                            Text(
+                              model.content.toString(),
+                              textAlign: TextAlign.right,
+                            ),
+                          SizedBox(
+                            width: 5,
+                          ),
+                        ],
                       )),
-                      if (model.content.toString() != "null")
-                        Text(
-                          model.content.toString(),
-                          textAlign: TextAlign.right,
-                        ),
-                      SizedBox(
-                        width: 5,
-                      ),
-                    ],
-                  )),
-              Text(
-                model.created.toString(),
-                textAlign: TextAlign.right,
-                style: const TextStyle(fontSize: 10),
+                  Text(
+                    model.created.toString(),
+                    textAlign: TextAlign.right,
+                    style: const TextStyle(fontSize: 10),
+                  ),
+                ],
               ),
+              IconButton(
+                  onPressed: () {
+                    Get.to(ZoomImage(
+                      image: '${model.file!}',
+                    ));
+                  },
+                  icon: Icon(Icons.zoom_in))
             ],
           ),
         ),
@@ -700,10 +742,30 @@ class ChatsDetailsScreen extends StatelessWidget {
                           controller.hasLinkController = true;
                           controller.update();
                         },
-                        child: CachedNetworkImage(
-                          imageUrl:
-                              '${controller.extractLinkImage(model.content!)}',
-                          maxHeightDiskCache: 200,
+                        child: Stack(
+                          alignment: AlignmentDirectional.topStart,
+                          children: [
+                            CachedNetworkImage(
+                              imageUrl:
+                                  '${controller.extractLinkImage(model.content!)}',
+                              maxHeightDiskCache: 200,
+                              maxWidthDiskCache: 250,
+                            ),
+                            if (controller.containsLinkImage(model.content!))
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: CircleAvatar(
+                                  child: IconButton(
+                                      onPressed: () {
+                                        Get.to(ZoomImage(
+                                          image:
+                                              '${controller.extractLinkImage(model.content!)}',
+                                        ));
+                                      },
+                                      icon: Icon(Icons.zoom_in)),
+                                ),
+                              ),
+                          ],
                         ),
                       )),
                     if (controller.containsLink(model.content!) &&

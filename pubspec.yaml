@@ -86,6 +86,7 @@ dependencies:
   socket_io_client: ^2.0.3+1
   flutter_widget_from_html: ^0.15.1
   change_app_package_name: ^1.2.0
+  insta_image_viewer: ^1.0.4
 
 dev_dependencies:
   flutter_test:

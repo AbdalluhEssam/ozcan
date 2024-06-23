@@ -1,6 +1,7 @@
+import 'dart:developer';
+
 import 'package:get/get.dart';
 import '../../core/constant/routes.dart';
-
 
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -13,6 +14,7 @@ abstract class VerfiyCodeController extends GetxController {
 
 class VerfiyCodeControllerImp extends VerfiyCodeController {
   String? email;
+  String? otp;
   MyServices myServices = Get.find();
 
   VerfiyCodeForgetPasswordData verfiyCodeForgetPasswordData =
@@ -27,13 +29,14 @@ class VerfiyCodeControllerImp extends VerfiyCodeController {
         email!, verfiyCodeResetPass);
     statusRequest = handlingData(response);
     if (StatusRequest.success == statusRequest) {
-      if (response['status'] == "success") {
-        Get.offNamed(AppRoute.resetPassword, arguments: {"email": email});
-      } else {
-        Get.defaultDialog(
-            title: "Warning", middleText: "Verfiy Code Not Correct");
-        statusRequest = StatusRequest.failure;
-      }
+      log(verfiyCodeResetPass.toString());
+      Get.offNamed(AppRoute.resetPassword, arguments: {
+        "email": email,
+        "otp": verfiyCodeResetPass,
+      });
+    } else {
+      Get.defaultDialog(
+          title: "Warning", middleText: "Verfiy Code Not Correct");
     }
     update();
   }

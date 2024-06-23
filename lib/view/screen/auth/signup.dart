@@ -21,6 +21,7 @@ class SignUp extends StatelessWidget {
             "signup".tr,
             style: Theme.of(context).textTheme.displayLarge,
           ),
+          automaticallyImplyLeading: false,
           elevation: 0,
           centerTitle: true,
         ),
@@ -58,6 +59,13 @@ class SignUp extends StatelessWidget {
                                 valid: (val) {
                                   return validInput(val!, 3, 100, "username");
                                 },
+                                onChanged: (val) {
+                                  controller.formState.currentState!
+                                      .validate();
+                                  return null;
+
+                                  // return  EmailValidator.validate(controller.email.text);
+                                },
                                 mycontroller: controller.username,
                                 label: "username".tr,
                                 hinttext: "hintusername".tr,
@@ -69,6 +77,13 @@ class SignUp extends StatelessWidget {
 
                                 valid: (val) {
                                   return validInput(val!, 5, 100, "email");
+                                },
+                                onChanged: (val) {
+                                  controller.formState.currentState!
+                                      .validate();
+                                  return null;
+
+                                  // return  EmailValidator.validate(controller.email.text);
                                 },
                                 mycontroller: controller.email,
                                 label: "email".tr,
@@ -82,6 +97,13 @@ class SignUp extends StatelessWidget {
                                 valid: (val) {
                                   return validInput(val!, 5, 100, "phone");
                                 },
+                                onChanged: (val) {
+                                  controller.formState.currentState!
+                                      .validate();
+                                  return null;
+
+                                  // return  EmailValidator.validate(controller.email.text);
+                                },
                                 mycontroller: controller.phone,
                                 label: "phone".tr,
                                 hinttext: "hintphone".tr,
@@ -94,6 +116,13 @@ class SignUp extends StatelessWidget {
 
                                   valid: (val) {
                                     return validInput(val!, 5, 100, "password");
+                                  },
+                                  onChanged: (val) {
+                                    controller.formState.currentState!
+                                        .validate();
+                                    return null;
+
+                                    // return  EmailValidator.validate(controller.email.text);
                                   },
                                   onTap: () {
                                     controller.showPassword();

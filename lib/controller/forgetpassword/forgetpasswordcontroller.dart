@@ -25,15 +25,12 @@ class ForgetPasswordControllerImp extends ForgetPasswordController {
       var response = await checkEmailData.postData(email.text);
       statusRequest = handlingData(response);
       if (StatusRequest.success == statusRequest) {
-        if (response['status'] == "success") {
-          Get.offNamed(AppRoute.verfiyCodeResetPassword,
-              arguments: {"email": email.text});
-          myServices.sharedPreferences.setString("email", email.text.toString());
-
-        } else {
-          Get.defaultDialog(title: "Warning", middleText: " Email Not Found");
-          statusRequest = StatusRequest.failure;
-        }
+        Get.offNamed(AppRoute.verfiyCodeResetPassword,
+            arguments: {"email": email.text});
+        myServices.sharedPreferences.setString("email", email.text.toString());
+      } else {
+        Get.defaultDialog(title: "Warning", middleText: " Email Not Found");
+        statusRequest = StatusRequest.failure;
       }
       update();
     }

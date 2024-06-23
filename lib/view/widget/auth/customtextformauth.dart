@@ -13,6 +13,7 @@ class CustomFormAuth extends StatelessWidget {
   final bool isNamber;
   final bool? obscureText;
   final void Function()? onTap;
+  final String? Function(String)? onChanged;
 
   const CustomFormAuth({
     Key? key,
@@ -23,7 +24,7 @@ class CustomFormAuth extends StatelessWidget {
     required this.valid,
     required this.isNamber,
     this.obscureText,
-    this.onTap,
+    this.onTap,this.onChanged,
   }) : super(key: key);
 
   @override
@@ -36,6 +37,8 @@ class CustomFormAuth extends StatelessWidget {
             ? const TextInputType.numberWithOptions(decimal: true)
             : TextInputType.text,
         validator: valid,
+        onChanged: onChanged,
+
         controller: mycontroller,
         obscureText: obscureText == null || obscureText == false ? false : true,
         decoration: InputDecoration(

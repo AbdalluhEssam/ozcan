@@ -61,6 +61,13 @@ class Login extends StatelessWidget {
                           valid: (val) {
                             return validInput(val!, 5, 100, "email");
                           },
+                          onChanged: (val) {
+                            controller.formstate.currentState!
+                                .validate();
+                            return null;
+
+                            // return  EmailValidator.validate(controller.email.text);
+                          },
                           mycontroller: controller.email,
                           label: "email".tr,
                           hinttext: "hintemail".tr,
@@ -73,11 +80,19 @@ class Login extends StatelessWidget {
                             onTap: () {
                               controller.showPassword();
                             },
+                            onChanged: (val) {
+                              controller.formstate.currentState!
+                                  .validate();
+                              return null;
+
+                              // return  EmailValidator.validate(controller.email.text);
+                            },
                             obscureText: controller.isShowPassword,
 
                             valid: (val) {
                               return validInput(val!, 5, 40, "password");
                             },
+
                             mycontroller: controller.password,
                             label: "password".tr,
                             hinttext: "hintpass".tr,
@@ -116,22 +131,22 @@ class Login extends StatelessWidget {
                         const SizedBox(
                           height: 30,
                         ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            buildMedia(
-                                icon: Icons.facebook,
-                                text: "Facebook",
-                                onPressed: () async {
-                                  await controller.loginFacebook();
-                                }),
-                            buildMedia(
-                                icon: MyFlutterApp.google,
-                                text: "Google",
-                                onPressed: () {}),
-                          ],
-                        ),
+                        // Row(
+                        //   crossAxisAlignment: CrossAxisAlignment.center,
+                        //   mainAxisAlignment: MainAxisAlignment.center,
+                        //   children: [
+                        //     buildMedia(
+                        //         icon: Icons.facebook,
+                        //         text: "Facebook",
+                        //         onPressed: () async {
+                        //           await controller.loginFacebook();
+                        //         }),
+                        //     buildMedia(
+                        //         icon: MyFlutterApp.google,
+                        //         text: "Google",
+                        //         onPressed: () {}),
+                        //   ],
+                        // ),
                       ],
                     ),
                   ),

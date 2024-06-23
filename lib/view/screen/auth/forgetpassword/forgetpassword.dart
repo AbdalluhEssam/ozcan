@@ -17,7 +17,6 @@ class ForgetPassword extends StatelessWidget {
     Get.put(ForgetPasswordControllerImp());
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.backgroundColor,
           title: Text(
             "forget".tr,
             style: Theme.of(context)
@@ -60,6 +59,13 @@ class ForgetPassword extends StatelessWidget {
                             label: "email".tr,
                             hinttext: "hintemail".tr,
                             iconData: Icons.email_outlined,
+                            onChanged: (val) {
+                              controller.formstate.currentState!
+                                  .validate();
+                              return null;
+
+                              // return  EmailValidator.validate(controller.email.text);
+                            },
                             // mycontroller: ,
                           ),
                           const SizedBox(

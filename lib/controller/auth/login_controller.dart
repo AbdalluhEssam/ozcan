@@ -65,7 +65,7 @@ class LoginControllerImp extends LoginController {
             myServices.sharedPreferences
                 .setString("phone", response['data']['user']['phone'].toString());
             myServices.sharedPreferences.setString("step", "2");
-            Get.offNamed(AppRoute.homeScreen);
+            Get.offAllNamed(AppRoute.mySplashScreen);
             Get.snackbar(
                 "${myServices.sharedPreferences.getString("username")} ",
                 "اهلا بك فى Ozcan  يومك سعيد".tr,

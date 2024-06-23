@@ -15,7 +15,6 @@ class VerfiyCode extends StatelessWidget {
     Get.put(VerfiyCodeControllerImp());
     return Scaffold(
         appBar: AppBar(
-          backgroundColor: AppColor.backgroundColor,
           title: Text(
             "verification".tr,
             style: Theme.of(context)
@@ -51,16 +50,18 @@ class VerfiyCode extends StatelessWidget {
                           cursorColor: AppColor.primaryColor,
                           fieldWidth: 55,
                           borderRadius: BorderRadius.circular(30),
-                          numberOfFields: 5,
+                          numberOfFields: 6,
                           borderColor: AppColor.primaryColor,
                           showFieldAsBox: true,
                           //runs when a code is typed in
                           onCodeChanged: (String code) {
                             //handle validation or checks here
+
                           },
                           //runs when every textfield is filled
                           onSubmit: (String verfiyCodeResetPass) {
                             controller.goToResetPassword(verfiyCodeResetPass);
+
                           }, // end onSubmit
                         ),
                       ],
