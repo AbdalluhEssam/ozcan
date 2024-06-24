@@ -77,6 +77,7 @@ class StoriesDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
+                                  controller.getVideoDuration(controller.story[index].mediaPath.toString());
                                   controller.itemsName =
                                       controller.story[index].note;
                                   controller.image =
@@ -88,20 +89,25 @@ class StoriesDepartment extends StatelessWidget {
                                       "image") {
                                     return StoryItem.pageImage(
                                       caption: Text(
-                                          "${controller.story[index].note}",
-                                          style:
-                                              TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
+                                        "${controller.story[index].note}",
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
                                       url:
                                           "${controller.story[index].mediaPath}",
                                       controller: controller.storyController,
                                     );
                                   } else {
                                     return StoryItem.pageVideo(
+                                      duration: controller.videoDuration ?? Duration(seconds: 45),
                                       "${controller.story[index].mediaPath}",
                                       caption: Text(
                                         "${controller.story[index].note}",
-                                        style:
-                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                        textAlign: TextAlign.center,
+                                      ),
                                       controller: controller.storyController,
                                     );
                                   }
@@ -112,6 +118,9 @@ class StoriesDepartment extends StatelessWidget {
                             inline: true,
                             repeat: false,
                             indicatorForegroundColor: primaryColor,
+                            onStoryShow: (storyItem, index) async{
+                             await controller.getVideoDuration(controller.story[index].mediaPath.toString());
+                            },
                             onComplete: () {
                               Get.back();
                             },

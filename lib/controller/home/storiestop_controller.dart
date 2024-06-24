@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:ozcan/data/datasource/remote/department_data.dart';
 import 'package:ozcan/data/model/story.dart';
 import 'package:story_view/controller/story_controller.dart';
+import 'package:video_player/video_player.dart';
 import '../../core/services/services.dart';
 import '../../core/class/statusrequest.dart';
 import '../../core/functions/handlingdatacontroller.dart';
@@ -21,7 +22,16 @@ class StoriesTopControllerImp extends StoriesTopController {
   StoryController storyController = StoryController();
   TextEditingController textController = TextEditingController();
   List<HighlightsModel> story = [];
+  late VideoPlayerController controller;
+  Duration? videoDuration;
 
+  Future<Duration?> getVideoDuration(String url) async {
+    final controller = VideoPlayerController.network(url);
+    await controller.initialize();
+    videoDuration = controller.value.duration;
+    log("//////////////////////////////////////" + videoDuration.toString());
+    return videoDuration;
+  }
   int? currentIndex = 0;
 
   late StatusRequest statusRequest;

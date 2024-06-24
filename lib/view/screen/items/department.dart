@@ -119,7 +119,7 @@ class DepartmentView extends StatelessWidget {
                                     children: [
                                       if (controller.story.isNotEmpty)
                                         StoresWidgetAfter(
-                                          photo:"${controller.story.first['media_path']}",
+                                          photo: controller.story.first['media_type'] == "video" ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png" : "${controller.story.first['media_path']}",
                                           primaryColor: primaryColor,
                                           onTap: () {
                                             if (controller.story.isNotEmpty)
@@ -142,27 +142,24 @@ class DepartmentView extends StatelessWidget {
                                       if (controller.storyTop.isNotEmpty)
                                         ...List.generate(
                                           controller.storyTop.length,
-                                          (index) => Visibility(
-                                            visible:controller.storyTop[index]['media_type'] != 'video' ,
-                                            child: Padding(
-                                              padding: const EdgeInsets.symmetric(
-                                                  horizontal: 8),
-                                              child: StoresWidget(
-                                                  onTap: () {
-                                                    Get.toNamed(
-                                                        AppRoute.storiesTopDepartment,
-                                                        arguments: {
-                                                          "categoriesId":controller.categoriesId,
-                                                          "categoriesColor":controller.categoriesColor,
-                                                          "categoriesName":controller.categoriesName,
-                                                          "slug": controller.slug,
-                                                          "highlightsId":controller.storyTop[index]['id'].toString(),
-                                                        });
-                                                  },
-                                                  primaryColor: primaryColor,
-                                                  title:  "${controller.storyTop[index]['note']}",
-                                                  photo: "${controller.storyTop[index]['media_path']}"),
-                                            ),
+                                          (index) => Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 8),
+                                            child: StoresWidget(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      AppRoute.storiesTopDepartment,
+                                                      arguments: {
+                                                        "categoriesId":controller.categoriesId,
+                                                        "categoriesColor":controller.categoriesColor,
+                                                        "categoriesName":controller.categoriesName,
+                                                        "slug": controller.slug,
+                                                        "highlightsId":controller.storyTop[index]['id'].toString(),
+                                                      });
+                                                },
+                                                primaryColor: primaryColor,
+                                                title:  "${controller.storyTop[index]['note']}",
+                                                photo:controller.storyTop[index]['media_type'] == "video" ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png" : "${controller.storyTop[index]['media_path']}"),
                                           ),
                                         ),
                                       if (controller.storyTop.isEmpty)

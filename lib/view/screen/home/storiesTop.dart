@@ -76,6 +76,7 @@ class StoriesTopDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
+                                  controller.getVideoDuration(controller.story[index].mediaPath.toString());
                                   controller.itemsName =controller.story[index].note;
                                   controller.image =controller.story[index].mediaPath;
                                   controller.update();
@@ -92,6 +93,8 @@ class StoriesTopDepartment extends StatelessWidget {
                                     );
                                   } else {
                                     return StoryItem.pageVideo(
+                                      duration: controller.videoDuration ?? Duration(seconds: 45),
+
                                       "${controller.story[index].mediaPath}",
                                       caption: Text(
                                         "${controller.story[index].note}",
@@ -106,6 +109,9 @@ class StoriesTopDepartment extends StatelessWidget {
                             controller: controller.storyController,
                             inline: true,
                             repeat: false,
+                            onStoryShow: (storyItem, index) async{
+                              await controller.getVideoDuration(controller.story[index].mediaPath.toString());
+                            },
                             indicatorForegroundColor: primaryColor,
                             onComplete: () {
                               Get.back();
