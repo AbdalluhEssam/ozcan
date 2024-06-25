@@ -611,6 +611,6 @@ class DepartmentView extends StatelessWidget {
   }
 
   whatsapp() async {
-    await launchUrlString("whatsapp://send?phone=+9647746423382");
+    await launchUrlString("whatsapp://send?phone=+9647744555500");
   }
 }
