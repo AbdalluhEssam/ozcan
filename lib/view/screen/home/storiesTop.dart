@@ -65,61 +65,80 @@ class StoriesTopDepartment extends StatelessWidget {
             children: [
               controller.story.isNotEmpty
                   ? Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        width: Get.width,
-                        child: Directionality(
-                          textDirection: TextDirection.ltr,
-                          child: StoryView(
-                            storyItems: [
-                              ...List.generate(
-                                controller.story.length,
-                                (index) {
-                                  controller.currentIndex = index;
-                                  controller.getVideoDuration(controller.story[index].mediaPath.toString());
-                                  controller.itemsName =controller.story[index].note;
-                                  controller.image =controller.story[index].mediaPath;
-                                  controller.update();
-                                  print(controller.currentIndex);
-                                  if (controller.story[index].mediaType.toString() == "image") {
-                                    return StoryItem.pageImage(
-                                      caption: Text(
-                                        "${controller.story[index].note}",
-                                        style:
-                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
-                                      url:
-                                          "${controller.story[index].mediaPath}",
-                                      controller: controller.storyController,
-                                    );
-                                  } else {
-                                    return StoryItem.pageVideo(
-                                      duration: controller.videoDuration ?? Duration(seconds: 45),
-
-                                      "${controller.story[index].mediaPath}",
-                                      caption: Text(
-                                        "${controller.story[index].note}",
-                                        style:
-                                        TextStyle(color: Colors.white,fontSize: 18),textAlign: TextAlign.center,),
-                                      controller: controller.storyController,
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
-                            controller: controller.storyController,
-                            inline: true,
-                            repeat: false,
-                            onStoryShow: (storyItem, index) async{
-                              await controller.getVideoDuration(controller.story[index].mediaPath.toString());
-                            },
-                            indicatorForegroundColor: primaryColor,
-                            onComplete: () {
-                              Get.back();
-                            },
-                          ),
+                flex: 2,
+                child: SizedBox(
+                  width: Get.width,
+                  child: Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: StoryView(
+                      storyItems: [
+                        ...List.generate(
+                          controller.story.length,
+                              (index) {
+                            controller.currentIndex = index;
+                            controller.itemsName =
+                                controller.story[index].note;
+                            controller.image =
+                                controller.story[index].mediaPath;
+                            controller.update();
+                            print(controller.currentIndex);
+                            if (controller.story[index].mediaType
+                                .toString() ==
+                                "video") {
+                              return controller.videoDurations.isNotEmpty
+                                  ? StoryItem.pageVideo(
+                                duration: controller.videoDurations[index],
+                                "${controller.story[index].mediaPath}",
+                                caption: Text(
+                                  "${controller.story[index].note}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18),
+                                  textAlign: TextAlign.center,
+                                ),
+                                controller:
+                                controller.storyController,
+                              )
+                                  : StoryItem.pageVideo(
+                                duration: Duration(seconds: 30),
+                                "${controller.story[index].mediaPath}",
+                                caption: Text(
+                                  "${controller.story[index].note}",
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18),
+                                  textAlign: TextAlign.center,
+                                ),
+                                controller:
+                                controller.storyController,
+                              );
+                            } else {
+                              return StoryItem.pageImage(
+                                caption: Text(
+                                  "${controller.story[index].note}",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 18),
+                                  textAlign: TextAlign.center,
+                                ),
+                                url:
+                                "${controller.story[index].mediaPath}",
+                                controller: controller.storyController,
+                              );
+                            }
+                          },
                         ),
-                      ),
-                    )
+                      ],
+                      controller: controller.storyController,
+                      inline: true,
+                      repeat: false,
+                      indicatorForegroundColor: primaryColor,
+                      onComplete: () {
+                        Get.back();
+                      },
+                    ),
+                  ),
+                ),
+              )
                   : Expanded(
                       child: Lottie.asset(AppImageAssets.offline,
                           width: 250, height: 250)),

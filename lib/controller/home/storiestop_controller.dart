@@ -24,12 +24,16 @@ class StoriesTopControllerImp extends StoriesTopController {
   List<HighlightsModel> story = [];
   late VideoPlayerController controller;
   Duration? videoDuration;
-
+  List<Duration> videoDurations = [];
   Future<Duration?> getVideoDuration(String url) async {
+    statusRequest = StatusRequest.loading;
     final controller = VideoPlayerController.network(url);
     await controller.initialize();
     videoDuration = controller.value.duration;
-    log("//////////////////////////////////////" + videoDuration.toString());
+    videoDurations.add(videoDuration!);
+    log("//////////////////////////////////////" + "${videoDurations}");
+    statusRequest = StatusRequest.success;
+    update();
     return videoDuration;
   }
   int? currentIndex = 0;
@@ -76,6 +80,9 @@ class StoriesTopControllerImp extends StoriesTopController {
     if (StatusRequest.success == statusRequest) {
       List stores = response['data'];
       story.addAll(stores.map((e) => HighlightsModel.fromJson(e)));
+      story.forEach((element) {
+        getVideoDuration(element.mediaPath.toString());
+      });
     } else {
       statusRequest = StatusRequest.failure;
     }

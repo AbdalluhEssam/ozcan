@@ -22,19 +22,23 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
   StoryController storyController = StoryController();
   TextEditingController textController = TextEditingController();
   List<HighlightsModel> story = [];
+  List<Duration> videoDurations = [];
   int? currentIndex = 0;
 
   late VideoPlayerController controller;
   Duration? videoDuration;
 
   Future<Duration?> getVideoDuration(String url) async {
+    statusRequest = StatusRequest.loading;
     final controller = VideoPlayerController.network(url);
     await controller.initialize();
     videoDuration = controller.value.duration;
-    log("//////////////////////////////////////" + videoDuration.toString());
+    videoDurations.add(videoDuration!);
+    log("//////////////////////////////////////" + "${videoDurations}");
+    statusRequest = StatusRequest.success;
+    update();
     return videoDuration;
   }
-
 
   late StatusRequest statusRequest;
 
@@ -78,11 +82,14 @@ class StoriesDepartmentControllerImp extends StoriesDepartmentController {
     if (StatusRequest.success == statusRequest) {
       List stores = response['data']['daily_stories'];
       story.addAll(stores.map((e) => HighlightsModel.fromJson(e)));
+      story.forEach((element) {
+        getVideoDuration(element.mediaPath.toString());
+
+      });
     } else {
       statusRequest = StatusRequest.failure;
     }
     update();
-
   }
 
   Future<bool?> addLike(id, index) async {

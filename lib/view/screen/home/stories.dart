@@ -77,7 +77,6 @@ class StoriesDepartment extends StatelessWidget {
                                 controller.story.length,
                                 (index) {
                                   controller.currentIndex = index;
-                                  controller.getVideoDuration(controller.story[index].mediaPath.toString());
                                   controller.itemsName =
                                       controller.story[index].note;
                                   controller.image =
@@ -86,7 +85,35 @@ class StoriesDepartment extends StatelessWidget {
                                   print(controller.currentIndex);
                                   if (controller.story[index].mediaType
                                           .toString() ==
-                                      "image") {
+                                      "video") {
+                                    return controller.videoDurations.isNotEmpty
+                                        ? StoryItem.pageVideo(
+                                            duration: controller.videoDurations[index],
+                                            "${controller.story[index].mediaPath}",
+                                            caption: Text(
+                                              "${controller.story[index].note}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            controller:
+                                                controller.storyController,
+                                          )
+                                        : StoryItem.pageVideo(
+                                            duration: Duration(seconds: 30),
+                                            "${controller.story[index].mediaPath}",
+                                            caption: Text(
+                                              "${controller.story[index].note}",
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                            controller:
+                                                controller.storyController,
+                                          );
+                                  } else {
                                     return StoryItem.pageImage(
                                       caption: Text(
                                         "${controller.story[index].note}",
@@ -98,18 +125,6 @@ class StoriesDepartment extends StatelessWidget {
                                           "${controller.story[index].mediaPath}",
                                       controller: controller.storyController,
                                     );
-                                  } else {
-                                    return StoryItem.pageVideo(
-                                      duration: controller.videoDuration ?? Duration(seconds: 45),
-                                      "${controller.story[index].mediaPath}",
-                                      caption: Text(
-                                        "${controller.story[index].note}",
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 18),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      controller: controller.storyController,
-                                    );
                                   }
                                 },
                               ),
@@ -118,9 +133,6 @@ class StoriesDepartment extends StatelessWidget {
                             inline: true,
                             repeat: false,
                             indicatorForegroundColor: primaryColor,
-                            onStoryShow: (storyItem, index) async{
-                             await controller.getVideoDuration(controller.story[index].mediaPath.toString());
-                            },
                             onComplete: () {
                               Get.back();
                             },
@@ -129,7 +141,7 @@ class StoriesDepartment extends StatelessWidget {
                       ),
                     )
                   : Expanded(
-                      child: Lottie.asset(AppImageAssets.offline,
+                      child: Lottie.asset(AppImageAssets.loading,
                           width: 250, height: 250)),
               Padding(
                 padding:
