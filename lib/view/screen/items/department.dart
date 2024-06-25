@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:ozcan/controller/home/department_controller.dart';
 import 'package:ozcan/core/constant/color.dart';
 import 'package:ozcan/core/constant/routes.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 import '../../../core/class/handlingdataview.dart';
 import '../../widget/home/department_widget.dart';
 import '../home/searchscreen.dart';
@@ -96,6 +97,15 @@ class DepartmentView extends StatelessWidget {
                       FontAwesome5.facebook_messenger,
                       color: primaryColor,
                     ))),
+            IconButton(
+                onPressed: () async {
+                  await whatsapp();
+                },
+                icon: Icon(
+                  FontAwesome5.whatsapp,
+                  size: 30,
+                  color: primaryColor,
+                )),
           ],
         ),
         body: GetBuilder<DepartmentControllerImp>(
@@ -119,7 +129,11 @@ class DepartmentView extends StatelessWidget {
                                     children: [
                                       if (controller.story.isNotEmpty)
                                         StoresWidgetAfter(
-                                          photo: controller.story.first['media_type'] == "video" ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png" : "${controller.story.first['media_path']}",
+                                          photo: controller.story
+                                                      .first['media_type'] ==
+                                                  "video"
+                                              ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png"
+                                              : "${controller.story.first['media_path']}",
                                           primaryColor: primaryColor,
                                           onTap: () {
                                             if (controller.story.isNotEmpty)
@@ -133,8 +147,7 @@ class DepartmentView extends StatelessWidget {
                                                             .categoriesColor,
                                                     "categoriesName": controller
                                                         .categoriesName,
-                                                    "slug":controller.slug,
-
+                                                    "slug": controller.slug,
                                                   });
                                           },
                                           show: controller.story.isNotEmpty,
@@ -148,18 +161,35 @@ class DepartmentView extends StatelessWidget {
                                             child: StoresWidget(
                                                 onTap: () {
                                                   Get.toNamed(
-                                                      AppRoute.storiesTopDepartment,
+                                                      AppRoute
+                                                          .storiesTopDepartment,
                                                       arguments: {
-                                                        "categoriesId":controller.categoriesId,
-                                                        "categoriesColor":controller.categoriesColor,
-                                                        "categoriesName":controller.categoriesName,
+                                                        "categoriesId":
+                                                            controller
+                                                                .categoriesId,
+                                                        "categoriesColor":
+                                                            controller
+                                                                .categoriesColor,
+                                                        "categoriesName":
+                                                            controller
+                                                                .categoriesName,
                                                         "slug": controller.slug,
-                                                        "highlightsId":controller.storyTop[index]['id'].toString(),
+                                                        "highlightsId":
+                                                            controller
+                                                                .storyTop[index]
+                                                                    ['id']
+                                                                .toString(),
                                                       });
                                                 },
                                                 primaryColor: primaryColor,
-                                                title:  "${controller.storyTop[index]['note']}",
-                                                photo:controller.storyTop[index]['media_type'] == "video" ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png" : "${controller.storyTop[index]['media_path']}"),
+                                                title:
+                                                    "${controller.storyTop[index]['note']}",
+                                                photo: controller
+                                                                .storyTop[index]
+                                                            ['media_type'] ==
+                                                        "video"
+                                                    ? "https://www.saga.co.uk/contentlibrary/saga/publishing/verticals/technology/internet/communications/youtube-1.png"
+                                                    : "${controller.storyTop[index]['media_path']}"),
                                           ),
                                         ),
                                       if (controller.storyTop.isEmpty)
@@ -578,5 +608,9 @@ class DepartmentView extends StatelessWidget {
                             )),
                       )
                     ]))));
+  }
+
+  whatsapp() async {
+    await launchUrlString("whatsapp://send?phone=+9647746423382");
   }
 }
