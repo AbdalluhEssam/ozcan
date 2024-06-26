@@ -92,7 +92,7 @@ android {
             proguardFiles(
                     getDefaultProguardFile('proguard-android.txt'),
                     'proguard-rules.pro'
-            )  0
+            )
             signingConfig signingConfigs.release
         }
 //        debug {
