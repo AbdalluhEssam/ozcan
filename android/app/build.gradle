@@ -56,8 +56,8 @@ android {
         minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
         multiDexEnabled true
-        versionCode 3
-        versionName '2.210'
+        versionCode 4
+        versionName '3.2.0'
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
