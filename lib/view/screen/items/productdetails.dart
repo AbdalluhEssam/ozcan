@@ -120,8 +120,7 @@ class ProductDetails extends StatelessWidget {
                                   height: 5,
                                 ),
                                 Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.35,
+                                  padding: EdgeInsets.symmetric(horizontal: 20),
                                   height:
                                       MediaQuery.of(context).size.height * 0.05,
                                   decoration: BoxDecoration(
@@ -133,14 +132,14 @@ class ProductDetails extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
-                                        "${controller.itemsModel.price}",
+                                        "${controller.itemsModel.NumberSales}",
                                         style: TextStyle(
                                             color: primaryColor,
                                             fontWeight: FontWeight.bold,
                                             fontSize: 14),
                                       ),
                                       Text(
-                                        "  شراء",
+                                        "  عملية شراء",
                                         style: TextStyle(
                                             color: primaryColor,
                                             fontWeight: FontWeight.bold,
@@ -151,9 +150,9 @@ class ProductDetails extends StatelessWidget {
                                 )
                               ],
                             ),
-
                             LikeButton(
-                              isLiked: controller.itemsModel.likes ?.contains(controller.userId.toString()),
+                              isLiked: controller.itemsModel.likes
+                                  ?.contains(controller.userId.toString()),
                               likeCount: controller.itemsModel.likes_count,
                               countPostion: CountPostion.left,
                               circleColor: CircleColor(
@@ -189,20 +188,20 @@ class ProductDetails extends StatelessWidget {
                           ],
                         ),
                       ),
-                     Padding(
-                           padding: const EdgeInsets.only(left: 15, right: 15),
-                           child: Column(
-                             mainAxisAlignment: MainAxisAlignment.end,
-                             crossAxisAlignment: CrossAxisAlignment.end,
-                             children: [
-                               Text(
-                                 "${controller.itemsModel.description.toString()}",
-                                 style: Second_font,
-                                 textAlign: TextAlign.start,
-                               ),
-                             ],
-                           ),
-                         ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 15, right: 15),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              "${controller.itemsModel.description.toString()}",
+                              style: Second_font,
+                              textAlign: TextAlign.start,
+                            ),
+                          ],
+                        ),
+                      ),
                       Padding(
                         padding: const EdgeInsets.only(left: 15, right: 15),
                         child: Row(
@@ -287,7 +286,7 @@ class ProductDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.center ,
+                              crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Text(
                                   "مجموع الدفع",

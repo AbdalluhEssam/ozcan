@@ -72,6 +72,7 @@ class ItemsDetailsModel {
   String? description;
   String? link;
   int? likes_count;
+  int? NumberSales;
   List<Images>? images;
   List<Stock>? stock;
   String? likes;
@@ -89,6 +90,7 @@ class ItemsDetailsModel {
         this.link,
         this.images,
         this.likes_count,
+        this.NumberSales,
         this.stock});
 
   ItemsDetailsModel.fromJson(Map<String, dynamic> json) {
@@ -102,6 +104,7 @@ class ItemsDetailsModel {
     image = json['image'].toString();
     description = json['description'].toString();
     likes_count = json['likes_count'];
+    NumberSales = json['number_sales'];
     link = json['link'].toString();
     likes = json['likes'].toString();
     if (json['images'] != null) {
@@ -131,6 +134,7 @@ class ItemsDetailsModel {
     data['description'] = this.description;
     data['likes_count'] = this.likes_count;
     data['link'] = this.link;
+    data['number_sales'] = this.NumberSales;
     data['likes'] = this.likes;
     if (this.images != null) {
       data['images'] = this.images!.map((v) => v.toJson()).toList();
