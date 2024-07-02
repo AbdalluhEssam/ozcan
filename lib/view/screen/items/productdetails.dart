@@ -287,7 +287,7 @@ class ProductDetails extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
+                              crossAxisAlignment: CrossAxisAlignment.center ,
                               children: [
                                 Text(
                                   "مجموع الدفع",
@@ -296,19 +296,9 @@ class ProductDetails extends StatelessWidget {
                                       fontWeight: FontWeight.bold,
                                       color: Colors.black),
                                 ),
-                                Row(
-                                  children: [
-                                    IconButton(
-                                        onPressed: () {},
-                                        icon: Icon(
-                                          Icons.attach_money_outlined,
-                                          color: Colors.black,
-                                        )),
-                                    Text(
-                                      "${controller.itemsModel.price}",
-                                      style: Main_font1,
-                                    ),
-                                  ],
+                                Text(
+                                  "${controller.itemsModel.price}",
+                                  style: Main_font1,
                                 )
                               ],
                             ),

@@ -16,6 +16,7 @@ class AppLink {
   static const String verfiyCodeSignUp = "$serverLink/auth/verfiycode.php";
   static const String reSend = "$serverLink/auth/resend.php";
   static const String login = "$serverLink/login";
+  static const String deleteAccount = "$serverLink/delete-account";
 //================================== Forget Password ===============================//
   static const String checkEmail = "$serverLink/generate-password-otp";
   static const String verfiyCodeForgetPass ="$serverLink/validate-password-otp";

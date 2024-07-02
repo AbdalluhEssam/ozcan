@@ -76,6 +76,15 @@ class DepartmentView extends StatelessWidget {
                   Icons.notifications_active_outlined,
                   color: primaryColor,
                 )),
+            IconButton(
+                onPressed: () async {
+                  await whatsapp();
+                },
+                icon: Icon(
+                  FontAwesome5.whatsapp,
+                  size: 30,
+                  color: primaryColor,
+                )),
             GetBuilder<DepartmentControllerImp>(
                 builder: (controller) => IconButton(
                     onPressed: () {
@@ -97,15 +106,6 @@ class DepartmentView extends StatelessWidget {
                       FontAwesome5.facebook_messenger,
                       color: primaryColor,
                     ))),
-            IconButton(
-                onPressed: () async {
-                  await whatsapp();
-                },
-                icon: Icon(
-                  FontAwesome5.whatsapp,
-                  size: 30,
-                  color: primaryColor,
-                )),
           ],
         ),
         body: GetBuilder<DepartmentControllerImp>(
