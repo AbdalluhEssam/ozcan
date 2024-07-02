@@ -146,6 +146,9 @@ class Settings extends StatelessWidget {
                       color: AppColor.backgroundColor,
                     ),
                   ),
+                  if (controller.myServices.sharedPreferences
+                      .getString("username") !=
+                      null)
                   const Divider(
                     height: 1,
                     color: AppColor.black,
@@ -166,10 +169,7 @@ class Settings extends StatelessWidget {
                         color: AppColor.backgroundColor,
                       ),
                     ),
-                  const Divider(
-                    height: 1,
-                    color: AppColor.black,
-                  ),
+
                   const Divider(
                     height: 1,
                     color: AppColor.black,
