@@ -137,8 +137,19 @@ Future<void> initFcm() async {
 
   var initializationSettingsAndroid =
   const AndroidInitializationSettings('@mipmap/ic_launcher');
+
+  final initializationSettingsIOS =
+  DarwinInitializationSettings(
+    requestAlertPermission: true,
+    requestBadgePermission: true,
+    requestSoundPermission: true,
+    onDidReceiveLocalNotification: (int id, String? title, String? body, String? payload) async {
+      // handle the received notification
+    },
+  );
+
   var initializationSettings =
-  InitializationSettings(android: initializationSettingsAndroid);
+  InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
   flutterLocalNotificationsPlugin.initialize(initializationSettings);
 
   refreshPageNotification(data) {
